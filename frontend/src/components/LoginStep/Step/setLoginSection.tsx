@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'redux/store';
 import { ITitle, ModalProps } from 'components/LoginStep/loginStep.types';
 import { nextStep, setSignUpInfo } from 'redux/reducers/loginSlice';
+import GoogleButton from 'components/LoginStep/google_btn/googleBtn';
 import BackButton from 'components/BackButton';
 
 const setLoginSection = ({ handleClose }: ModalProps) => {
   const loginStep = useSelector((state: RootState) => state.login.currentStep);
   const dispatch = useDispatch<AppDispatch>();
 
+  /*
   const googleLogin = useCallback(async () => {
     try {
       const result = await dispatch(loginAsync()).unwrap();
@@ -49,6 +51,7 @@ const setLoginSection = ({ handleClose }: ModalProps) => {
       console.log(error);
     }
   }, []);
+*/
 
   return (
     <>
@@ -61,10 +64,7 @@ const setLoginSection = ({ handleClose }: ModalProps) => {
           우선, 로그인부터 해볼까요?
         </SubTitle>
         <BtnSection>
-          <LoginBtn onClick={googleLogin}>
-            <FcGoogle size={50} />
-            <div>구글로 로그인하기</div>
-          </LoginBtn>
+          <GoogleButton />
         </BtnSection>
       </LoginSection>
     </>
@@ -151,20 +151,4 @@ const BtnSection = styled.div`
   justify-content: center;
   background-color: none;
   cursor: pointer;
-`;
-
-const LoginBtn = styled.button`
-  ${({ theme }) => theme.flexMixIn('center', 'center')};
-  border: none;
-  background: none;
-  font-size: ${({ theme }) => theme.fontMedium};
-  font-weight: ${({ theme }) => theme.weightBold};
-  cursor: pointer;
-
-  div {
-    height: 50px;
-    margin-left: 5px;
-    line-height: 50px;
-    font-family: 'Jua', sans-serif;
-  }
 `;

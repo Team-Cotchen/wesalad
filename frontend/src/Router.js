@@ -14,7 +14,7 @@ const Router = () => {
         <Route path="project/:id" element={<Detail />} />
         <Route path="/creation" element={<Creation />} />
         <Route path="edit/:id" element={<Edit />} />
-        {/* <Route path="/callback" element={<GoogleLogin />} /> */}
+        <Route path="/callback" element={<GoogleLogin />} />
       </Routes>
     </BrowserRouter>
   );
