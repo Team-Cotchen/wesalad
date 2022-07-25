@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 import { ITitle } from 'components/LoginStep/loginStep.types';
 import { IInfoSection } from 'components/LoginStep/loginStep.types';
+import { devices } from 'styles/devices';
 
 const setInfoSection = ({ handleBasicInfo, handleLoginStep }: IInfoSection) => {
   const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
@@ -13,7 +14,7 @@ const setInfoSection = ({ handleBasicInfo, handleLoginStep }: IInfoSection) => {
     <>
       <InfoSection>
         <BackButton />
-        <Title fontSize="28px" marginBottom="30px">
+        <Title fontSize="28px" marginBottom="10px">
           WeSalad에 처음오셨군요!
         </Title>
         <SubTitle fontSize="20px" marginBottom="20px">
@@ -47,13 +48,17 @@ const setInfoSection = ({ handleBasicInfo, handleLoginStep }: IInfoSection) => {
 export default setInfoSection;
 
 const InfoSection = styled.div`
-  padding: calc(92px / 2) 70px;
+  padding: 2rem 4rem;
 `;
 
 const Title = styled.h1<ITitle>`
   font-size: ${({ fontSize }) => fontSize};
   margin-bottom: ${({ marginBottom }) => marginBottom};
   text-align: center;
+
+  @media ${devices.tablet} {
+    font-size: ${({ theme }) => theme.fontSemiMedium};
+  }
 `;
 
 const SubTitle = styled.h1<ITitle>`
@@ -62,11 +67,15 @@ const SubTitle = styled.h1<ITitle>`
   color: #d3cece;
   text-align: center;
   margin: 0px 10px 5px 0px;
+
+  @media ${devices.tablet} {
+    font-size: ${({ theme }) => theme.fontSmall};
+  }
 `;
 
 const UserDetailInfo = styled.div`
   ${({ theme }) => theme.flexMixIn('center', 'center')};
-  margin-bottom: 70px;
+  margin-bottom: 30px;
 `;
 
 const Profile = styled.img`
@@ -74,6 +83,11 @@ const Profile = styled.img`
   height: 130px;
   margin-right: 30px;
   border-radius: 50%;
+
+  @media ${devices.tablet} {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const Form = styled.form`

@@ -6,8 +6,8 @@ export const QuestionData: {
   answerB: string;
   ingredientA: string;
   ingredientB: string;
-  0: string;
-  1: string;
+  resultA: string;
+  resultB: string;
 }[] = [
   {
     id: 1,
@@ -17,8 +17,8 @@ export const QuestionData: {
     answerB: '수용적인 자세로 의견을 받아들이는 편이다.',
     ingredientA: 'tomato',
     ingredientB: 'lettuce',
-    '0': '적극적인 토마토',
-    '1': '수용적인 양상추',
+    resultA: '적극적인 토마토',
+    resultB: '수용적인 양상추',
   },
   {
     id: 2,
@@ -28,8 +28,8 @@ export const QuestionData: {
     answerB: '도전보단 안정적인 방법으로 진행하는 편이다.',
     ingredientA: 'paprika',
     ingredientB: 'broccoli',
-    '0': '도전적인 파프리카',
-    '1': '안정적인 브로콜리',
+    resultA: '도전적인 파프리카',
+    resultB: '안정적인 브로콜리',
   },
   {
     id: 3,
@@ -39,8 +39,8 @@ export const QuestionData: {
     answerB: '팀원으로써 주어진 일에 책임을 다한다.',
     ingredientA: 'avocado',
     ingredientB: 'olives',
-    '0': '리더쉽의 아보카도',
-    '1': '책임감의 올리브',
+    resultA: '리더쉽의 아보카도',
+    resultB: '책임감의 올리브',
   },
   {
     id: 4,
@@ -50,8 +50,8 @@ export const QuestionData: {
     answerB: '상황에 맞게 능동적으로 일 하는 것을 선호한다.',
     ingredientA: 'mayo',
     ingredientB: 'balsamic',
-    '0': '계획적인 마요네즈',
-    '1': '즉흥적인 발사믹',
+    resultA: '계획적인 마요네즈',
+    resultB: '즉흥적인 발사믹',
   },
   {
     id: 5,
@@ -61,7 +61,7 @@ export const QuestionData: {
     answerB: '팀원과 사적으로 교류하는 것도 선호한다.',
     ingredientA: 'salmon',
     ingredientB: 'bacon',
-    '0': '워커홀릭 베이컨',
-    '1': '사교적인 연어',
+    resultA: '워커홀릭 베이컨',
+    resultB: '사교적인 연어',
   },
 ];

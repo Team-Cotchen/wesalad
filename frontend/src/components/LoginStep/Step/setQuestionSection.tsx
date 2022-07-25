@@ -4,6 +4,7 @@ import { QuestionData } from 'assets/data/QuestionData';
 import { IQuestionSection } from 'components/LoginStep/loginStep.types';
 import { ITitle } from 'components/LoginStep/loginStep.types';
 import { IProgressBar } from 'components/LoginStep/loginStep.types';
+import { devices } from 'styles/devices';
 
 const setQuestionSection = ({
   questionNum,
@@ -12,7 +13,7 @@ const setQuestionSection = ({
   return (
     <>
       <Header>
-        <Title fontSize="60px" marginBottom="20px">
+        <Title fontSize="60px" marginBottom="0px">
           {`Q${QuestionData[questionNum].num}`}
         </Title>
         <SubTitle fontSize="20px" marginBottom="5px">
@@ -47,13 +48,21 @@ const setQuestionSection = ({
 export default setQuestionSection;
 
 const Header = styled.div`
-  padding: 40px 50px 20px 30px;
+  padding: 10px 50px 0px 30px;
 `;
 
 const Title = styled.h1<ITitle>`
   font-size: ${({ fontSize }) => fontSize};
   margin-bottom: ${({ marginBottom }) => marginBottom};
   text-align: center;
+
+  @media ${devices.laptop} {
+    font-size: 50px;
+  }
+
+  @media ${devices.mobile} {
+    font-size: 40px;
+  }
 `;
 
 const SubTitle = styled.h1<ITitle>`
@@ -86,11 +95,27 @@ const Question = styled.h1`
   font-size: 25px;
   text-align: center;
   line-height: 40px;
+
+  @media ${devices.laptop} {
+    font-size: 19px;
+  }
+
+  @media ${devices.tablet} {
+    font-size: 16px;
+  }
+
+  @media ${devices.mobile} {
+    font-size: 14px;
+  }
 `;
 
 const ChoiceSection = styled.div`
   ${({ theme }) => theme.flexMixIn('center', 'center')};
   flex-direction: column;
+
+  @media ${devices.mobile} {
+    padding-top: 10px;
+  }
 `;
 
 const ChoiceBtn = styled.button`
@@ -110,6 +135,23 @@ const ChoiceBtn = styled.button`
 
   &:hover {
     opacity: 1;
+  }
+
+  @media ${devices.laptop} {
+    width: 75%;
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  @media ${devices.tablet} {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  @media ${devices.mobile} {
+    font-size: 12px;
+    padding: 15px;
+    margin-top: 20px;
   }
 `;
 

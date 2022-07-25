@@ -4,6 +4,7 @@ const API = {
   checkToken: `${BASE_URL}/accounts/`,
   search: `${BASE_URL}/accounts/search`,
   login: `${BASE_URL}/users/google`,
+  signup: `${BASE_URL}/users/signup`,
 
   getToken: () => {
     const access = localStorage.getItem('accessToken');

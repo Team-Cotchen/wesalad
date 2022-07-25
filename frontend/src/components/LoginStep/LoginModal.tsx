@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import LoginSection from 'components/LoginStep/Step/setLoginSection';
 import InfoSection from 'components/LoginStep/Step/setInfoSection';
@@ -10,10 +10,9 @@ import { ModalProps, IBasicInfo } from 'components/LoginStep/loginStep.types';
 import { useSelector, useDispatch } from 'react-redux';
 import { nextStep } from 'redux/reducers/loginSlice';
 import { RootState } from 'redux/store';
-import axios from 'axios';
-
 import 'antd/dist/antd.min.css';
 import { message } from 'antd';
+import { devices } from 'styles/devices';
 
 const SOCIAL_LOGIN = 1;
 const SET_JOININFO = 2;
@@ -50,8 +49,7 @@ const LoginModal = ({ handleClose }: ModalProps) => {
     if (QuestionData.length !== questionNum + 1) {
       setQuestionNum(questionNum + 1);
     } else {
-      fetchByUserInfo();
-      // dispatch(nextStep(loginStep));
+      dispatch(nextStep(loginStep));
     }
   };
 
@@ -72,39 +70,10 @@ const LoginModal = ({ handleClose }: ModalProps) => {
     dispatch(nextStep(loginStep));
   };
 
-  const fetchByUserInfo = async () => {
-    const stacksToString = String(basicInfo.stacks);
-    // const answerToString = String(basicInfo.answers);
-    const ordinalToNumber = Number(basicInfo.ordinal_number);
-
-    setBasicInfo({
-      ...basicInfo,
-      // answers: answerToString,
-      answers: '적극적인 토마토',
-      ordinal_number: ordinalToNumber,
-      stacks: stacksToString,
-    });
-
-    try {
-      const res = await axios({
-        method: 'post',
-        url: `https://wesalad.net/users/signup/7`,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: basicInfo,
-      });
-
-      if (res.status === 201) handleClose();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const renderByLoginStep = (loginStep: number) => {
     switch (loginStep) {
       case SOCIAL_LOGIN:
-        return <LoginSection handleClose={handleClose} />;
+        return <LoginSection />;
       case SET_JOININFO:
         return (
           <InfoSection
@@ -114,12 +83,12 @@ const LoginModal = ({ handleClose }: ModalProps) => {
             }}
           ></InfoSection>
         );
-      case SET_QUESTION:
-        return <QuestionSection {...{ questionNum, handleBtnNum }} />;
       case SET_INTEREST:
         return <StacksSection name={basicInfo.name} {...{ handleBasicInfo }} />;
+      case SET_QUESTION:
+        return <QuestionSection {...{ questionNum, handleBtnNum }} />;
       case SET_RESULT:
-        return <ResultSection handleClose={handleClose} />;
+        return <ResultSection {...{ handleClose, basicInfo }} />;
 
       default:
         return <div></div>;
@@ -140,4 +109,16 @@ const Wrapper = styled.div`
   border-radius: 5px;
   background-color: white;
   transform: translate(-50%, -50%);
+
+  @media ${devices.laptop} {
+    width: 32rem;
+  }
+
+  @media ${devices.tablet} {
+    width: 28rem;
+  }
+
+  @media ${devices.mobile} {
+    width: 25rem;
+  }
 `;
