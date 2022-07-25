@@ -1,0 +1,60 @@
+{
+  "id": 1,
+  "category": "Study",
+  "post_answer": [
+    {
+      "is_primary": false,
+      "answer": {
+        "question": "의견이 여러 방향으로 나누어질 때, 당신은 어떤 방향을 선호하시나요?",
+        "content": "적극적으로 의견을 어필하는 편이다.",
+        "description": "적극적인 토마토",
+        "image_url": "https://i.ibb.co/BnmkQsk/07-tomato.png"
+      }
+    },
+    {
+      "is_primary": false,
+      "answer": {
+        "question": "평소 팀에서 어떤 역할을 맡으시나요?",
+        "content": "팀의 리더보다는 팀원으로써 주어진일에 책임을 다하는 것에 집중한다.",
+        "description": "책임감의 올리브",
+        "image_url": "https://i.ibb.co/XX9H948/12-olives.png"
+      }
+    }
+  ],
+  "post_stack": [
+    {
+      "title": "JavaScript",
+      "image_url": "https://i.ibb.co/Yjwz5rH/01-javascript.png",
+      "description": "front-end"
+    },
+    {
+      "title": "TypeScript",
+      "image_url": "https://i.ibb.co/6gxfp3m/02-typescript.png",
+      "description": "front-end"
+    }
+  ],
+  "post_applyway": [
+    {
+      "title": "오픈카톡",
+      "description": "http://velog.io"
+    }
+  ],
+  "post_place": "오프라인",
+  "user": {
+    "id": 2,
+    "created_at": "2022-06-29T16:09:37.419206",
+    "updated_at": "2022-06-29T16:09:37.419213",
+    "name": "김효정",
+    "ordinal_number": 10,
+    "google_account": 2
+  },
+  "created_at": "2022-07-01T18:07:13.880474",
+  "updated_at": "2022-07-01T18:07:13.880517",
+  "title": "글 제목",
+  "number_of_front": 3,
+  "number_of_back": 2,
+  "period": "3개월",
+  "description": "<h1>ㄴ랴너리;ㅁㄴ라ㅓㅁ; 리ㅏㅓㄴㄹㅇ!~!!!!/U</h1>\r\n<p>&nbsp;</p>\r\n<p>ㅇㄴㄹㄴㅇ러;ㅣ라ㅓ;ㅣ라ㅓㄴ리마ㅓㄹ미</p>\r\n<p>&nbsp;</p>\r\n<p>ㅇㄴㄹㅁ리ㅏㅁ럼;ㅣ라ㅓ리;마러;ㅣㅏ러ㅣ라ㅓㅣㄹㄴㄹ;<em>ㅋㅋㅋㅋㅋㅋㅋㅋㅋ</em></p>\r\n<p style='text-align:center'><em>ㅠㅎㅇ니ㅏ러니망러니아럼ㄴ;ㅣㄹ아멀</em></p>",
+  "start_date": "2022-07-01T00:00:00",
+  "status": "active"
+}
