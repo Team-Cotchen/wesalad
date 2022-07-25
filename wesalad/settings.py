@@ -98,7 +98,9 @@ ROOT_URLCONF = 'wesalad.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'frontend', 'build'), # 경로 변경
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,6 +111,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+#경로 추가
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
 ]
 
 WSGI_APPLICATION = 'wesalad.wsgi.application'
