@@ -5,7 +5,6 @@ import Main from 'pages/Main/index';
 import Creation from 'pages/Creation/Creation';
 import Edit from 'pages/Edit/Edit';
 import GoogleLogin from 'pages/auth/googleLogin';
-import Test from 'components/LoginStep/Step/Test';
 
 const Router = () => {
   return (
@@ -15,8 +14,7 @@ const Router = () => {
         <Route path="project/:id" element={<Detail />} />
         <Route path="/creation" element={<Creation />} />
         <Route path="edit/:id" element={<Edit />} />
-        <Route path="/callback" element={<GoogleLogin />} />
-        <Route path="/test" element={<Test />} />
+        {/* <Route path="/callback" element={<GoogleLogin />} /> */}
       </Routes>
     </BrowserRouter>
   );

@@ -10,10 +10,7 @@ import { ModalProps, IBasicInfo } from 'components/LoginStep/loginStep.types';
 import { useSelector, useDispatch } from 'react-redux';
 import { nextStep } from 'redux/reducers/loginSlice';
 import { RootState } from 'redux/store';
-import { devices } from 'styles/devices';
-
 import axios from 'axios';
-import API from 'config';
 
 import 'antd/dist/antd.min.css';
 import { message } from 'antd';
@@ -143,22 +140,4 @@ const Wrapper = styled.div`
   border-radius: 5px;
   background-color: white;
   transform: translate(-50%, -50%);
-
-  /*
-  @media screen and ${devices.laptop} {
-    overflow-x: hidden;
-    width: 30rem;
-    height: 18rem;
-  }
-
-  @media screen and ${devices.tablet} {
-    width: 200px;
-    height: 200px;
-  }
-
-  @media screen and ${devices.mobile} {
-    width: 200px;
-    height: 200px;
-  }
-  */
 `;

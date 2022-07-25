@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import loginAsync from '../actions/loginAsync';
 
 const initialState = {
-  currentStep: 2,
+  currentStep: 1,
   id: undefined,
   imageUrl: undefined,
   modalVisible: false,

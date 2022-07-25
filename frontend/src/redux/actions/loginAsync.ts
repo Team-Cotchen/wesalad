@@ -3,7 +3,7 @@ import axios from 'axios';
 import API from 'config';
 
 const loginAsync = createAsyncThunk('user/login', async (data, thunkAPI) => {
-  const response = await axios.get('/users/google/login');
+  const response = await axios.get(`${API.login}`);
   const result = response.data;
   return result;
 });
