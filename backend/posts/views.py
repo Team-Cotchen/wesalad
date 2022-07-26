@@ -1,4 +1,4 @@
-from rest_framework          import generics
+from rest_framework          import generics, status
 from rest_framework.views    import APIView
 from rest_framework.response import Response
 
@@ -7,12 +7,11 @@ from utils.decorators import check_token
 from .filters         import PostListFilterBackend
 from .paginations     import PostListPagination
 from .models          import Post
-from .serializers     import PostCreateSerializer, PostSerializer
+from .serializers     import PostSerializer
 
 
-class PostListView(generics.ListAPIView):
-    queryset         = Post.objects.select_related('user', 'category')\
-                        .prefetch_related('postanswers__answer', 'poststacks__stack').all()
+class PostListView(generics.ListCreateAPIView):
+    queryset         = Post.objects.filter(status='active')
     serializer_class = PostSerializer
     pagination_class = PostListPagination
     filter_backends  = [PostListFilterBackend]
@@ -22,6 +21,27 @@ class PostListView(generics.ListAPIView):
         page       = self.paginate_queryset(queryset)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
+    
+    @check_token
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_create(self, serializer):
+        user      = self.request.user
+        data      = self.request.data
+        leftovers = {
+            "category" : data['category'],
+            "answers"  : data['answers'],
+            "stacks"   : data['stacks'],
+            "applyway" : data['applyway'],
+            "flavor"   : data['flavor'],
+            "place"    : data['place']
+        }
+        serializer.save(user=user, leftovers=leftovers)
 
 
 class PostDetailView(APIView):
@@ -77,31 +97,3 @@ class PostDetailView(APIView):
         post.delete()
         
         return Response(status=204)
-        
-        
-
-class PostCreateView(APIView):
-    @check_token
-    def post(self, request):
-        category      = request.data.get("category")
-        answers       = request.data.get("answers")
-        stacks        = request.data.get("stacks")
-        applyway      = request.data.get("applyway")
-        applyway_info = request.data.get("applyway_info")
-        place         = request.data.get("place")
-        flavor        = request.data.get("flavor")
-        
-        serializer = PostCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(
-                user_id       = request.user.id,
-                category      = category,
-                answers       = answers,
-                stacks        = stacks,
-                applyway      = applyway,
-                applyway_info = applyway_info,
-                place         = place,
-                flavor        = flavor
-            )
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
