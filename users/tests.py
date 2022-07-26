@@ -133,8 +133,8 @@ class WesaladSignUpTest(APITestCase):
             {
                 'name'          : 'test_user',
                 'ordinal_number': 31,
-                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_4,answer_test_description_20',
-                'stacks'        : 'stack_test_title_1,stack_test_title_2'
+                'answers'       : '1,2,3,4,20',
+                'stacks'        : '1,2'
              },
             format='json')
         print(response.content)
@@ -234,8 +234,8 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_2,answer_test_description_19',
-                'stacks'        : 'stack_test_title_3,stack_test_title_4'
+                'answers'       : '1,2,3,19',
+                'stacks'        : '3,4'
              },
             format='json', **header)
         print(response.content)
@@ -249,8 +249,8 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_2,answer_test_description_19',
-                'stacks'        : 'stack_test_title_3,stack_test_title_4'
+                'answers'       : '1,2,3,19',
+                'stacks'        : '3,4'
              },
             format='json')
         print(response.content)
@@ -265,8 +265,8 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : 'answer_test_description_50',
-                'stacks'        : 'stack_test_title_3'
+                'answers'       : '50',
+                'stacks'        : '3'
              },
             format='json', **header)
         print(response.content)
@@ -281,8 +281,8 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : 'answer_test_description_4',
-                'stacks'        : 'stack_test_title_50'
+                'answers'       : '4',
+                'stacks'        : '50'
              },
             format='json', **header)
         print(response.content)
@@ -297,8 +297,8 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 'df',
-                'answers'       : 'answer_test_description_4',
-                'stacks'        : 'stack_test_title_3'
+                'answers'       : '4',
+                'stacks'        : '3'
              },
             format='json', **header)
         print(response.json())

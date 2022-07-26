@@ -44,10 +44,13 @@ class GoogleSignInAPI(APIView):
 
         if not user_filter.exists()\
             or not True in [user.is_active for user in user_filter]:
-            return Response({'google_account' : google_account.id}, status=status.HTTP_200_OK)
+            return Response({'google_account_id' : google_account.id, 'image_url' : google_account.image_url}, status=status.HTTP_200_OK)
         
         user  = User.objects.get(google_account=google_account, is_active=True)
         token = self.generate_jwt(user)
+        
+        token['user_id']   = user.id
+        token['user_name'] = user.name
                 
         return Response(token, status=status.HTTP_200_OK)
 
