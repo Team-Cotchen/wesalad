@@ -76,7 +76,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             [user.useranswers.create(answer = Answer.objects.get(id=answer_id)) for answer_id in answers]
             
             if stacks:
-                [user.userstacks.create(stack = Stack.objects.get(id=stack_id)) for stack_id in stacks]
+                [user.userstacks.create(stack = Stack.objects.get(title=stack)) for stack in stacks]
             
             return user
         
@@ -110,7 +110,7 @@ class UserSerializer(serializers.ModelSerializer):
         [user.useranswers.create(answer = Answer.objects.get(id=answer_id)) for answer_id in answers]
         
         if stacks:
-            [user.userstacks.create(stack = Stack.objects.get(id=stack_id)) for stack_id in stacks]
+            [user.userstacks.create(stack = Stack.objects.get(title=stack)) for stack in stacks]
             
         return user
     
