@@ -5,8 +5,8 @@ export interface ModalProps {
 }
 
 export interface ITitle {
-  fontSize: string;
-  marginBottom: string;
+  fontSize?: string;
+  marginBottom?: string;
 }
 
 export interface IProgressBar {
@@ -58,7 +58,7 @@ export interface IFetchResultData {
       };
     },
   ];
-  token: {
+  token?: {
     refresh: string;
     access: string;
   };

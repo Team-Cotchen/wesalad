@@ -1,62 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import loginAsync from 'redux/actions/loginAsync';
-import { FcGoogle } from 'react-icons/fc';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from 'redux/store';
-import { ITitle, ModalProps } from 'components/LoginStep/loginStep.types';
-import { nextStep, setSignUpInfo } from 'redux/reducers/loginSlice';
+import { ITitle } from 'components/LoginStep/loginStep.types';
+
 import GoogleButton from 'components/LoginStep/google_btn/googleBtn';
-import BackButton from 'components/BackButton';
+import { devices } from 'styles/devices';
 
-const setLoginSection = ({ handleClose }: ModalProps) => {
-  const loginStep = useSelector((state: RootState) => state.login.currentStep);
-  const dispatch = useDispatch<AppDispatch>();
-
-  /*
-  const googleLogin = useCallback(async () => {
-    try {
-      const result = await dispatch(loginAsync()).unwrap();
-      const token = result.token;
-      const googleAccountId = result.id;
-      const imageUrl = result.google_account.image_url;
-
-      if (token.access === undefined) {
-        localStorage.setItem('accessToken', token.access);
-        localStorage.setItem('refreshToken', token.refresh);
-
-        // 만료시간?
-        localStorage.setItem('expiredTime', result.updated_at);
-
-        // axios.defaults.headers.common['x-access-token'] = token.access;
-        handleClose();
-      } else {
-        dispatch(
-          setSignUpInfo({
-            key: 'imageUrl',
-            value: imageUrl,
-          }),
-        );
-
-        dispatch(
-          setSignUpInfo({
-            key: 'id',
-            value: googleAccountId,
-          }),
-        );
-
-        dispatch(nextStep(loginStep));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-*/
-
+const setLoginSection = () => {
   return (
     <>
       <LoginSection>
-        <BackButton />
         <Title fontSize="80px" marginBottom="40px">
           환영합니다!
         </Title>
@@ -104,7 +56,7 @@ const SubTitleHightLight = keyframes`
 `;
 
 const LoginSection = styled.div`
-  padding: calc(198px / 2) 70px;
+  padding: 4rem;
 `;
 
 const Title = styled.h1<ITitle>`
@@ -122,6 +74,14 @@ const Title = styled.h1<ITitle>`
     transform: translateY(-40px);
     z-index: -100;
     animation: ${TitleHightLight} 1.5s linear;
+  }
+
+  @media ${devices.laptop} {
+    font-size: 60px;
+  }
+
+  @media ${devices.tablet} {
+    font-size: ${({ theme }) => theme.fontLarge};
   }
 `;
 
@@ -142,6 +102,10 @@ const SubTitle = styled.h1<ITitle>`
     animation: ${SubTitleHightLight} 1.5s linear;
     animation-delay: 1s;
     animation-fill-mode: forwards;
+
+    @media ${devices.laptop} {
+      display: none;
+    }
   }
 `;
 

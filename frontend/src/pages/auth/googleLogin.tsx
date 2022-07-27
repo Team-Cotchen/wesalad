@@ -1,26 +1,57 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import qs from 'qs';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import API from 'config';
+import { IFetchResultData } from 'components/LoginStep/loginStep.types';
+import { RootState } from 'redux/store';
+import {
+  nextStep,
+  setSignUpInfo,
+  setModalVisible,
+} from 'redux/reducers/loginSlice';
 
 const googleLogin = () => {
+  const loginStep = useSelector((state: RootState) => state.login.currentStep);
   const navigate = useNavigate();
   const location = useLocation();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  console.log('hi');
   const { code } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   });
-  // console.log(code);
 
-  console.log(qs.parse(location.search));
+  const getLoginInfo = async () => {
+    const result: IFetchResultData = await axios.get(
+      `${API.login}/login?code=${code}`,
+    );
+    const token = result.token;
+    const googleAccountId = result.id;
+    const imageUrl = result.google_account?.image_url;
 
-  const getLoginInfo = () => {
-    axios
-      .get(`https://wesalad.net/users/google/login?code=${code}`)
-      .then((res) => console.log(res));
+    navigate('/');
+
+    if (token?.access !== undefined) {
+      localStorage.setItem('accessToken', token.access);
+      localStorage.setItem('refreshToken', token.refresh);
+    } else {
+      dispatch(
+        setSignUpInfo({
+          key: 'imageUrl',
+          value: imageUrl,
+        }),
+      );
+
+      dispatch(
+        setSignUpInfo({
+          key: 'id',
+          value: googleAccountId,
+        }),
+      );
+      dispatch(setModalVisible(true));
+      dispatch(nextStep(loginStep));
+    }
   };
 
   useEffect(() => {
