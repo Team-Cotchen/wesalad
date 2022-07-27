@@ -1,10 +1,10 @@
 export const BASE_URL = 'https://wesalad.net';
 
 const API = {
-  checkToken: `${BASE_URL}/accounts/`,
-  search: `${BASE_URL}/accounts/search`,
-  login: `${BASE_URL}/users/google`,
-  signup: `${BASE_URL}/users/signup`,
+  checkToken: `${BASE_URL}/api/accounts/`,
+  search: `${BASE_URL}/api/accounts/search`,
+  login: `${BASE_URL}/api/users/google`,
+  signup: `${BASE_URL}/api/users/signup`,
 
   getToken: () => {
     const access = localStorage.getItem('accessToken');

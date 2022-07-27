@@ -3,10 +3,11 @@ from rest_framework import serializers
 from django.db              import transaction
 from django.core.exceptions import ObjectDoesNotExist
 
-from characteristics.models import Answer, Stack
-from utils.utils            import error_message
-from posts.models           import ApplyWay, Category, Flavor, Place, Post
-from users.models           import User
+from apps.characteristics.models import Answer, Stack
+from apps.utils.utils            import error_message
+from apps.users.models           import User
+from .models           import ApplyWay, Category, Flavor, Place, Post
+
 
 
 class PostUserSerializer(serializers.ModelSerializer):

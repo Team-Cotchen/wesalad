@@ -1,5 +1,6 @@
 from django.urls import path
-from users.views import GoogleLoginAPI, GoogleSignInAPI, SignUpAPI, ProfileAPI
+
+from .views import GoogleLoginAPI, GoogleSignInAPI, SignUpAPI, ProfileAPI
 
 
 urlpatterns = [

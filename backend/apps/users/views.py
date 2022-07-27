@@ -14,8 +14,8 @@ from django.contrib.auth    import get_user_model
 
 from .models                import GoogleSocialAccount
 from .serializers           import UserSerializer, UserCreateSerializer
-from utils.decorators       import check_token
-from utils.utils            import error_message
+from apps.utils.decorators       import check_token
+from apps.utils.utils            import error_message
 
 User = get_user_model()
 

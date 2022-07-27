@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PostsConfig(AppConfig):
+class CharacteristicsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'posts'
+    name = 'apps.characteristics'

@@ -6,8 +6,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.db           import transaction
 from django.contrib.auth import get_user_model
 
-from characteristics.models      import Answer, Stack
-from characteristics.serializers import StackSerializer
+from apps.characteristics.models      import Answer, Stack
+from apps.characteristics.serializers import StackSerializer
 from .models                     import UserAnswer, UserStack, GoogleSocialAccount
 
 User = get_user_model()

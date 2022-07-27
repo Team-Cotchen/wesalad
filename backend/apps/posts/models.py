@@ -1,8 +1,8 @@
 from django.db import models
 
-from users.models           import User
-from characteristics.models import Answer, Stack
-from utils.timestamp        import TimestampZone
+from apps.users.models           import User
+from apps.characteristics.models import Answer, Stack
+from apps.utils.timestamp        import TimestampZone
 
 
 class Category(TimestampZone):
