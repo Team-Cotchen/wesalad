@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from utils.timestamp        import TimestampZone
-from characteristics.models import Stack, Answer
+from apps.utils.timestamp        import TimestampZone
+from apps.characteristics.models import Stack, Answer
 from .managers              import UserManager
 
 class GoogleSocialAccount(TimestampZone): 

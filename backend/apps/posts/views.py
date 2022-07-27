@@ -2,8 +2,8 @@ from rest_framework          import generics, status
 from rest_framework.views    import APIView
 from rest_framework.response import Response
 
-from utils.utils      import error_message
-from utils.decorators import check_token
+from apps.utils.utils      import error_message
+from apps.utils.decorators import check_token
 from .filters         import PostListFilterBackend
 from .paginations     import PostListPagination
 from .models          import Post

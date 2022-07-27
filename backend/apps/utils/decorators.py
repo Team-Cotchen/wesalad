@@ -13,7 +13,7 @@ from rest_framework.response import  Response
 from rest_framework_simplejwt.exceptions  import TokenError
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
-from utils.utils import error_message
+from .utils import error_message
 
 User = get_user_model()
 
