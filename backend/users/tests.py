@@ -134,7 +134,7 @@ class WesaladSignUpTest(APITestCase):
                 'name'          : 'test_user',
                 'ordinal_number': 31,
                 'answers'       : '1,2,3,4,20',
-                'stacks'        : '1,2'
+                'stacks'        : 'stack_test_title_1,stack_test_title_2'
              },
             format='json')
         print(response.content)
@@ -235,7 +235,7 @@ class ProfileTest(APITestCase):
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
                 'answers'       : '1,2,3,19',
-                'stacks'        : '3,4'
+                'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json', **header)
         print(response.content)
@@ -250,7 +250,7 @@ class ProfileTest(APITestCase):
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
                 'answers'       : '1,2,3,19',
-                'stacks'        : '3,4'
+                'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json')
         print(response.content)
@@ -266,7 +266,7 @@ class ProfileTest(APITestCase):
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
                 'answers'       : '50',
-                'stacks'        : '3'
+                'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json', **header)
         print(response.content)
@@ -282,7 +282,7 @@ class ProfileTest(APITestCase):
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
                 'answers'       : '4',
-                'stacks'        : '50'
+                'stacks'        : 'stack_test_title_50'
              },
             format='json', **header)
         print(response.content)
@@ -298,7 +298,7 @@ class ProfileTest(APITestCase):
                 'name'          : 'test_user_updated',
                 'ordinal_number': 'df',
                 'answers'       : '4',
-                'stacks'        : '3'
+                'stacks'        : 'stack_test_title_3'
              },
             format='json', **header)
         print(response.json())
