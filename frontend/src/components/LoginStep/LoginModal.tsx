@@ -28,9 +28,6 @@ enum BasicInfoKeys {
 const LoginModal = ({ handleClose }: ModalProps) => {
   const dispatch = useDispatch();
   const loginStep = useSelector((state: RootState) => state.login.currentStep);
-  // const id = useSelector((state: RootState) => state.login.id);
-  const id = 1;
-
   const [questionNum, setQuestionNum] = useState<number>(0);
   const [basicInfo, setBasicInfo] = useState<IBasicInfo>({
     name: '',

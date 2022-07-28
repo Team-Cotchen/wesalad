@@ -24,13 +24,12 @@ const googleLogin = () => {
 
   const getLoginInfo = async () => {
     const result: IFetchResultData = await axios.get(
-      `https://wesalad.net/api/users/google/login?code=${code}`,
+      `${API.callback}?code=${code}`,
     );
+
     const token = result.token;
     const googleAccountId = result.id;
     const imageUrl = result.google_account?.image_url;
-
-    navigate('/');
 
     if (token?.access !== undefined) {
       localStorage.setItem('accessToken', token.access);
@@ -52,6 +51,7 @@ const googleLogin = () => {
       dispatch(setModalVisible(true));
       dispatch(nextStep(loginStep));
     }
+    navigate('/');
   };
 
   useEffect(() => {

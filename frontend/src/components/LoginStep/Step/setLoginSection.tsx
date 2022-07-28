@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ITitle } from 'components/LoginStep/loginStep.types';
-
 import GoogleButton from 'components/LoginStep/google_btn/googleBtn';
 import { devices } from 'styles/devices';
 

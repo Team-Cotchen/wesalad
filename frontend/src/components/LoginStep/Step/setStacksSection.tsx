@@ -59,9 +59,9 @@ const setStacksSection = ({
             showArrow
             onChange={(value) => handleBasicInfo(value as string, 'stacks')}
           >
-            {STACKS.map(({ value }, i: number) => (
-              <Option key={i} value={value}>
-                {value}
+            {STACKS.map(({ title }, i) => (
+              <Option key={i} value={title}>
+                {title}
               </Option>
             ))}
           </StyledSelect>
