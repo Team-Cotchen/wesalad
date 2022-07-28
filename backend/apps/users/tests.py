@@ -8,9 +8,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.test             import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models                import GoogleSocialAccount, UserAnswer, UserStack
-from characteristics.models import Question, Stack, Answer
-from .views                 import GoogleSignInAPI
+from apps.users.models                import GoogleSocialAccount, UserAnswer, UserStack
+from apps.characteristics.models import Question, Stack, Answer
+from apps.users.views                 import GoogleSignInAPI
 
 User = get_user_model()
 
@@ -42,7 +42,7 @@ class GoogleLoginTest(APITestCase):
             google_account = self.google_account
         )
     
-        self.test_url =  'http://localhost:8080/users/google/login'
+        self.test_url =  'http://localhost:8080/api/users/google/login'
         
     def tearDown(self):
         self.user.delete()
@@ -67,7 +67,7 @@ class GoogleLoginTestNotUser(APITestCase):
             email     = test_user_data.get('email'),
         )
 
-        self.test_url =  'http://localhost:8080/users/google/login'
+        self.test_url =  'http://localhost:8080/api/users/google/login'
         
     def tearDown(self):
         self.google_account.delete()
@@ -85,7 +85,7 @@ class GoogleLoginTestNotUser(APITestCase):
 # 처음 구글로그인을 시도하는 경우
 class GoogleLoginTestNotGoogleSocialAccount(APITestCase):
     def setUp(self):
-        self.test_url =  'http://localhost:8080/users/google/login'
+        self.test_url =  'http://localhost:8080/api/users/google/login'
     
     @patch.object(GoogleSignInAPI, 'google_get_user_info')
     def test_google_social_signin(self, mocked_google_user_info):
@@ -119,7 +119,7 @@ class WesaladSignUpTest(APITestCase):
                 Stack(id = i, title = f'stack_test_title_{i}', image_url = f'stack_test_image_url_{i}', description = f'stack_test_description_{i}')
             ])
             
-        self.test_url =  f'http://localhost:8080/users/signup/{self.google_account.id}'
+        self.test_url =  f'http://localhost:8080/api/users/signup/{self.google_account.id}'
         
     def tearDown(self):
         self.google_account.delete()
@@ -133,7 +133,7 @@ class WesaladSignUpTest(APITestCase):
             {
                 'name'          : 'test_user',
                 'ordinal_number': 31,
-                'answers'       : '1,2,3,4,20',
+                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_4,answer_test_description_20',
                 'stacks'        : 'stack_test_title_1,stack_test_title_2'
              },
             format='json')
@@ -185,7 +185,7 @@ class ProfileTest(APITestCase):
         
         self.access_token = self.generate_jwt(self.user)['access']
         
-        self.test_url =  f'http://localhost:8080/users/profile'
+        self.test_url =  f'http://localhost:8080/api/users/profile'
         
     def generate_jwt(self, user):
         refresh = RefreshToken.for_user(user)
@@ -234,7 +234,7 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : '1,2,3,19',
+                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_19',
                 'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json', **header)
@@ -249,7 +249,7 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : '1,2,3,19',
+                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_19',
                 'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json')
@@ -265,7 +265,7 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : '50',
+                'answers'       : 'answer_test_description_50',
                 'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json', **header)
@@ -281,7 +281,7 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : '4',
+                'answers'       : 'answer_test_description_4',
                 'stacks'        : 'stack_test_title_50'
              },
             format='json', **header)
@@ -297,7 +297,7 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 'df',
-                'answers'       : '4',
+                'answers'       : 'answer_test_description_4',
                 'stacks'        : 'stack_test_title_3'
              },
             format='json', **header)

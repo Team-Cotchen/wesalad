@@ -73,7 +73,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 google_account = google_account,                
             )
             
-            [user.useranswers.create(answer = Answer.objects.get(id=answer_id)) for answer_id in answers]
+            [user.useranswers.create(answer = Answer.objects.get(description=answer)) for answer in answers]
             
             if stacks:
                 [user.userstacks.create(stack = Stack.objects.get(title=stack)) for stack in stacks]
@@ -107,7 +107,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.useranswers.all().delete()
         user.userstacks.all().delete()
         
-        [user.useranswers.create(answer = Answer.objects.get(id=answer_id)) for answer_id in answers]
+        [user.useranswers.create(answer = Answer.objects.get(description=answer)) for answer in answers]
         
         if stacks:
             [user.userstacks.create(stack = Stack.objects.get(title=stack)) for stack in stacks]
