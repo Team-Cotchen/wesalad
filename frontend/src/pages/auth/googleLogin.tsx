@@ -24,7 +24,7 @@ const googleLogin = () => {
 
   const getLoginInfo = async () => {
     const result: IFetchResultData = await axios.get(
-      `${API.login}/login?code=${code}`,
+      `https://wesalad.net/api/users/google/login?code=${code}`,
     );
     const token = result.token;
     const googleAccountId = result.id;

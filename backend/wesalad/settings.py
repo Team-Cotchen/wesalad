@@ -98,7 +98,7 @@ ROOT_URLCONF = 'wesalad.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['../frontend/build'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,11 +112,11 @@ TEMPLATES = [
 ]
 
 #경로 추가
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    '../frontend/build/static'
-]
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     '../frontend/build/static'
+# ]
 
 WSGI_APPLICATION = 'wesalad.wsgi.application'
 
