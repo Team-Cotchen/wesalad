@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import API from 'config';
 import { ITitle } from 'components/LoginStep/loginStep.types';
@@ -8,15 +8,26 @@ import { RootState } from 'redux/store';
 import { QuestionData } from 'assets/data/QuestionData';
 import { keyframes } from 'styled-components';
 import { devices } from 'styles/devices';
+import { message } from 'antd';
 
 const setResultSection = ({ handleClose, basicInfo }: any) => {
   const tendencyResult: number[] = basicInfo.answers;
-  // const id = useSelector((state: RootState) => state.login.id);
-  const id = 7;
+  const answerChangeForm: string[] = [];
+  const id = useSelector((state: RootState) => state.login.id);
+
+  const changeToFetchForm = () => {
+    tendencyResult.map((item, i) => {
+      item === 0
+        ? answerChangeForm.push(QuestionData[i].resultA)
+        : answerChangeForm.push(QuestionData[i].resultB);
+    });
+
+    return answerChangeForm;
+  };
 
   const fetchByUserInfo = async () => {
     const stacksToString = String(basicInfo.stacks);
-    const answerToString = String(basicInfo.answers);
+    const answerToString = String(changeToFetchForm());
     const ordinalToNumber = Number(basicInfo.ordinal_number);
 
     const setFetchFormData = {
@@ -30,13 +41,17 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
       const res = await axios({
         method: 'post',
         url: `${API.signup}/${id}`,
+
         headers: {
           'Content-Type': 'application/json',
         },
         data: setFetchFormData,
       });
 
-      if (res.status === 201) handleClose();
+      if (res.status === 201) {
+        message.success('완료되었어요 로그인해주세요 🙌');
+        handleClose();
+      }
     } catch (error) {
       console.log(error);
     }
