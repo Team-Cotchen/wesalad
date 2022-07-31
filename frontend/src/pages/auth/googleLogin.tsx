@@ -23,15 +23,13 @@ const googleLogin = () => {
   });
 
   const getLoginInfo = async () => {
-    const result: IFetchResultData = await axios.get(
-      `${API.callback}?code=${code}`,
-    );
+    const { data } = await axios.get(`${API.callback}?code=${code}`);
 
-    const token = result.token;
-    const googleAccountId = result.id;
-    const imageUrl = result.google_account?.image_url;
+    const token = data?.token;
+    const googleAccountId = data?.google_account_id;
+    const imageUrl = data?.image_url;
 
-    if (token?.access !== undefined) {
+    if (token !== undefined) {
       localStorage.setItem('accessToken', token.access);
       localStorage.setItem('refreshToken', token.refresh);
     } else {
