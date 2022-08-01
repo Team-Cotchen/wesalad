@@ -26,7 +26,7 @@ const Main: FunctionComponent = () => {
         `http://172.20.10.6:8080/posts?${paginationString}&${queryString}`,
       );
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       // setPromoCards(data);
       setPaginationBtnNumber(Math.ceil(data.length / LIMIT));
     })();
