@@ -4,7 +4,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import API from 'config';
-import { IFetchResultData } from 'components/LoginStep/loginStep.types';
 import { RootState } from 'redux/store';
 import {
   nextStep,

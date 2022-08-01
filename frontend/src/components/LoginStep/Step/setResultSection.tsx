@@ -9,11 +9,13 @@ import { QuestionData } from 'assets/data/QuestionData';
 import { keyframes } from 'styled-components';
 import { devices } from 'styles/devices';
 import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const setResultSection = ({ handleClose, basicInfo }: any) => {
   const tendencyResult: number[] = basicInfo.answers;
   const answerChangeForm: string[] = [];
   const id = useSelector((state: RootState) => state.login.id);
+  const navigate = useNavigate();
 
   const changeToFetchForm = () => {
     tendencyResult.map((item, i) => {
@@ -50,8 +52,16 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
 
       if (res.status === 201) {
         message.success('완료되었어요 로그인해주세요 🙌');
-        handleClose();
       }
+
+      if (res.data.token !== undefined) {
+        const token = res.data.token;
+        localStorage.setItem('accessToken', token.access);
+        localStorage.setItem('refreshToken', token.refresh);
+      }
+
+      handleClose();
+      navigate('/');
     } catch (error) {
       console.log(error);
     }
