@@ -20,6 +20,17 @@ from apps.utils.utils            import error_message
 User = get_user_model()
 
 class GoogleLoginAPI(APIView):
+    """
+        구글로그인을 위한 첫번째 API
+        API 호출 시 구글로부터 AuthorizationCode를 받아와서
+        지정해둔 Redirect Uri로 redirect함과 동시에 
+        Query parameter를 통해서 AuthorizationCode를 전달해준다.
+
+        Ex. https://wesalad.net/google/callback?code={AuthorizationCode}
+        
+    Args:
+        APIView (_type_): _description_
+    """
     def get(self, request):
         app_key = settings.GOOGLE_OAUTH2_CLIENT_ID
         scope   = "https://www.googleapis.com/auth/userinfo.email " + \
