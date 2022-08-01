@@ -51,7 +51,7 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
       });
 
       if (res.status === 201) {
-        message.success('완료되었어요 로그인해주세요 🙌');
+        message.success('축하드려요! 가입되었습니다. 🙌');
       }
 
       if (res.data.token !== undefined) {
