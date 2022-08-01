@@ -4,10 +4,8 @@ from django.db              import transaction
 from django.core.exceptions import ObjectDoesNotExist
 
 from apps.characteristics.models import Answer, Stack
-from apps.utils.utils            import error_message
 from apps.users.models           import User
-from .models           import ApplyWay, Category, Flavor, Place, Post
-
+from .models                     import ApplyWay, Category, Flavor, Place, Post
 
 
 class PostUserSerializer(serializers.ModelSerializer):
@@ -19,6 +17,7 @@ class PostUserSerializer(serializers.ModelSerializer):
     class Meta:
         model  = User
         fields = ['id', 'ordinal_number', 'name', 'image_url']
+
 
 class PostSerializer(serializers.ModelSerializer):
     category      = serializers.SerializerMethodField()
@@ -97,18 +96,23 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         try:
             leftovers = validated_data.pop("leftovers", None)
-            answers   = leftovers['answers']
-            stacks    = leftovers['stacks']
-            category  = Category.objects.get(title = leftovers['category'])
-            applyway  = ApplyWay.objects.get(title = leftovers['applyway']['title'])
-            flavor    = Flavor.objects.get(title = leftovers['flavor'])
-            place     = Place.objects.get(title = leftovers['place'])
+            answers   = leftovers.get('answers')
+            stacks    = leftovers.get('stacks')
+            category  = Category.objects.get(title = leftovers.get('category'))
+            applyway  = ApplyWay.objects.get(title = leftovers.get('applyway')['title'])
+            flavor    = Flavor.objects.get(title = leftovers.get('flavor'))
+            place     = Place.objects.get(title = leftovers.get('place'))
 
+            if not answers:
+                raise serializers.ValidationError('Answer matching query does not exist.')
+            if not stacks:
+                raise serializers.ValidationError('Stack matching query does not exist.')
+            
             # Post 생성
             post = Post.objects.create(
                 category = category,
                 **validated_data
-                )
+            )
             
             # 중간테이블 생성
             [post.postanswers.create(
@@ -118,43 +122,33 @@ class PostSerializer(serializers.ModelSerializer):
             [post.poststacks.create(stack = Stack.objects.get(title = stack)) for stack in stacks]
             post.postapplyways.create(
                 applyway    = applyway,
-                description = leftovers['applyway']['description']
+                description = leftovers.get('applyway')['description']
             )
             post.postplaces.create(place = place)
             post.postflavors.create(flavor = flavor)
             
             return post
         except ObjectDoesNotExist as e:
-            raise serializers.ValidationError(error_message(f'{e}'))
+            raise serializers.ValidationError(f'{e}')
         except KeyError as e:
-            raise serializers.ValidationError(error_message(f"Key Error : {e}"))
+            raise serializers.ValidationError(f'Key Error : {e}')
     
     @transaction.atomic()
     def update(self, instance, validated_data):
         try:
-            category      = validated_data.pop("category", None)
-            answers       = validated_data.pop("answers", None)
-            stacks        = validated_data.pop("stacks", None)
-            applyway      = validated_data.pop("applyway", None)
-            applyway_info = validated_data.pop("applyway_info", None)
-            place         = validated_data.pop("place", None)
-            flavor        = validated_data.pop("flavor", None)
+            leftovers = validated_data.pop("leftovers", None)
+            answers   = leftovers.get('answers')
+            stacks    = leftovers.get('stacks')
+            category  = Category.objects.get(title = leftovers.get('category'))
+            applyway  = ApplyWay.objects.get(title = leftovers.get('applyway')['title'])
+            flavor    = Flavor.objects.get(title = leftovers.get('flavor'))
+            place     = Place.objects.get(title = leftovers.get('place'))
             
-            category_instance = Category.objects.get(title = category)
-            applyway_instance = ApplyWay.objects.get(title = applyway)
-            place_instance    = Place.objects.get(title = place)
-            flavor_instance   = Flavor.objects.get(title = flavor)
-            
-            Post.objects.filter(id = instance.id)\
-            .update(
-                category = category_instance,
+            updated_instance = Post.objects.filter(id = instance.id)
+            updated_instance.update(
+                category = category,
                 **validated_data
             )
-            
-            instance = Post.objects.get(id = instance.id)
-            
-            # stacks  = json.loads(stacks)
-            # answers = json.loads(answers)
             
             instance.postplaces.all().delete()
             instance.postflavors.all().delete()
@@ -162,18 +156,23 @@ class PostSerializer(serializers.ModelSerializer):
             instance.poststacks.all().delete()
             instance.postanswers.all().delete()
             
-            instance.postplaces.create(place = place_instance)
-            instance.postflavors.create(flavor = flavor_instance)
-            instance.postapplyways.create(applyway = applyway_instance, description = applyway_info)
-            [instance.poststacks.create(stack = Stack.objects.get(title = stack)) for stack in stacks]
             [instance.postanswers.create(
                 answer     = Answer.objects.get(description = answer.get("description")),
                 is_primary = answer.get("is_primary")
-                ) for answer in answers]
+            ) for answer in answers]
+            [instance.poststacks.create(stack = Stack.objects.get(title = stack)) for stack in stacks]
+            instance.postapplyways.create(
+                applyway    = applyway,
+                description = leftovers.get('applyway')['description']
+            )
+            instance.postplaces.create(place = place)
+            instance.postflavors.create(flavor = flavor)
             
             return instance
         except ObjectDoesNotExist as e:
-            raise serializers.ValidationError(error_message(f'{e}')) 
+            raise serializers.ValidationError(f'{e}')
+        except KeyError as e:
+            raise serializers.ValidationError(f'Key Error : {e}')
 
     class Meta:
         model  = Post
