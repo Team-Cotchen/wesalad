@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../redux/store';
+import { RootState } from 'redux/store';
 import { previousStep } from 'redux/reducers/loginSlice';
 
 const BackBtn = () => {

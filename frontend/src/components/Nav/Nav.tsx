@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import logo from 'assets/images/logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setModalVisible, clearStep } from 'redux/reducers/loginSlice';
+import { setModalVisible } from 'redux/reducers/loginSlice';
 import { RootState } from 'redux/store';
-import Modal from './Modal/Modal';
-import LoginModal from '../components/LoginStep/LoginModal';
-import API from 'config';
+import Modal from 'components/Modal/Modal';
+import LoginModal from 'components/LoginStep/LoginModal';
+import LoginUser from 'components/Nav/LoginUser';
 
 const Nav = () => {
   const isGetToken = window.localStorage.getItem('accessToken') === null;
@@ -32,12 +32,6 @@ const Nav = () => {
     else openModal();
   };
 
-  const handleLogout = async () => {
-    dispatch(clearStep());
-    localStorage.clear();
-    navigate('/');
-  };
-
   return (
     <Wrapper>
       <NavBox>
@@ -48,7 +42,7 @@ const Nav = () => {
         <NavRight>
           <NewPost onClick={() => checkIfLoggedIn()}>새 글 쓰기</NewPost>
           {!isGetToken ? (
-            <Login onClick={handleLogout}>로그아웃</Login>
+            <LoginUser />
           ) : (
             <Login onClick={openModal}>로그인</Login>
           )}
@@ -87,8 +81,8 @@ const NavLeft = styled.div`
 `;
 
 const LogoImg = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 2.6rem;
+  height: 2.6rem;
   margin: 0 10px;
 `;
 
@@ -102,7 +96,7 @@ const NavRight = styled.div`
 `;
 
 const NewPost = styled.div`
-  margin-right: 30px;
+  margin-right: 15px;
   font-size: ${({ theme }) => theme.fontRegular};
 
   &:hover {
