@@ -1,60 +1,99 @@
 {
-  "id": 1,
-  "category": "Study",
+  "id": 42,
+  "category": "프로젝트",
   "post_answer": [
     {
-      "is_primary": false,
-      "answer": {
-        "question": "의견이 여러 방향으로 나누어질 때, 당신은 어떤 방향을 선호하시나요?",
-        "content": "적극적으로 의견을 어필하는 편이다.",
-        "description": "적극적인 토마토",
-        "image_url": "https://i.ibb.co/BnmkQsk/07-tomato.png"
-      }
+      "primary_answer": [
+        {
+          "description": "즉흥적인 발사믹",
+          "image_url": "https://i.ibb.co/Sn7jtj8/14-balsamic.png"
+        },
+        {
+          "description": "리더쉽의 아보카도",
+          "image_url": "https://i.ibb.co/gFrBZ0V/11-avocado.png"
+        },
+        {
+          "description": "책임감의 올리브",
+          "image_url": "https://i.ibb.co/XX9H948/12-olives.png"
+        }
+      ]
     },
     {
-      "is_primary": false,
-      "answer": {
-        "question": "평소 팀에서 어떤 역할을 맡으시나요?",
-        "content": "팀의 리더보다는 팀원으로써 주어진일에 책임을 다하는 것에 집중한다.",
-        "description": "책임감의 올리브",
-        "image_url": "https://i.ibb.co/XX9H948/12-olives.png"
-      }
+      "secondary_answer": [
+        {
+          "description": "사교적인 연어",
+          "image_url": "https://i.ibb.co/D5gVvqG/16-salmon.png"
+        },
+        {
+          "description": "도전적인 파프리카",
+          "image_url": "https://i.ibb.co/LpDN5YK/09-paprika.png"
+        },
+        {
+          "description": "수용적인 양상추",
+          "image_url": "https://i.ibb.co/hyHqvp0/08-lettuce.png"
+        },
+        {
+          "description": "적극적인 토마토",
+          "image_url": "https://i.ibb.co/BnmkQsk/07-tomato.png"
+        },
+        {
+          "description": "안정적인 브로콜리",
+          "image_url": "https://i.ibb.co/f4Vq1Cx/10-broccoli.png"
+        },
+        {
+          "description": "계획적인 마요네즈",
+          "image_url": "https://i.ibb.co/FgNDzdW/13-mayo.png"
+        },
+        {
+          "description": "워커홀릭 베이컨",
+          "image_url": "https://i.ibb.co/Tvx2Fd2/15-bacon.png"
+        }
+      ]
     }
   ],
   "post_stack": [
     {
-      "title": "JavaScript",
-      "image_url": "https://i.ibb.co/Yjwz5rH/01-javascript.png",
-      "description": "front-end"
+      "title": "Figma",
+      "image_url": "https://i.ibb.co/XLJJZLW/29-figma.png",
+      "description": "common"
     },
     {
-      "title": "TypeScript",
-      "image_url": "https://i.ibb.co/6gxfp3m/02-typescript.png",
-      "description": "front-end"
+      "title": "Zeplin",
+      "image_url": "https://i.ibb.co/dtcgTVQ/00-settings.png",
+      "description": "common"
+    },
+    {
+      "title": "AWS",
+      "image_url": "https://i.ibb.co/HKj7cLC/25-aws.png",
+      "description": "common"
     }
   ],
   "post_applyway": [
     {
-      "title": "오픈카톡",
+      "title": "카카오톡 오픈채팅",
       "description": "http://velog.io"
+    }
+  ],
+  "post_flavor": [
+    {
+      "title": "매운맛",
+      "description": "주 4시간 이상",
+      "image_url": "https://i.ibb.co/x3JHb8W/03-hot.png"
     }
   ],
   "post_place": "오프라인",
   "user": {
-    "id": 2,
-    "created_at": "2022-06-29T16:09:37.419206",
-    "updated_at": "2022-06-29T16:09:37.419213",
-    "name": "김효정",
-    "ordinal_number": 10,
-    "google_account": 2
+    "ordinal_number": 31,
+    "name": "박지훈",
+    "image_url": "https://lh3.googleusercontent.com/a/AATXAJwtgUQyGrWqPxLrgWkk39SF2AQIleUEsbHt-KJK=s96-c"
   },
-  "created_at": "2022-07-01T18:07:13.880474",
-  "updated_at": "2022-07-01T18:07:13.880517",
+  "created_at": "2022-07-14T22:52:36.560824",
+  "updated_at": "2022-07-14T22:52:36.560869",
   "title": "글 제목",
-  "number_of_front": 3,
-  "number_of_back": 2,
-  "period": "3개월",
-  "description": "<h1>ㄴ랴너리;ㅁㄴ라ㅓㅁ; 리ㅏㅓㄴㄹㅇ!~!!!!/U</h1>\r\n<p>&nbsp;</p>\r\n<p>ㅇㄴㄹㄴㅇ러;ㅣ라ㅓ;ㅣ라ㅓㄴ리마ㅓㄹ미</p>\r\n<p>&nbsp;</p>\r\n<p>ㅇㄴㄹㅁ리ㅏㅁ럼;ㅣ라ㅓ리;마러;ㅣㅏ러ㅣ라ㅓㅣㄹㄴㄹ;<em>ㅋㅋㅋㅋㅋㅋㅋㅋㅋ</em></p>\r\n<p style='text-align:center'><em>ㅠㅎㅇ니ㅏ러니망러니아럼ㄴ;ㅣㄹ아멀</em></p>",
+  "number_of_front": "3명",
+  "number_of_back": "2명",
+  "period": "7개월",
+  "description": "글 내용",
   "start_date": "2022-07-01T00:00:00",
   "status": "active"
 }

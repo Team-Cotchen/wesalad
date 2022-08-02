@@ -1,30 +1,33 @@
 import axios from 'axios';
-import React, { useEffect, useState, FunctionComponent } from 'react';
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import theme from 'styles/theme';
-
-import profile from 'assets/images/profile.png';
-import salad from 'assets/images/salad.png';
-
-import Card from '../../components/Card';
-import { FaPepperHot } from 'react-icons/fa';
-import { BASE_URL } from 'config';
+import { message } from 'antd';
+import dayjs from 'dayjs';
 import { FiExternalLink } from 'react-icons/fi';
+import React, { useEffect, useState, FunctionComponent } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-import type { DetailModel } from './DetailModel';
+import Nav from 'components/Nav/Nav';
+import Card from 'components/Card';
+import PostBackButton from 'components/PostBackButton';
+
+import theme from 'styles/theme';
+import { devices } from 'styles/devices';
+
+import getToken, { BASE_URL } from 'config';
+
+import type { DetailModel } from 'pages/Detail/DetailModel';
+
+const { refresh, access } = getToken.getToken();
 
 const Detail: FunctionComponent = () => {
-  const [detailInfo, setDetailInfo] = useState<DetailModel>();
-
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [detailInfo, setDetailInfo] = useState<DetailModel>();
 
   const getDetails = async () => {
     try {
-      // const { data } = await axios.get(`${BASE_URL}/posts/${id}`);
-
-      //mock data
-      const { data } = await axios.get('/cardsdata.json');
+      const { data } = await axios.get(`${BASE_URL}/posts/${id}`);
+      //const { data } = await axios.get(`/data/cardsdata.json`);
 
       setDetailInfo(data);
     } catch (err) {
@@ -36,146 +39,187 @@ const Detail: FunctionComponent = () => {
     getDetails();
   }, []);
 
-  // review post 필요@
+  const goToEdit = () => {
+    navigate(`/edit/${id}`);
+  };
 
-  // customize date data
-  const year = detailInfo?.created_at.split('-')[0];
-  const month = detailInfo?.created_at.split('-')[1];
-  const day = detailInfo?.created_at.split('-')[2].split('T')[0];
-  const time = detailInfo?.created_at.split('-')[2].split('T')[1].split('.')[0];
+  const deletePost = async () => {
+    try {
+      const { data } = await axios.delete(`${BASE_URL}/posts/${id}`, {
+        headers: {
+          refresh: refresh ?? '',
+          access: access ?? '',
+        },
+      });
+
+      if (data) {
+        message.success('해당 게시글이 삭제되었습니다.');
+        navigate('/');
+      }
+    } catch (err) {
+      console.log(err);
+      message.error('해당 게시글이 삭제되지 않았습니다.');
+    }
+  };
 
   return (
-    <Wrapper>
-      <Header>
-        <HeaderTitle>
-          {detailInfo?.title}
-          <TitleLine />
-        </HeaderTitle>
-
-        <HeaderInfo>
-          <UserInfo>
-            <Profile src={detailInfo?.user?.image_url || profile} />
-            <span>
-              {detailInfo?.user?.ordinal_number}기 {detailInfo?.user?.name}
-            </span>
-          </UserInfo>
-          <Date>
-            {year}년 {month}월 {day}일 {time}
-          </Date>
-        </HeaderInfo>
-      </Header>
-      <Line />
-      <BasicInfo>
-        <Title>
-          <Num>1</Num>프로젝트 레시피
-          <Spicy>
-            맵기 단계
-            <Pepper /> <p> </p>
-          </Spicy>
-        </Title>
-        <InfoList>
-          <ListSection>
-            <ListItem>
-              <ItemTitle>프로젝트 타입</ItemTitle>
-              <Content>{detailInfo?.category}</Content>
-            </ListItem>
-            <ListItem>
-              <ItemTitle>진행 방식 </ItemTitle>
-              <Content>{detailInfo?.post_place}</Content>
-            </ListItem>
-            <ListItem>
-              <ItemTitle>프론트엔드 모집 인원</ItemTitle>
-              <Content>{detailInfo?.number_of_front}명</Content>
-            </ListItem>
-            <ListItem>
-              <ItemTitle>백엔드 모집 인원</ItemTitle>
-              <Content>{detailInfo?.number_of_back}명</Content>
-            </ListItem>
-          </ListSection>
-          <ListSection>
-            <ListItem>
-              <ItemTitle>기술 스택</ItemTitle>
-              <Content>
-                {detailInfo?.post_stack?.map(({ image_url }, idx) => (
-                  <Stackimage key={idx} src={image_url} />
-                ))}
-              </Content>
-            </ListItem>
-            <ListItem>
-              <ItemTitle>진행 기간</ItemTitle>
-              <Content>{detailInfo?.period}</Content>
-            </ListItem>
-            <ListItem>
-              <ItemTitle>시작 예정일</ItemTitle>
-              <Content>{detailInfo?.start_date.split('T')[0]}</Content>
-            </ListItem>
-            <ListItem>
-              <ItemTitle>연락 방법</ItemTitle>
-              <Content>{detailInfo?.post_applyway[0].title}</Content>
-            </ListItem>
-            <ListItem>
-              <ItemTitle>연락할 곳</ItemTitle>
-              <Content>
-                {detailInfo?.post_applyway[0].title !== '이메일' ? (
-                  <ExternalLink
-                    target="_blank"
-                    rel="noreferrer"
-                    href={detailInfo?.post_applyway[0].description}
-                  >
-                    {detailInfo?.post_applyway[0].description}
-                    <FiExternalLink />
-                  </ExternalLink>
-                ) : (
-                  detailInfo?.post_applyway[0].description
-                )}
-              </Content>
-            </ListItem>
-          </ListSection>
-        </InfoList>
-      </BasicInfo>
-      <PersonalityList>
-        <SemiTitle>
-          <Salad src={salad} />
-          우리는 이런 재료를 가진 팀원들과 함께 하고 싶어요.
-        </SemiTitle>
-        <CardBox>
-          {detailInfo?.post_answer
-            .map((item) => item.answer)
-            .map(({ description, image_url }) => (
-              <Card
-                id={description}
-                key={description}
-                image_url={image_url}
-                name={description}
+    <>
+      <Nav />
+      <Wrapper>
+        <Header>
+          <PostBackButton />
+          <HeaderTitle>
+            {detailInfo?.title}
+            <TitleLine />
+          </HeaderTitle>
+          <HeaderInfo>
+            <UserInfo>
+              <Profile
+                src={
+                  detailInfo?.user?.image_url ||
+                  'https://i.ibb.co/0CNSQWx/profile.png'
+                }
               />
-            ))}
-        </CardBox>
-      </PersonalityList>
-
-      <Introduction>
-        <Title>
-          <Num>2</Num>프로젝트 소개
-        </Title>
-        <Line></Line>
-        <MainContent>
-          {detailInfo?.description ? (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: detailInfo.description,
-              }}
-            ></div>
-          ) : (
-            ''
-          )}
-        </MainContent>
+              <span>
+                {detailInfo?.user?.ordinal_number}기 {detailInfo?.user?.name}
+              </span>
+            </UserInfo>
+            <Date>
+              {dayjs(detailInfo?.created_at).format(
+                'YYYY년 mm월 DD일 HH:mm:ss',
+              )}
+            </Date>
+          </HeaderInfo>
+        </Header>
         <Line />
-        <Comments>
-          <SemiTitle>댓글</SemiTitle>
-          <CommentInput />
-          <CommentBtn>댓글 등록</CommentBtn>
-        </Comments>
-      </Introduction>
-    </Wrapper>
+        <BasicInfo>
+          <Title>
+            <Num>1</Num>프로젝트 레시피
+            <Spicy>
+              맵기 단계
+              <Flavor>
+                <FlavorImg
+                  alt="pepper"
+                  src={detailInfo?.post_flavor[0]?.image_url}
+                />
+                {detailInfo?.post_flavor[0]?.title}
+                <FlavorDetail>{`(${detailInfo?.post_flavor[0]?.description})`}</FlavorDetail>
+              </Flavor>
+            </Spicy>
+          </Title>
+          <InfoList>
+            <ListSection>
+              <ListItem>
+                <ItemTitle>프로젝트 타입</ItemTitle>
+                <Content>{detailInfo?.category}</Content>
+              </ListItem>
+              <ListItem>
+                <ItemTitle>진행 방식 </ItemTitle>
+                <Content>{detailInfo?.post_place}</Content>
+              </ListItem>
+              <ListItem>
+                <ItemTitle>프론트엔드 모집 인원</ItemTitle>
+                <Content>{detailInfo?.number_of_front}</Content>
+              </ListItem>
+              <ListItem>
+                <ItemTitle>백엔드 모집 인원</ItemTitle>
+                <Content>{detailInfo?.number_of_back}</Content>
+              </ListItem>
+            </ListSection>
+            <ListSection>
+              <ListItem>
+                <ItemTitle>기술 스택</ItemTitle>
+                <Content>
+                  {detailInfo?.post_stack?.map(({ image_url }, idx) => (
+                    <Stackimage key={idx} src={image_url} />
+                  ))}
+                </Content>
+              </ListItem>
+              <ListItem>
+                <ItemTitle>진행 기간</ItemTitle>
+                <Content>{detailInfo?.period}</Content>
+              </ListItem>
+              <ListItem>
+                <ItemTitle>시작 예정일</ItemTitle>
+                <Content>
+                  {dayjs(detailInfo?.start_date).format('YYYY-MM-DD')}
+                </Content>
+              </ListItem>
+              <ListItem>
+                <ItemTitle>연락 방법</ItemTitle>
+                <Content>{detailInfo?.post_applyway[0].title}</Content>
+              </ListItem>
+              <ListItem>
+                <ItemTitle>연락할 곳</ItemTitle>
+                <Content>
+                  {detailInfo?.post_applyway[0].title !== '이메일' ? (
+                    <ExternalLink
+                      target="_blank"
+                      rel="noreferrer"
+                      href={detailInfo?.post_applyway[0].description}
+                    >
+                      {detailInfo?.post_applyway[0].description}
+                      <FiExternalLink />
+                    </ExternalLink>
+                  ) : (
+                    detailInfo?.post_applyway[0].description
+                  )}
+                </Content>
+              </ListItem>
+            </ListSection>
+          </InfoList>
+        </BasicInfo>
+        <PersonalityList>
+          <SemiTitle>
+            <Salad src="https://i.ibb.co/PrKjyH6/salad.png" />
+            우리는 이런 재료를 가진 팀원들과 함께 하고 싶어요.
+          </SemiTitle>
+          <CardBox>
+            {detailInfo?.post_answer?.[0]?.primary_answer?.map(
+              ({ description, image_url }) => (
+                <Card
+                  id={description}
+                  key={description}
+                  image_url={image_url}
+                  name={description}
+                />
+              ),
+            )}
+
+            {detailInfo?.post_answer?.[0]?.secondary_answer?.map(
+              ({ description, image_url }) => (
+                <Card
+                  id={description}
+                  key={description}
+                  image_url={image_url}
+                  name={description}
+                />
+              ),
+            )}
+          </CardBox>
+        </PersonalityList>
+        <Introduction>
+          <Title>
+            <Num>2</Num>프로젝트 소개
+          </Title>
+          <Line></Line>
+          <MainContent>
+            {detailInfo?.description ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: detailInfo?.description,
+                }}
+              ></div>
+            ) : (
+              ''
+            )}
+          </MainContent>
+          <Line />
+        </Introduction>
+        <EditButton onClick={goToEdit}>수정</EditButton>
+        <DeleteButton onClick={deletePost}>삭제</DeleteButton>
+      </Wrapper>
+    </>
   );
 };
 
@@ -183,11 +227,27 @@ export default Detail;
 
 const Wrapper = styled.div`
   ${theme.wrapper()};
+  position: relative;
+
+  @media screen and ${devices.laptop} {
+    overflow-x: hidden;
+    width: 900px;
+  }
+
+  @media screen and ${devices.tablet} {
+    overflow-x: hidden;
+    width: 720px;
+  }
+
+  @media screen and ${devices.mobile} {
+    overflow-x: hidden;
+    width: 500px;
+  }
 `;
 
 // header
 const Header = styled.header`
-  margin-top: 140px;
+  margin-top: 120px;
 `;
 
 const HeaderTitle = styled.h1`
@@ -197,15 +257,24 @@ const HeaderTitle = styled.h1`
   padding-left: 30px;
   font-size: 40px;
   font-weight: ${theme.weightSemiBold};
+
+  @media screen and ${devices.mobile} {
+    margin: 10px 0;
+  }
 `;
 
 const TitleLine = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   width: 100%;
   height: 15px;
   background-color: ${theme.mainGreen};
   z-index: -1;
+
+  @media screen and ${devices.mobile} {
+    width: 80%;
+    height: 12px;
+  }
 `;
 
 const HeaderInfo = styled.div`
@@ -220,6 +289,10 @@ const UserInfo = styled.div`
   padding-right: 20px;
   font-weight: ${theme.weightBold};
   border-right: 1px solid #dbdbdb;
+
+  @media screen and ${devices.laptop} {
+    margin: 10px 20px;
+  }
 `;
 
 const Profile = styled.img`
@@ -227,6 +300,11 @@ const Profile = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
+
+  @media screen and ${devices.mobile} {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const Date = styled.div`
@@ -238,16 +316,33 @@ const Line = styled.div`
   height: 1px;
   margin: 20px 0;
   background-color: #dfe1e6;
+
+  @media screen and ${devices.mobile} {
+    margin: 10px 0;
+  }
 `;
 
 //BasicInfo
 const BasicInfo = styled.div`
   padding: 20px;
+
+  @media screen and ${devices.laptop} {
+    padding: 15px;
+  }
 `;
 
 const Title = styled.h2`
   position: relative;
   font-size: 25px;
+
+  @media screen and ${devices.laptop} {
+    font-size: 22px;
+  }
+
+  @media screen and ${devices.mobile} {
+    margin-bottom: 60px;
+    font-size: 18px;
+  }
 `;
 
 const Spicy = styled.div`
@@ -265,10 +360,39 @@ const Spicy = styled.div`
     margin-top: 10px;
     font-size: ${theme.fontSmall};
   }
+
+  @media screen and ${devices.laptop} {
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  @media screen and ${devices.mobile} {
+    margin-top: 10px;
+  }
 `;
 
-const Pepper = styled(FaPepperHot)`
-  color: #f5390f;
+const Flavor = styled.div`
+  display: flex;
+`;
+
+const FlavorImg = styled.img`
+  width: 30px;
+  height: 30px;
+
+  @media screen and ${devices.laptop} {
+    width: 25px;
+    height: 25px;
+  }
+`;
+
+const FlavorDetail = styled.div`
+  margin: 0 10px;
+  font-size: ${theme.fontSmall};
+  color: #999999;
+
+  @media screen and ${devices.laptop} {
+    font-size: 13px;
+  }
 `;
 
 const Num = styled.span`
@@ -281,15 +405,39 @@ const Num = styled.span`
   border-radius: 50%;
   color: #fff;
   background-color: ${theme.mainGreen};
+
+  @media screen and ${devices.laptop} {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+
+  @media screen and ${devices.mobile} {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+  }
 `;
 
 const InfoList = styled.ul`
   display: flex;
+
+  @media screen and ${devices.mobile} {
+    display: block;
+  }
 `;
 
 const ListSection = styled.div`
   flex: 1;
   margin: 30px 0;
+
+  @media screen and ${devices.laptop} {
+    margin: 10px 0;
+  }
+
+  @media screen and ${devices.mobile} {
+    margin: 0;
+  }
 `;
 
 const ListItem = styled.li`
@@ -298,11 +446,32 @@ const ListItem = styled.li`
   margin: 30px;
   font-size: ${theme.fontRegular};
   font-weight: ${theme.weightSemiBold};
+
+  @media screen and ${devices.laptop} {
+    margin: 15px 0;
+    font-size: ${theme.fontSmall};
+  }
+
+  @media screen and ${devices.mobile} {
+    margin: 20px;
+    font-size: ${theme.fontSmall};
+  }
 `;
 
 const ItemTitle = styled.div`
   width: 200px;
   color: #808080;
+
+  @media screen and ${devices.laptop} {
+    width: 150px;
+    border-right: 1px solid #dbdbdb;
+    margin-right: 10px;
+  }
+
+  @media screen and ${devices.mobile} {
+    width: 200px;
+    border: 0;
+  }
 `;
 
 const Stackimage = styled.img`
@@ -310,6 +479,18 @@ const Stackimage = styled.img`
   margin-bottom: -20px;
   width: 40px;
   height: 40px;
+
+  @media screen and ${devices.laptop} {
+    transform: translate(0px, -10px);
+    width: 35px;
+    height: 35px;
+  }
+
+  @media screen and ${devices.mobile} {
+    transform: translate(0px, -17px);
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const Content = styled.div``;
@@ -325,9 +506,13 @@ const PersonalityList = styled.div`
 `;
 
 const CardBox = styled.div`
-  margin-top: 30px;
-  padding-bottom: 20px;
-  border-radius: 3px;
+margin-top: 30px;
+padding-bottom 20px;
+border-radius: 3px;
+
+@media screen and ${devices.laptop} {
+  margin-top: 0px;
+}
 `;
 
 const SemiTitle = styled.h3`
@@ -335,12 +520,26 @@ const SemiTitle = styled.h3`
   align-items: center;
   margin-bottom: 20px;
   font-size: 20px;
+
+  @media screen and ${devices.laptop} {
+    margin-bottom: 10px;
+  }
+
+  @media screen and ${devices.mobile} {
+    font-size: 17px;
+  }
 `;
 
 const Salad = styled.img`
   width: 30px;
   height: 30px;
   margin-right: 20px;
+
+  @media screen and ${devices.mobile} {
+    width: 25px;
+    height: 25px;
+    margin: 0 10px;
+  }
 `;
 
 //Introduction
@@ -355,30 +554,57 @@ const MainContent = styled.div`
   line-height: 30px;
 `;
 
-const Comments = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-const CommentInput = styled.input`
-  font-family: ‘Black Han Sans’;
-  width: 100%;
-  height: 80px;
-  padding: 10px;
-  border: 1px #dbdbdb solid;
-  border-radius: 4px;
-  font-size: ${theme.fontRegular};
-`;
-
-const CommentBtn = styled.button`
+const EditButton = styled.button`
   position: absolute;
-  right: 0px;
-  bottom: -60px;
-  padding: 10px;
+  right: 100px;
+  bottom: -40px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
   background: ${theme.mainGreen};
   font-size: ${theme.fontRegular};
   color: #fff;
   border: 0;
-  border-radius: 30px;
+  border-radius: 10px;
   cursor: pointer;
+
+  @media screen and ${devices.laptop} {
+    bottom: -10px;
+  }
+
+  @media screen and ${devices.tablet} {
+    bottom: -20px;
+  }
+
+  @media screen and ${devices.mobile} {
+    right: 90px;
+    bottom: 0;
+    padding: 7px 15px;
+  }
+`;
+
+const DeleteButton = styled.button`
+  position: absolute;
+  right: 20px;
+  bottom: -40px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background: #999;
+  font-size: ${theme.fontRegular};
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+
+  @media screen and ${devices.laptop} {
+    bottom: -10px;
+  }
+
+  @media screen and ${devices.tablet} {
+    bottom: -20px;
+  }
+
+  @media screen and ${devices.mobile} {
+    bottom: 0;
+    padding: 7px 15px;
+  }
 `;

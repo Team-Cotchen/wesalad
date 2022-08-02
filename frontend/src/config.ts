@@ -15,6 +15,9 @@ const API = {
   },
 };
 
+export const setAccessToken = (token: string) =>
+  localStorage.setItem('accessToken', token);
+
 export const TINYMCE_API_KEY =
   'zxuiph9yiunvdp85dyzooockfmnnka538tzip74drjnbvoia';
 

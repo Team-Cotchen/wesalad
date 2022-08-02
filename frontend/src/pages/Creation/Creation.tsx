@@ -15,6 +15,7 @@ const Creation: FunctionComponent = () => {
     period: '기간 미정 ~ 6개월 이상',
     description: '',
     start_date: moment(new Date(), 'YYYY-MM-DD'),
+    flavor: '',
   };
 
   const postToCreate = {
