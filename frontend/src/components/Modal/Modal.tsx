@@ -47,8 +47,7 @@ const ModalOverlay = styled.div<{ name: string; visible: boolean }>`
   left: 0;
   bottom: 0;
   right: 0;
-  background: ${({ name }) =>
-    name === 'loading' ? 'white' : 'rgba(77, 77, 77, 0.5)'};
+  background: rgba(77, 77, 77, 0.5);
   z-index: 900;
 `;
 

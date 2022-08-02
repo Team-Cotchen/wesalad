@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { clearStep } from 'redux/reducers/loginSlice';
+import { message } from 'antd';
 import { devices } from 'styles/devices';
 
 const DropdownItem = () => {
@@ -11,6 +12,7 @@ const DropdownItem = () => {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
+    message.success('로그아웃 되었습니다👋');
     dispatch(clearStep());
     localStorage.clear();
     navigate('/');
@@ -22,7 +24,7 @@ const DropdownItem = () => {
         <Link to="/">
           <li>내 작성글</li>
         </Link>
-        <Link to="/">
+        <Link to="/setting">
           <li>설정</li>
         </Link>
         <li onClick={handleLogout}>로그아웃</li>

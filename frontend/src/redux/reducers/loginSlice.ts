@@ -1,12 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import loginAsync from '../actions/loginAsync';
 
 const initialState = {
   currentStep: 1,
-  id: undefined,
+  signupId: undefined,
+  loginId: undefined,
   imageUrl: undefined,
   modalVisible: false,
-  data: [],
 };
 
 const loginSlice = createSlice({
@@ -32,11 +31,6 @@ const loginSlice = createSlice({
     }),
     clearStep: () => initialState,
   },
-  // 비동기처리
-  extraReducers: (builder) =>
-    builder.addCase(loginAsync.fulfilled, (state, { payload }) => ({
-      ...state,
-    })),
 });
 
 export const {
