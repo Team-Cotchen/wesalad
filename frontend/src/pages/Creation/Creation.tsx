@@ -4,18 +4,18 @@ import moment from 'moment';
 
 const Creation: FunctionComponent = () => {
   const fields = {
-    category: '스터디/프로젝트',
-    stacks: ['javascript'],
+    category: undefined,
+    stacks: undefined,
     applyway: '카카오톡 오픈 채팅',
     applyway_info: '',
-    place: '온라인/오프라인',
+    place: undefined,
     title: '',
-    number_of_front: '인원 미정 ~ 5명 이상',
-    number_of_back: '인원 미정 ~ 5명 이상',
-    period: '기간 미정 ~ 6개월 이상',
+    number_of_front: undefined,
+    number_of_back: undefined,
+    period: undefined,
     description: '',
     start_date: moment(new Date(), 'YYYY-MM-DD'),
-    flavor: '',
+    flavor: '중간맛',
   };
 
   const postToCreate = {
