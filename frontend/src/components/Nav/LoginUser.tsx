@@ -27,7 +27,7 @@ const LoginUser = () => {
         onClick={() => setMenuVisible(!menuVisible)}
       >
         <img src={imageUrl} />
-        <ArrowIcon menuVisible={menuVisible} size={20} />
+        <ArrowIcon size={20} />
       </ProfileSection>
       {menuVisible && <DropdownItem />}
     </>
@@ -46,11 +46,9 @@ const ProfileSection = styled.div`
   }
 `;
 
-const ArrowIcon = styled(IoMdArrowDropdown)<{ menuVisible: boolean }>`
+const ArrowIcon = styled(IoMdArrowDropdown)`
   transform: translateY(5px);
   color: grey;
   transition: all 0.2s ease-in;
-
   transform-origin: center 60%;
-  ${({ menuVisible }) => menuVisible && `transform: rotate(-180deg);`};
 `;
