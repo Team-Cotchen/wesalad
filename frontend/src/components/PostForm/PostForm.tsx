@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 import PostFormModal from 'components/PostForm/PostFormModal';
 import Card from 'components/Card';
-import Nav from 'components/Nav';
+import Nav from 'components/Nav/Nav';
 
 import theme from 'styles/theme';
 import { devices } from 'styles/devices';

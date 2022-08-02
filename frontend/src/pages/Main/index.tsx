@@ -1,4 +1,4 @@
-import Nav from 'components/Nav';
+import Nav from 'components/Nav/Nav';
 import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { CARDS_DATA } from 'pages/Main/cardsdata';
