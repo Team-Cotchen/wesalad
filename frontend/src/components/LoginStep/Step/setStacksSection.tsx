@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'redux/store';
 import { nextStep } from 'redux/reducers/loginSlice';
 import { Select } from 'antd';
 import { ITitle, IInfoSection } from 'components/LoginStep/loginStep.types';
-import axios from 'axios';
+
 import { OptionModel } from 'components/PostForm/PostForm.model';
 import 'antd/dist/antd.min.css';
 const { Option } = Select;
 import BackButton from 'components/BackButton';
+import { OPTIONS } from 'assets/data/Options.constant';
 import { devices } from 'styles/devices';
 
 type IStacks = Pick<OptionModel, 'STACKS'>;
@@ -20,20 +21,7 @@ const setStacksSection = ({
 }: Pick<IInfoSection, 'handleBasicInfo' | 'name'>) => {
   const dispatch = useDispatch();
   const loginStep = useSelector((state: RootState) => state.login.currentStep);
-
-  const [stacks, setStacks] = useState({
-    STACKS: [],
-  });
-  const { STACKS }: IStacks = stacks;
-
-  const getOptions = async () => {
-    const { data } = await axios.get('/data/constantOptions.json');
-    setStacks(data);
-  };
-
-  useEffect(() => {
-    getOptions();
-  }, []);
+  const { STACKS }: IStacks = OPTIONS;
 
   return (
     <>

@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 const setResultSection = ({ handleClose, basicInfo }: any) => {
   const tendencyResult: number[] = basicInfo.answers;
   const answerChangeForm: string[] = [];
-  const id = useSelector((state: RootState) => state.login.id);
+  const id = useSelector((state: RootState) => state.login.signupId);
   const navigate = useNavigate();
 
   const changeToFetchForm = () => {
@@ -77,9 +77,15 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
         <ResultWindowSection>
           {tendencyResult?.map((item, i) =>
             item === 0 ? (
-              <Card key={i}>{QuestionData[i].resultA}</Card>
+              <Card key={i}>
+                <Icon src={QuestionData[i].image_urlA} />
+                {QuestionData[i].resultA}
+              </Card>
             ) : (
-              <Card key={i}>{QuestionData[i].resultB}</Card>
+              <Card key={i}>
+                <Icon src={QuestionData[i].image_urlB} />
+                {QuestionData[i].resultB}
+              </Card>
             ),
           )}
         </ResultWindowSection>
@@ -158,7 +164,6 @@ const SubTitle = styled.h1<ITitle>`
 `;
 
 const ResultWindowSection = styled.div`
-  background: '#2DE466';
   padding: 10px 10px;
   border-radius: 30px;
 
@@ -182,7 +187,6 @@ const SubmitBtn = styled.button<{ mode: string }>`
   background-color: ${({ theme }) => theme.mainGreen};
   color: white;
   padding: 0 8px;
-
   border: none;
   border-radius: 10px;
   font-size: ${({ theme }) => theme.fontSemiMedium};
@@ -197,12 +201,12 @@ const SubmitBtn = styled.button<{ mode: string }>`
 const Card = styled.li`
   display: inline-block;
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   margin: 10px 10px;
-  background: ${({ theme }) => theme.mainGreen};
-  border-radius: 10px;
+  background: white;
   font-size: ${({ theme }) => theme.fontSmall};
-  color: white;
+  border-radius: 20px;
+  border: 1px solid #dbdbdb;
 
   @media ${devices.laptop} {
     padding: 15px;
@@ -213,4 +217,10 @@ const Card = styled.li`
     padding: 5px;
     margin: 10px 10px;
   }
+`;
+
+const Icon = styled.img`
+  margin-right: 4px;
+  width: 21px;
+  height: 21px;
 `;

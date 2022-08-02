@@ -8,6 +8,8 @@ export const QuestionData: {
   ingredientB: string;
   resultA: string;
   resultB: string;
+  image_urlA: string;
+  image_urlB: string;
 }[] = [
   {
     id: 1,
@@ -19,6 +21,8 @@ export const QuestionData: {
     ingredientB: 'lettuce',
     resultA: '적극적인 토마토',
     resultB: '수용적인 양상추',
+    image_urlA: 'https://i.ibb.co/BnmkQsk/07-tomato.png',
+    image_urlB: 'https://i.ibb.co/hyHqvp0/08-lettuce.png',
   },
   {
     id: 2,
@@ -30,6 +34,8 @@ export const QuestionData: {
     ingredientB: 'broccoli',
     resultA: '도전적인 파프리카',
     resultB: '안정적인 브로콜리',
+    image_urlA: 'https://i.ibb.co/LpDN5YK/09-paprika.png',
+    image_urlB: 'https://i.ibb.co/f4Vq1Cx/10-broccoli.png',
   },
   {
     id: 3,
@@ -41,6 +47,8 @@ export const QuestionData: {
     ingredientB: 'olives',
     resultA: '리더쉽의 아보카도',
     resultB: '책임감의 올리브',
+    image_urlA: 'https://i.ibb.co/gFrBZ0V/11-avocado.png',
+    image_urlB: 'https://i.ibb.co/XX9H948/12-olives.png',
   },
   {
     id: 4,
@@ -52,6 +60,8 @@ export const QuestionData: {
     ingredientB: 'balsamic',
     resultA: '계획적인 마요네즈',
     resultB: '즉흥적인 발사믹',
+    image_urlA: 'https://i.ibb.co/FgNDzdW/13-mayo.png',
+    image_urlB: 'https://i.ibb.co/Sn7jtj8/14-balsamic.png',
   },
   {
     id: 5,
@@ -63,5 +73,7 @@ export const QuestionData: {
     ingredientB: 'bacon',
     resultA: '워커홀릭 베이컨',
     resultB: '사교적인 연어',
+    image_urlA: 'https://i.ibb.co/D5gVvqG/16-salmon.png',
+    image_urlB: 'https://i.ibb.co/Tvx2Fd2/15-bacon.png',
   },
 ];

@@ -5,6 +5,7 @@ import Main from 'pages/Main/index';
 import Creation from 'pages/Creation/Creation';
 import Edit from 'pages/Edit/Edit';
 import GoogleLogin from 'pages/auth/googleLogin';
+import Setting from 'pages/Setting/Setting';
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
         <Route path="/creation" element={<Creation />} />
         <Route path="edit/:id" element={<Edit />} />
         <Route path="google/callback" element={<GoogleLogin />} />
+        <Route path="/setting" element={<Setting />} />
       </Routes>
     </BrowserRouter>
   );
