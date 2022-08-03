@@ -1,10 +1,12 @@
 from django.db import models
 
+
 class Question(models.Model):
     content = models.CharField(max_length=300)
 
     class Meta:
         db_table = 'questions'
+
         
 class Answer(models.Model):
     content     = models.CharField(max_length=300)
@@ -14,6 +16,7 @@ class Answer(models.Model):
     
     class Meta:
         db_table = 'answers'
+
 
 class Stack(models.Model):
     title       = models.CharField(max_length=100)

@@ -1,24 +1,25 @@
-from dataclasses import field, fields
-from pyexpat import model
 from rest_framework import serializers
 
 from .models import Question, Answer, Stack
+
 
 class QuestionSerializer(serializers.ModelSerializer):
     
     class Meta:
         model  = Question
-        fields = ['content']
+        fields = '__all__'
+
 
 class AnswerSerializer(serializers.ModelSerializer):
     question = QuestionSerializer(required=False)
     
     class Meta:
         model  = Answer
-        fields = ['content', 'description', 'image_url', 'question']
+        fields = '__all__'
+
 
 class StackSerializer(serializers.ModelSerializer):
     
     class Meta:
         model  = Stack
-        fields = ['title', 'description', 'image_url']
+        fields = '__all__'
