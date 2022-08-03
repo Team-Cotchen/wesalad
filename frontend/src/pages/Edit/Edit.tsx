@@ -17,10 +17,12 @@ const Edit: FunctionComponent = () => {
 
   const getData = async () => {
     try {
-      //   const { data } = await axios.get(`${BASE_URL}/posts/${id}`);
+      const { data } = await axios.get(`${BASE_URL}/posts/${id}`);
 
-      //mock data
-      const { data } = await axios.get('/data/cardsdata.json');
+      // //mock data
+      //const { data } = await axios.get('/data/cardsdata.json');
+
+      console.log(data);
 
       convertToPostData(data);
     } catch (err) {
@@ -45,6 +47,7 @@ const Edit: FunctionComponent = () => {
       post_stack,
       start_date,
       title,
+      post_flavor,
     } = data;
 
     const fields = {
@@ -58,15 +61,17 @@ const Edit: FunctionComponent = () => {
       number_of_back,
       period,
       start_date: moment(start_date, 'YYYY-MM-DD'),
+      flavor: post_flavor[0]?.title,
     };
 
-    const primary = post_answer
-      .filter(({ is_primary }) => is_primary === true)
-      .map(({ answer }) => answer.description);
+    const primary =
+      post_answer?.[0]?.primary_answer?.map(({ description }) => description) ||
+      [];
 
-    const additional = post_answer
-      .filter(({ is_primary }) => is_primary === false)
-      .map(({ answer }) => answer.description);
+    const additional =
+      post_answer?.[0]?.secondary_answer?.map(
+        ({ description }) => description,
+      ) || [];
 
     setPostToEdit({ fields, description, primary, additional });
   };

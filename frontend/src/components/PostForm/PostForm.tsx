@@ -1,27 +1,25 @@
 import { Select, DatePicker, Checkbox, message, Form, Button } from 'antd';
 import axios from 'axios';
-import React, { useState, FunctionComponent, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, FunctionComponent, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ImPointRight } from 'react-icons/im';
 import { VscCircleOutline } from 'react-icons/vsc';
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 
+import { OPTIONS } from 'assets/data/Options.constant';
+
 import PostFormModal from 'components/PostForm/PostFormModal';
 import Card from 'components/Card';
 import Nav from 'components/Nav/Nav';
+import type { FormModel, PostModel } from 'components/PostForm/PostForm.model';
 
 import theme from 'styles/theme';
 import { devices } from 'styles/devices';
 
-import { BASE_URL, TINYMCE_API_KEY } from 'config';
+import getToken, { BASE_URL, TINYMCE_API_KEY } from 'config';
 
-import type {
-  OptionModel,
-  FormModel,
-  PostModel,
-} from 'components/PostForm/PostForm.model';
-
+const { refresh, access } = getToken.getToken();
 const { Option } = Select;
 const { Item } = Form;
 
@@ -31,19 +29,10 @@ interface Props {
 }
 
 const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
+  const { id } = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [options, setOptions] = useState<OptionModel>({
-    CATEGORY: [],
-    PLACE: [],
-    NUM_OF_DEVELOPER: [],
-    PERIOD: [],
-    APPLY_WAY: [],
-    FLAVOR: [],
-    STACKS: [],
-    CARD_LIST: [],
-  });
 
   const {
     CATEGORY,
@@ -54,7 +43,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
     FLAVOR,
     STACKS,
     CARD_LIST,
-  } = options;
+  } = OPTIONS;
 
   const [additionalCards, setAdditionalCards] = useState<string[]>(
     mode === 'edit' ? defaultPost.additional : [],
@@ -63,68 +52,76 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
     mode === 'edit' ? defaultPost.primary : [],
   );
   const [applyWay, setApplyWay] = useState<unknown>();
-  const [flavor, setFlavor] = useState('');
+  const [flavor, setFlavor] = useState(defaultPost?.fields?.flavor);
   const [description, setDescription] = useState('');
 
-  const PRYMARY_CARDS = primaryCards.map((name) => {
-    return {
-      name,
-      image_url: CARD_LIST.find((card) => card.name === name)?.image_url,
-    };
-  });
+  const convertToImgCard = (cards: string[]) =>
+    cards.map((name) => {
+      return {
+        name,
+        image_url: CARD_LIST.find((card) => card.name === name)?.image_url,
+      };
+    });
 
-  const ADDITIONAL_CARDS = additionalCards.map((name) => {
-    return {
-      name,
-      image_url: CARD_LIST.find((card) => card.name === name)?.image_url,
-    };
-  });
+  const PRYMARY_CARDS = convertToImgCard(primaryCards);
+  const ADDITIONAL_CARDS = convertToImgCard(additionalCards);
 
   const ALL_CARDS = useMemo(
     () =>
       [...primaryCards, ...additionalCards].map((item) => {
-        return { description: item, is_primary: primaryCards.includes(item) };
+        return { description: item, is_primary: primaryCards?.includes(item) };
       }),
     [primaryCards, additionalCards],
   );
 
-  useEffect(() => {
-    const getOptions = async () => {
-      const { data } = await axios.get('/data/constantOptions.json');
-
-      setOptions(data);
-    };
-    getOptions();
-  }, []);
-
-  const submitForm = async (values: FormModel) => {
+  const EditForm = async (formData: FormData) => {
     try {
-      const formData = new FormData();
-
-      const formattedValues = {
-        ...values,
-        start_date: values.start_date.format('YYYY-MM-DD'),
-        answers: JSON.stringify(ALL_CARDS),
-        stacks: JSON.stringify(values.stacks),
-        description,
-      };
-
-      Object.entries(formattedValues).forEach(([key, value]) =>
-        formData.append(key, value),
-      );
-
-      const res = await axios({
-        method: mode === 'edit' ? 'put' : 'post',
-        url: `${BASE_URL}/posts/create`,
+      const res = await axios.put(`${BASE_URL}/posts/${id}`, {
         headers: {
           'Content-Type': `multipart/form-data`,
+          refresh,
+          access,
+        },
+        data: formData,
+      });
+
+      if (res.status === 200) {
+        message.success('수정되었습니다.');
+
+        const id = (res.data as { id: number }).id;
+
+        navigate(`/project/${id}`);
+      }
+
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+      message.error('수정되지 않았습니다.');
+
+      console.log((err as any).response);
+      if (
+        (err as { response: { data: { ERROR: string } } }).response.data
+          ?.ERROR === 'YOUR_LOGIN_HAS_EXPIRED'
+      ) {
+        message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
+      }
+    }
+  };
+
+  const CreateForm = async (formData: FormData) => {
+    try {
+      // 만약 이렇게해서 안될시 formData 꺼내서 url 옆에 적어줄것
+      const res = await axios.post(`${BASE_URL}/posts/create`, {
+        headers: {
+          'Content-Type': `multipart/form-data`,
+          refresh,
+          access,
         },
         data: formData,
       });
 
       if (res.status === 201) {
         message.success('프로젝트가 성공적으로 생성되었습니다! 🎉');
-
         const id = (res.data as { id: number }).id;
 
         navigate(`/project/${id}`);
@@ -132,7 +129,34 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
     } catch (err) {
       console.log(err);
       message.error('프로젝트가 생성되지 않았습니다.');
+
+      if (
+        (err as { response: { data: { ERROR: string } } }).response.data
+          ?.ERROR === 'YOUR_LOGIN_HAS_EXPIRED'
+      ) {
+        message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
+        navigate('/google/callback');
+      }
     }
+  };
+
+  // validate 필요 ->  required - validation 처리 함수 만들기
+  const submitForm = async (values: FormModel) => {
+    const formData = new FormData();
+    const formattedValues = {
+      ...values,
+      start_date: values.start_date.format('YYYY-MM-DD'),
+      answers: JSON.stringify(ALL_CARDS),
+      stacks: JSON.stringify(values.stacks),
+      flavor,
+      description,
+    };
+
+    Object.entries(formattedValues).forEach(([key, value]) =>
+      formData.append(key, value),
+    );
+
+    mode === 'edit' ? EditForm(formData) : CreateForm(formData);
   };
 
   const handleFlavor = (e: React.MouseEvent<HTMLElement>) => {
@@ -162,10 +186,8 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
             setAdditionalCards={setAdditionalCards}
             primaryCards={primaryCards}
             setPrimaryCards={setPrimaryCards}
-            CARD_LIST={CARD_LIST}
           />
         )}
-
         <Form
           form={form}
           onFinish={submitForm}
@@ -176,7 +198,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
             <Title>
               <Num>1</Num>원하는 프로젝트 레시피를 알려주세요.
             </Title>
-            <Line></Line>
+            <Line />
             <Main>
               <SelectList>
                 <ListItem
@@ -187,10 +209,11 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 프로젝트 타입
                     </StyledLabel>
                   }
+                  colon={false}
                 >
-                  <StyledSelect bordered={false}>
+                  <StyledSelect bordered={false} placeholder="스터디/프로젝트">
                     {CATEGORY.map((category) => (
-                      <Option key={category} value={category || 'category'}>
+                      <Option key={category} value={category}>
                         {category}
                       </Option>
                     ))}
@@ -204,10 +227,11 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 진행방식
                     </StyledLabel>
                   }
+                  colon={false}
                 >
                   <StyledSelect bordered={false}>
                     {PLACE.map((place) => (
-                      <Option key={place} value={place || 'place'}>
+                      <Option key={place} value={place}>
                         {place}
                       </Option>
                     ))}
@@ -221,6 +245,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 기술 스택
                     </StyledLabel>
                   }
+                  colon={false}
                 >
                   <StyledSelect
                     placeholder="사용할 기술 스택을 골라주세요."
@@ -231,7 +256,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                     showArrow
                   >
                     {STACKS.map(({ value, title }) => (
-                      <Option key={value} value={value || 'stack'}>
+                      <Option key={value} value={value}>
                         {title}
                       </Option>
                     ))}
@@ -245,10 +270,14 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 프론트엔드 모집 인원
                     </StyledLabel>
                   }
+                  colon={false}
                 >
-                  <StyledSelect bordered={false}>
+                  <StyledSelect
+                    bordered={false}
+                    placeholder="인원 미정 ~ 5명 이상"
+                  >
                     {NUM_OF_DEVELOPER.map((num) => (
-                      <Option key={num} value={num || '0'}>
+                      <Option key={num} value={num}>
                         {num}
                       </Option>
                     ))}
@@ -262,10 +291,14 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 백엔드 모집 인원
                     </StyledLabel>
                   }
+                  colon={false}
                 >
-                  <StyledSelect bordered={false}>
+                  <StyledSelect
+                    bordered={false}
+                    placeholder="인원 미정 ~ 5명 이상"
+                  >
                     {NUM_OF_DEVELOPER.map((num) => (
-                      <Option key={num} value={num || '0'}>
+                      <Option key={num} value={num}>
                         {num}
                       </Option>
                     ))}
@@ -279,10 +312,11 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 진행 기간
                     </StyledLabel>
                   }
+                  colon={false}
                 >
                   <StyledSelect bordered={false}>
                     {PERIOD.map((num) => (
-                      <Option key={num} value={num || '0'}>
+                      <Option key={num} value={num}>
                         {num}
                       </Option>
                     ))}
@@ -296,6 +330,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 시작 예정일
                     </StyledLabel>
                   }
+                  colon={false}
                 >
                   <StyledDatePicker placeholder="날짜를 골라주세요." />
                 </ListItem>
@@ -307,10 +342,11 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 연락 방법
                     </StyledLabel>
                   }
+                  colon={false}
                 >
                   <StyledSelect bordered={false} onChange={setApplyWay}>
                     {APPLY_WAY.map(({ title }) => (
-                      <Option key={title} value={title || 'title'}>
+                      <Option key={title} value={title}>
                         {title}
                       </Option>
                     ))}
@@ -324,6 +360,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                       &nbsp; 연락 주소
                     </StyledLabel>
                   }
+                  colon={false}
                 >
                   <ContactInput
                     placeholder={
@@ -350,7 +387,6 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                         {PRYMARY_CARDS.length > 0 && (
                           <CardBoxLabel>메인 재료</CardBoxLabel>
                         )}
-
                         {PRYMARY_CARDS?.map(({ image_url, name }, index) => (
                           <Card
                             id={name}
@@ -405,14 +441,18 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
           </BasicInfo>
 
           {primaryCards.length === 0 && additionalCards.length === 0 && (
-            <MiddleLine></MiddleLine>
+            <MiddleLine />
           )}
           <DetailInfo>
             <Title>
               <Num>2</Num>프로젝트에 대해 소개해주세요.
             </Title>
-            <Line></Line>
-            <Item name="title" label={<TitleLabel>제목</TitleLabel>}>
+            <Line />
+            <Item
+              name="title"
+              label={<TitleLabel>제목</TitleLabel>}
+              colon={false}
+            >
               <TitleInput type="text" name="title"></TitleInput>
             </Item>
             <StyledLabel>자세한 소개</StyledLabel>
@@ -425,13 +465,13 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   export_cors_hosts: [`${BASE_URL}`],
                   placeholder: '프로젝트에 대해 소개해주세요.',
                   height: 700,
-                  menubar: true,
-                  plugins: ['image'],
+                  menubar: false,
+                  // plugins: ['image'],
                   paste_data_images: true,
-                  automatic_uploads: true,
-                  images_upload_url: `${BASE_URL}/posts/create`, // 서버주소 이어야 하지 않을까? => 만약 안되면 image 아이콘 없애고 drag 만 되는 걸로 바꾸기
+                  // automatic_uploads: true,
+                  // images_upload_url: `${BASE_URL}/posts/create`, // 서버주소 이어야 하지 않을까? => 만약 안되면 image 아이콘 없애고 drag 만 되는 걸로 바꾸기
                   toolbar:
-                    'undo redo | image | styles | styleselect  | fontsizeselect  | bold italic | alignleft aligncenter alignright alignjustify | outdent indent ',
+                    'undo redo  | styles | styleselect  | fontsizeselect  | bold italic | alignleft aligncenter alignright alignjustify | outdent indent ',
                   resize: false,
                 }}
                 onEditorChange={handleEditorChange}
@@ -439,10 +479,14 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
             </EditorBox>
           </DetailInfo>
           <ButtonBox>
-            <StyledButton style={{ background: '#99999' }}>취소</StyledButton>
+            <StyledButton
+              onClick={() => navigate('/')}
+              style={{ background: '#99999' }}
+            >
+              취소
+            </StyledButton>
             <StyledButton
               htmlType="submit"
-              type="ghost"
               style={{ background: theme.mainGreen, color: '#fff' }}
             >
               {mode === 'edit' ? '수정' : '등록'}
@@ -478,7 +522,7 @@ const BasicInfo = styled.div`
   margin: 120px 0 160px 0;
 
   @media screen and ${devices.laptop} {
-    margin: 100px 20px 160px 20px;
+    margin: 110px 20px 160px 20px;
   }
 
   @media screen and ${devices.tablet} {
@@ -663,12 +707,11 @@ const StyledDatePicker = styled(DatePicker)`
   background-color: #f4f5f7;
 `;
 
-const PickButton = styled.button`
+const PickButton = styled(Button)`
   font-family: ‘Black Han Sans’, sans-serif;
   margin: 10px 0 10px 20px;
   display: block;
   padding: 0 10px;
-  right: 30px;
   height: 35px;
   border-radius: 30px;
   border: 0;
@@ -812,7 +855,7 @@ const EditorBox = styled.div`
 const ButtonBox = styled.div`
   font-family: 'Jua', sans-serif;
   position: absolute;
-  right: 0;
+  right: 10px;
   bottom: -60px;
 `;
 

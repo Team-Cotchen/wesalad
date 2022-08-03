@@ -1,15 +1,12 @@
 export interface DetailModel {
   id: number;
   category: '스터디' | '프로젝트';
-  post_answer: {
-    is_primary: boolean;
-    answer: {
-      question: string;
-      content: string;
-      description: string;
-      image_url: string;
-    };
-  }[];
+  post_answer: [
+    {
+      primary_answer: { description: string; image_url: string }[];
+      secondary_answer: { description: string; image_url: string }[];
+    },
+  ];
   post_stack: {
     title: string;
     image_url: string;
@@ -21,6 +18,7 @@ export interface DetailModel {
       description: string;
     },
   ];
+  post_flavor: [{ description: string; image_url: string; title: string }];
   post_place: '온라인' | '오프라인';
   user: {
     id: string;

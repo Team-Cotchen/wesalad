@@ -14,13 +14,15 @@ import theme from 'styles/theme';
 import logo from 'assets/images/logo.png';
 import { GrFormClose } from 'react-icons/gr';
 
+import { OPTIONS } from 'assets/data/Options.constant';
+const { CARD_LIST } = OPTIONS;
+
 interface Props {
   additionalCards: string[];
   primaryCards: string[];
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   setAdditionalCards: Dispatch<SetStateAction<string[]>>;
   setPrimaryCards: Dispatch<SetStateAction<string[]>>;
-  CARD_LIST: { image_url: string; name: string }[];
 }
 
 const PostFormModal: FunctionComponent<Props> = ({
@@ -29,7 +31,6 @@ const PostFormModal: FunctionComponent<Props> = ({
   setAdditionalCards,
   setPrimaryCards,
   setIsModalOpen,
-  CARD_LIST,
 }: Props) => {
   const [currentSelection, setCurrentSelection] = useState<
     'primary' | 'additional'
@@ -176,7 +177,7 @@ const Wrapper = styled.div`
 const ModalBox = styled.div`
   position: relative;
   width: 700px;
-  height: 550px;
+  height: 580px;
   background-color: #fff;
   border-radius: 3px;
 
@@ -186,6 +187,7 @@ const ModalBox = styled.div`
 
   @media screen and ${devices.mobile} {
     width: 435px;
+    height: 560px;
   }
 `;
 
@@ -261,9 +263,10 @@ const CardBox = styled.ul`
 
 const SubmitBtn = styled.button`
   position: absolute;
-  padding: 10px;
-  bottom: 30px;
+  padding: 20px;
+  bottom: 15px;
   right: 30px;
+  line-height: 3px;
   border: 0;
   border-radius: 30px;
   background-color: ${theme.mainViolet};
@@ -271,4 +274,10 @@ const SubmitBtn = styled.button`
   font-weight: bold;
   font-size: ${theme.fontSmall};
   cursor: pointer;
+
+  @media screen and ${devices.mobile} {
+    font-size: 13px;
+    padding: 15px;
+    bottom: 15px;
+  }
 `;

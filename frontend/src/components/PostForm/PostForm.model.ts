@@ -20,6 +20,7 @@ export interface FormModel {
   number_of_back: string;
   period: string;
   start_date: moment.Moment;
+  flavor: string;
 }
 
 export interface PostModel {
