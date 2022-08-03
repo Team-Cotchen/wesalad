@@ -116,9 +116,9 @@ TEMPLATES = [
 
 #경로 추가
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATICFILES_DIRS = [
-#     '../frontend/build/static'
+#     os.path.join(BASE_DIR, 'static')
 # ]
 
 WSGI_APPLICATION = 'wesalad.wsgi.application'
