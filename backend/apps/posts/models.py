@@ -11,6 +11,7 @@ class Category(TimestampZone):
     class Meta:
         db_table = 'categories'
 
+
 class Post(TimestampZone):
     user            = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     category        = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
@@ -24,6 +25,7 @@ class Post(TimestampZone):
     
     class Meta:
         db_table = 'posts'
+
         
 class ApplyWay(models.Model):
     title = models.CharField(max_length=200)
@@ -31,11 +33,13 @@ class ApplyWay(models.Model):
     class Meta:
         db_table = 'applyways'
 
+
 class Place(models.Model):
     title = models.CharField(max_length=200)
     
     class Meta:
         db_table = 'places'
+
 
 class Flavor(models.Model):
     title       = models.CharField(max_length=300)
@@ -54,12 +58,14 @@ class PostAnswer(TimestampZone):
     class Meta:
         db_table = 'postanswers'
 
+
 class PostStack(models.Model):
     post  = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='poststacks')
     stack = models.ForeignKey(Stack, on_delete=models.CASCADE, related_name='poststacks')
     
     class Meta:
         db_table = 'poststacks'
+
         
 class PostApplyWay(models.Model): 
     post        = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postapplyways')
@@ -69,12 +75,14 @@ class PostApplyWay(models.Model):
     class Meta:
         db_table = 'postapplyways'
 
+
 class PostPlace(models.Model): 
     post  = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postplaces')
     place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='postplaces')
     
     class Meta:
         db_table = 'postplaces'
+
 
 class PostFlavor(TimestampZone): 
     post       = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postflavors')
