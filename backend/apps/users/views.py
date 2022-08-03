@@ -20,17 +20,6 @@ from apps.utils.utils            import error_message
 User = get_user_model()
 
 class GoogleLoginAPI(APIView):
-    """
-        구글로그인을 위한 첫번째 API
-        API 호출 시 구글로부터 AuthorizationCode를 받아와서
-        지정해둔 Redirect Uri로 redirect함과 동시에 
-        Query parameter를 통해서 AuthorizationCode를 전달해준다.
-
-        Ex. https://wesalad.net/google/callback?code={AuthorizationCode}
-        
-    Args:
-        APIView (_type_): _description_
-    """
     def get(self, request):
         app_key = settings.GOOGLE_OAUTH2_CLIENT_ID
         scope   = "https://www.googleapis.com/auth/userinfo.email " + \
@@ -176,77 +165,3 @@ class ProfileAPI(APIView):
         user.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-# class SignUpAPI(generics.CreateAPIView):
-#         queryset          = User.objects.all()
-#         lookup_url_kwargs = 'google_account_id'
-#         
-#         def create(self, request, *args, **kwargs):
-#             try:
-#                 serializer = UserCreateSerializer(data = request.data)
-#                 serializer.is_valid(raise_exception=True)
-#                 token = self.perform_create(serializer)
-#                 
-#                 return Response(token, status=status.HTTP_201_CREATED)
-#             except ValueError:
-#                 return Response({'ERROR' : 'THIS_ACCOUNT_ALREADY_EXIST'}, status=status.HTTP_400_BAD_REQUEST)
-#         
-#         def perform_create(self, serializer):
-#             google_account = GoogleSocialAccount.objects.get(id=self.kwargs.get('google_account_id'))
-#             
-#             if not User.objects.filter(google_account = google_account).exists():
-#                 serializer.save(google_account = google_account)
-#                 
-#                 user  = User.objects.get(google_account=google_account)
-#                 token = GoogleSignInAPI.generate_jwt(self, user)
-#                 return token
-#             raise ValueError    
-
-# class SignUpAPI(APIView):
-#     def get(self, request):
-#         questions = Question.objects.prefetch_related('answers').all()
-#         result = {
-#             'characteristics' : [{
-#                 f'question_{question.id}': question.content,
-#                 'answers' : [answer.content for answer in Answer.objects.filter(question=question)]
-#                 } for question in questions],
-#             
-#                 'stacks' : [{'title' : stack.title, 'image' : stack.image_url} for stack in Stack.objects.all()]
-#             }
-#         
-#         return JsonResponse({'result': result}, status=200)
-    
-#     def post(self, request):
-#         try: 
-#             data              = request.POST
-#             google_account_id = request.GET.get('google_account_id')
-#             google_account    = GoogleSocialAccount.objects.get(id=google_account_id)
-#             
-#             answers = data['answers'].split(',')
-#             stacks  = data['stacks'].split(',')
-#             
-#             with transaction.atomic():
-#                 user = User.objects.create(
-#                     name           = data['name'],
-#                     ordinal_number = data['ordinal_number'],
-#                     google_account = google_account
-#                 )
-#                 
-                # for answer_id in answers:
-                #     UserAnswer.objects.create(
-                #         user = user,
-                #         answer = Answer.objects.get(id=answer_id)
-                #     )
-                # 
-                # for stack_id in stacks:
-                #     UserStack.objects.create(
-                #         user = user,
-                #         stack = Stack.objects.get(id=stack_id)
-                #     )
-# # 
-#             return HttpResponse(status = 201)
-#         except IntegrityError:
-#             return JsonResponse({'message' : 'THIS_ACCOUNT_ALREADY_EXIST'}, status=400)
-#         except ValueError:
-#             return JsonResponse({'message' : 'VALUE_ERROR'}, status=400)

@@ -21,8 +21,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
 # Application Definition
 
 INSTALLED_APPS = [
@@ -41,9 +39,6 @@ INSTALLED_APPS = [
     #rest_framework
     'rest_framework',
     'rest_framework_simplejwt',
-    
-    #swagger
-    'drf_yasg',
     
     # auth
     'allauth',
