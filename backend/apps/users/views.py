@@ -52,7 +52,7 @@ class GoogleSignInAPI(APIView):
         token['user_id']   = user.id
         token['user_name'] = user.name
                 
-        return Response({'token' : token}, status=status.HTTP_200_OK)
+        return Response({'token' : token, 'image_url' : google_account.image_url}, status=status.HTTP_200_OK)
 
     def google_get_user_info(self, google_token_api, auth_code):
 
@@ -131,7 +131,7 @@ class ProfileAPI(APIView):
                 return Response({'ERROR' : error_message(f'{e}')}, status=status.HTTP_400_BAD_REQUEST)
 
     @check_token
-    def put(self, request):
+    def patch(self, request):
         try:
             user = request.user
             
