@@ -144,12 +144,6 @@ class PostSerializer(serializers.ModelSerializer):
             flavor    = Flavor.objects.get(title = leftovers.get('flavor'))
             place     = Place.objects.get(title = leftovers.get('place'))
             
-            updated_instance = Post.objects.filter(id = instance.id)
-            updated_instance.update(
-                category = category,
-                **validated_data
-            )
-            
             instance.postplaces.all().delete()
             instance.postflavors.all().delete()
             instance.postapplyways.all().delete()
@@ -167,6 +161,13 @@ class PostSerializer(serializers.ModelSerializer):
             )
             instance.postplaces.create(place = place)
             instance.postflavors.create(flavor = flavor)
+            
+            updated_instance = Post.objects.filter(id = instance.id)
+            updated_instance.update(
+                category = category,
+                **validated_data
+            )
+            instance = Post.objects.get(id = instance.id)
             
             return instance
         except ObjectDoesNotExist as e:
