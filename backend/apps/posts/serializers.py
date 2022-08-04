@@ -34,7 +34,7 @@ class PostSerializer(serializers.ModelSerializer):
     def get_post_answer(self, post):
         primary_answer   = []
         secondary_answer = []
-        postanswers      = post.postanswers.filter(post = post)
+        postanswers      = post.postanswers.select_related('answer').filter(post = post)
         for postanswer in postanswers:
             if postanswer.is_primary:
                 primary_answer.append({
@@ -56,7 +56,7 @@ class PostSerializer(serializers.ModelSerializer):
         return data
     
     def get_post_stack(self, post):
-        poststacks = post.poststacks.filter(post = post)
+        poststacks = post.poststacks.select_related('stack').filter(post = post)
         data      = [{
             'id'         : poststack.stack.id,
             'title'      : poststack.stack.title,
