@@ -26,18 +26,21 @@ class UserAnswerSerializer(serializers.ModelSerializer):
         model = UserAnswer
         fields = ['answer']
 
+
 class UserStackSerializer(serializers.ModelSerializer):
     stack = StackSerializer(required=False)
     
     class Meta:
         model = UserStack
         fields = ['stack']
+
         
 class GoogleSocialAccountSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = GoogleSocialAccount
         fields = ['sub', 'email', 'image_url']
+
 
 class UserCreateSerializer(serializers.ModelSerializer): 
     google_account = GoogleSocialAccountSerializer(required=False)
@@ -85,7 +88,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model  = User
         fields = '__all__'
-        
+
+
 class UserSerializer(serializers.ModelSerializer):
     google_account = GoogleSocialAccountSerializer(required=False)
     user_answers   = UserAnswerSerializer(source='useranswers',many=True, required=False)

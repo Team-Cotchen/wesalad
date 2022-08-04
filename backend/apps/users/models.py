@@ -5,6 +5,7 @@ from apps.utils.timestamp        import TimestampZone
 from apps.characteristics.models import Stack, Answer
 from .managers              import UserManager
 
+
 class GoogleSocialAccount(TimestampZone): 
     sub       = models.CharField(max_length=400)
     image_url = models.CharField(max_length=300, null=True, blank=True)
@@ -12,6 +13,7 @@ class GoogleSocialAccount(TimestampZone):
 
     class Meta:
         db_table = 'google_social_accounts'
+
     
 class User(AbstractBaseUser, PermissionsMixin, TimestampZone): 
     name           = models.CharField(max_length=100)
@@ -34,12 +36,14 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampZone):
     class Meta:
         db_table = 'users'
 
+
 class UserAnswer(TimestampZone):
     user   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='useranswers')
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='useranswers')
     
     class Meta:
         db_table = 'useranswers'
+
 
 class UserStack(TimestampZone):
     user  = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userstacks')
