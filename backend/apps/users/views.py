@@ -132,12 +132,15 @@ class ProfileAPI(APIView):
     @check_token
     def patch(self, request):
         try:
-            user = request.user
+            user   = request.user
+            stacks = request.data.get('stacks')
             
             serializer = UserUpdateSerializer(user, data=request.data)
             
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(
+                    stacks = stacks,
+                )
                 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
