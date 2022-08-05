@@ -22,21 +22,21 @@ export interface IUserAnswerModi {
   imageUrl: string;
 }
 
-const token = {
-  access: localStorage.getItem('accessToken'),
-  refresh: localStorage.getItem('refreshToken'),
-};
-
 const Setting = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
-  const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
+  // const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
   const [user, setUser] = useState<IFetchResultData>();
   const [userName, setUserName] = useState('');
   const [userOrdinalNumber, setUserOrdinalNumber] = useState(0);
   const [userStackModi, setUserStackModi] = useState<string[]>([]);
   const [userAnswerModi, setUserAnswerModi] = useState<IUserAnswerModi[]>();
+
+  const token = {
+    access: localStorage.getItem('accessToken'),
+    refresh: localStorage.getItem('refreshToken'),
+  };
 
   const openModal = () => {
     document.body.style.overflow = 'hidden';

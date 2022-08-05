@@ -72,7 +72,9 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
       <ResultSection>
         <Header>
           <Title fontSize="80px">감사합니다!</Title>
-          <SubTitle fontSize="30px">결과는 다음과 같아요</SubTitle>
+          <SubTitle fontSize="25px">
+            설정창에서 <span>성향 및 스택</span>을 확인할 수 있어요! 🎉
+          </SubTitle>
         </Header>
         {/* TODO: 수정예정 */}
         {/* <ResultWindowSection>
@@ -118,7 +120,7 @@ const TitleHightLight = keyframes`
 `;
 
 const ResultSection = styled.div`
-  padding: 2rem 4rem 0rem 4rem;
+  padding: 7rem 4rem 0rem 4rem;
 `;
 
 const Header = styled.div``;
@@ -154,6 +156,10 @@ const SubTitle = styled.h1<ITitle>`
   font-weight: ${({ theme }) => theme.weightBold};
   text-align: start;
   margin-bottom: 0;
+
+  span {
+    color: ${({ theme }) => theme.mainViolet};
+  }
 
   @media ${devices.laptop} {
     font-size: 40px;
