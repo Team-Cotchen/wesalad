@@ -6,15 +6,15 @@ import { IFetchResultData } from 'components/LoginStep/loginStep.types';
 import axios from 'axios';
 import API from 'config';
 
-const token = {
-  access: localStorage.getItem('accessToken'),
-  refresh: localStorage.getItem('refreshToken'),
-};
-
 const LoginUser = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState<IFetchResultData>();
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const token = {
+    access: localStorage.getItem('accessToken'),
+    refresh: localStorage.getItem('refreshToken'),
+  };
 
   useEffect(() => {
     const getUserImageUrl = async () => {
@@ -30,7 +30,8 @@ const LoginUser = () => {
     };
 
     getUserImageUrl();
-  }, [user]);
+  }, [token.access, token.refresh, user]);
+  console.log(token);
 
   useEffect(() => {
     const handleCloseMenu = (event: MouseEvent) => {
