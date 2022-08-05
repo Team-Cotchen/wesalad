@@ -10,7 +10,7 @@ import LoginModal from 'components/LoginStep/LoginModal';
 import LoginUser from 'components/Nav/LoginUser';
 
 const Nav = () => {
-  // const isGetToken = window.localStorage.getItem('accessToken') === null;
+  const isGetToken = window.localStorage.getItem('accessToken') === null;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const modalVisible = useSelector(
@@ -26,8 +26,6 @@ const Nav = () => {
     document.body.style.overflow = 'auto';
     dispatch(setModalVisible(false));
   };
-
-  const isGetToken = false;
 
   const checkIfLoggedIn = () => {
     if (!isGetToken) navigate('/creation');
