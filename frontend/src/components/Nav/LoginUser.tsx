@@ -1,14 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
 import DropdownItem from 'components/Nav/Dropdown';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { IFetchResultData } from 'components/LoginStep/loginStep.types';
+import axios from 'axios';
+import API from 'config';
+
+const token = {
+  access: localStorage.getItem('accessToken'),
+  refresh: localStorage.getItem('refreshToken'),
+};
 
 const LoginUser = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [user, setUser] = useState<IFetchResultData>();
   const menuRef = useRef<HTMLDivElement>(null);
-  const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
+
+  const getUserImageUrl = async () => {
+    const { data } = await axios.get(`${API.userModiorDell}`, {
+      headers: {
+        access: `${token.access}`,
+        refresh: `${token.refresh}`,
+      },
+    });
+
+    setUser(data);
+    if (user === undefined) return;
+  };
 
   useEffect(() => {
     const handleCloseMenu = (event: MouseEvent) => {
@@ -26,7 +44,7 @@ const LoginUser = () => {
         ref={menuRef}
         onClick={() => setMenuVisible(!menuVisible)}
       >
-        <img src={imageUrl} />
+        <img src={user?.google_account?.image_url} />
         <ArrowIcon size={20} />
       </ProfileSection>
       {menuVisible && <DropdownItem />}
