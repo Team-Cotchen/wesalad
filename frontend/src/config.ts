@@ -6,6 +6,7 @@ const API = {
   login: `${BASE_URL}/api/users/google`,
   signup: `${BASE_URL}/api/users/signup`,
   callback: `${BASE_URL}/api/users/google/login`,
+  userModiorDell: `${BASE_URL}/api/users/profile`,
 
   getToken: () => {
     const access = localStorage.getItem('accessToken');

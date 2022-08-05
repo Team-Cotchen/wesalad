@@ -27,21 +27,28 @@ const googleLogin = () => {
     const token = data?.token;
     const googleAccountId = data?.google_account_id;
     const imageUrl = data?.image_url;
+    const loginId = data?.id;
+
+    dispatch(
+      setSignUpInfo({
+        key: 'imageUrl',
+        value: imageUrl,
+      }),
+    );
 
     if (token !== undefined) {
       localStorage.setItem('accessToken', token.access);
       localStorage.setItem('refreshToken', token.refresh);
+      dispatch(
+        setSignUpInfo({
+          key: 'loginId',
+          value: loginId,
+        }),
+      );
     } else {
       dispatch(
         setSignUpInfo({
-          key: 'imageUrl',
-          value: imageUrl,
-        }),
-      );
-
-      dispatch(
-        setSignUpInfo({
-          key: 'id',
+          key: 'signupId',
           value: googleAccountId,
         }),
       );

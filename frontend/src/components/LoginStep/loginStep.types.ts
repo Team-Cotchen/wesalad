@@ -46,6 +46,7 @@ export interface IFetchResultData {
       answer: {
         content: string;
         description: string;
+        image_url: string;
       };
     },
   ];

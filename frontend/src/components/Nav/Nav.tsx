@@ -48,7 +48,8 @@ const Nav = () => {
           )}
         </NavRight>
       </NavBox>
-      <Modal name="login" onClose={closeModal} visible={modalVisible}>
+
+      <Modal onClose={closeModal} visible={modalVisible}>
         <LoginModal handleClose={closeModal} />
       </Modal>
     </Wrapper>
