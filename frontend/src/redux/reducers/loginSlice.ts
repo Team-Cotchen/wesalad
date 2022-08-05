@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  currentStep: 2,
+  currentStep: 1,
   signupId: undefined,
   loginId: undefined,
   imageUrl: undefined,
