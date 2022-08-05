@@ -74,7 +74,8 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
           <Title fontSize="80px">감사합니다!</Title>
           <SubTitle fontSize="30px">결과는 다음과 같아요</SubTitle>
         </Header>
-        <ResultWindowSection>
+        {/* TODO: 수정예정 */}
+        {/* <ResultWindowSection>
           {tendencyResult.map((item, i) =>
             item === 0 ? (
               <Card key={i}>
@@ -88,7 +89,7 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
               </Card>
             ),
           )}
-        </ResultWindowSection>
+        </ResultWindowSection> */}
         <SubmitSection>
           <SubmitBtn mode="submit" onClick={fetchByUserInfo}>
             시작하기

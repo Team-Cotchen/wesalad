@@ -82,12 +82,13 @@ const Setting = () => {
   }, [user?.name, user?.ordinal_number]);
 
   // 첫페이지 렌더링 시 token 유무 검증
-  useEffect(() => {
-    if (userName === undefined) {
-      message.warning('로그인이 필요합니다.');
-      return navigate('/');
-    }
-  }, [navigate, userName]);
+  // TODO 수정예정
+  // useEffect(() => {
+  //   if (userName === undefined) {
+  //     message.warning('로그인이 필요합니다.');
+  //     return navigate('/');
+  //   }
+  // }, [navigate, userName]);
 
   const onCompleteClick = async () => {
     if (!userName) {
