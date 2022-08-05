@@ -17,8 +17,9 @@ class UserAnswerSerializer(serializers.ModelSerializer):
     
     def get_answer(self, useranswer):
         data = {
-            'content' : useranswer.answer.content,
-            'description' : useranswer.answer.description,
+            'content'    : useranswer.answer.content,
+            'description': useranswer.answer.description,
+            'image_url'  : useranswer.answer.image_url,
         }
         return data
     
@@ -89,34 +90,26 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model  = User
         fields = '__all__'
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    google_account = GoogleSocialAccountSerializer(required=False)
+    
+    @transaction.atomic()
+    def update(self, user, validated_data):
+        user.name = validated_data['name']
+        user.ordinal_number = validated_data['ordinal_number']
+        user.save()
+    
+        return user
+    
+    class Meta:
+        model  = User
+        fields = ['name', 'ordinal_number', 'google_account']
+
 
 class UserSerializer(serializers.ModelSerializer):
     google_account = GoogleSocialAccountSerializer(required=False)
     user_answers   = UserAnswerSerializer(source='useranswers',many=True, required=False)
     user_stacks    = UserStackSerializer(source='userstacks',many=True, required=False)
-    
-    @transaction.atomic()
-    def update(self, user, validated_data):
-        if not validated_data.get('stacks'):
-            stacks = None
-        else:   
-            stacks = validated_data.pop('stacks').split(',')
-
-        answers = validated_data.pop('answers').split(',')
-        
-        user.name = validated_data['name']
-        user.ordinal_number = validated_data['ordinal_number']
-        user.save()
-        
-        user.useranswers.all().delete()
-        user.userstacks.all().delete()
-        
-        [user.useranswers.create(answer = Answer.objects.get(description=answer)) for answer in answers]
-        
-        if stacks:
-            [user.userstacks.create(stack = Stack.objects.get(title=stack)) for stack in stacks]
-            
-        return user
     
     class Meta:
         model  = User

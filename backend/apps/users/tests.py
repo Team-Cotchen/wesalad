@@ -232,13 +232,11 @@ class ProfileTest(APITestCase):
     # Profile Update
     def test_success_wesalad_user_profile_update(self):
         header   = {'HTTP_access' : self.access_token}
-        response = self.client.put(
+        response = self.client.patch(
             f'{self.test_url}', 
             {
                 'name'          : 'test_user_updated',
-                'ordinal_number': 19,
-                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_19',
-                'stacks'        : 'stack_test_title_3,stack_test_title_4'
+                'ordinal_number': 19,                
              },
             format='json', **header)
         print(response.content)
@@ -247,13 +245,11 @@ class ProfileTest(APITestCase):
         self.assertEqual(response.json()['name'], 'test_user_updated')
     
     def test_fail_wesalad_user_profile_update_without_token(self):
-        response = self.client.put(
+        response = self.client.patch(
             f'{self.test_url}', 
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
-                'answers'       : 'answer_test_description_1,answer_test_description_2,answer_test_description_3,answer_test_description_19',
-                'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json')
         print(response.content)
@@ -261,47 +257,45 @@ class ProfileTest(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.content, b'{"ERROR":"DECODE_ERROR"}')
     
-    def test_fail_wesalad_user_profile_update_with_wrong_answer_information(self):
-        header   = {'HTTP_access' : self.access_token}
-        response = self.client.put(
-            f'{self.test_url}', 
-            {
-                'name'          : 'test_user_updated',
-                'ordinal_number': 19,
-                'answers'       : 'answer_test_description_50',
-                'stacks'        : 'stack_test_title_3,stack_test_title_4'
-             },
-            format='json', **header)
-        print(response.content)
-    
-        self.assertEqual(response.status_code, 400)    
-        self.assertEqual(response.content, b'{"ERROR":"ANSWER_MATCHING_QUERY_DOES_NOT_EXIST."}')
-    
-    def test_fail_wesalad_user_profile_update_with_wrong_stack_information(self):
-        header   = {'HTTP_access' : self.access_token}
-        response = self.client.put(
-            f'{self.test_url}', 
-            {
-                'name'          : 'test_user_updated',
-                'ordinal_number': 19,
-                'answers'       : 'answer_test_description_4',
-                'stacks'        : 'stack_test_title_50'
-             },
-            format='json', **header)
-        print(response.content)
-    
-        self.assertEqual(response.status_code, 400)    
-        self.assertEqual(response.content, b'{"ERROR":"STACK_MATCHING_QUERY_DOES_NOT_EXIST."}')
+    # def test_fail_wesalad_user_profile_update_with_wrong_answer_information(self):
+    #     header   = {'HTTP_access' : self.access_token}
+    #     response = self.client.put(
+    #         f'{self.test_url}', 
+    #         {
+    #             'name'          : 'test_user_updated',
+    #             'ordinal_number': 19,
+    #             'answers'       : 'answer_test_description_50',
+    #             'stacks'        : 'stack_test_title_3,stack_test_title_4'
+    #          },
+    #         format='json', **header)
+    #     print(response.content)
+    # 
+    #     self.assertEqual(response.status_code, 400)    
+    #     self.assertEqual(response.content, b'{"ERROR":"ANSWER_MATCHING_QUERY_DOES_NOT_EXIST."}')
+    # 
+    # def test_fail_wesalad_user_profile_update_with_wrong_stack_information(self):
+    #     header   = {'HTTP_access' : self.access_token}
+    #     response = self.client.put(
+    #         f'{self.test_url}', 
+    #         {
+    #             'name'          : 'test_user_updated',
+    #             'ordinal_number': 19,
+    #             'answers'       : 'answer_test_description_4',
+    #             'stacks'        : 'stack_test_title_50'
+    #          },
+    #         format='json', **header)
+    #     print(response.content)
+    # 
+    #     self.assertEqual(response.status_code, 400)    
+    #     self.assertEqual(response.content, b'{"ERROR":"STACK_MATCHING_QUERY_DOES_NOT_EXIST."}')
     
     def test_fail_wesalad_user_profile_update_with_wrong_type(self):
         header   = {'HTTP_access' : self.access_token}
-        response = self.client.put(
+        response = self.client.patch(
             f'{self.test_url}', 
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 'df',
-                'answers'       : 'answer_test_description_4',
-                'stacks'        : 'stack_test_title_3'
              },
             format='json', **header)
         print(response.json())
