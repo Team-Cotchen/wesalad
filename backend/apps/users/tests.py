@@ -9,7 +9,7 @@ from rest_framework.test             import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.users.models                import GoogleSocialAccount, UserAnswer, UserStack
-from apps.characteristics.models import Question, Stack, Answer
+from apps.characteristics.models      import Question, Stack, Answer
 from apps.users.views                 import GoogleSignInAPI
 
 User = get_user_model()
@@ -58,6 +58,7 @@ class GoogleLoginTest(APITestCase):
         
         self.assertEqual(response.status_code, 200)
 
+
 # GoogleSocialAccount 까진 생성, 하지만 WeSalad User가 아닐 경우
 class GoogleLoginTestNotUser(APITestCase):
     def setUp(self):    
@@ -67,7 +68,7 @@ class GoogleLoginTestNotUser(APITestCase):
             email     = test_user_data.get('email'),
         )
 
-        self.test_url =  'http://localhost:8080/api/users/google/login'
+        self.test_url = 'http://localhost:8080/api/users/google/login'
         
     def tearDown(self):
         self.google_account.delete()
@@ -82,10 +83,11 @@ class GoogleLoginTestNotUser(APITestCase):
         
         self.assertEqual(response.status_code, 200)
 
+
 # 처음 구글로그인을 시도하는 경우
 class GoogleLoginTestNotGoogleSocialAccount(APITestCase):
     def setUp(self):
-        self.test_url =  'http://localhost:8080/api/users/google/login'
+        self.test_url = 'http://localhost:8080/api/users/google/login'
     
     @patch.object(GoogleSignInAPI, 'google_get_user_info')
     def test_google_social_signin(self, mocked_google_user_info):
@@ -147,6 +149,7 @@ class WesaladSignUpTest(APITestCase):
         print(response.content)
         
         self.assertEqual(response.status_code, 400)
+
 
 class ProfileTest(APITestCase):
     def setUp(self):

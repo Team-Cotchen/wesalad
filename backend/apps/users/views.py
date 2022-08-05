@@ -12,10 +12,10 @@ from django.conf            import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth    import get_user_model
 
+from apps.utils.decorators  import check_token
+from apps.utils.utils       import error_message
 from .models                import GoogleSocialAccount
 from .serializers           import UserSerializer, UserCreateSerializer
-from apps.utils.decorators       import check_token
-from apps.utils.utils            import error_message
 
 User = get_user_model()
 
@@ -40,7 +40,7 @@ class GoogleSignInAPI(APIView):
         user_data = self.google_get_user_info(google_token_api, auth_code)
         
         google_account = self.get_or_create(user_data)
-        user_filter = User.objects.filter(google_account=google_account)
+        user_filter    = User.objects.filter(google_account=google_account)
 
         if not user_filter.exists()\
             or not True in [user.is_active for user in user_filter]:
@@ -55,7 +55,6 @@ class GoogleSignInAPI(APIView):
         return Response({'token' : token, 'image_url' : google_account.image_url}, status=status.HTTP_200_OK)
 
     def google_get_user_info(self, google_token_api, auth_code):
-
         client_id     = settings.GOOGLE_OAUTH2_CLIENT_ID
         client_secret = settings.GOOGLE_OAUTH2_CLIENT_SECRET
         redirect_uri  = settings.GOOGLE_OAUTH2_REDIRECT_URI
