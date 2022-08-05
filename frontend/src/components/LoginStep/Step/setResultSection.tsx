@@ -12,7 +12,7 @@ import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const setResultSection = ({ handleClose, basicInfo }: any) => {
-  const tendencyResult: number[] = basicInfo.answers;
+  const tendencyResult = basicInfo.answers as number[];
   const answerChangeForm: string[] = [];
   const id = useSelector((state: RootState) => state.login.signupId);
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
           <SubTitle fontSize="30px">결과는 다음과 같아요</SubTitle>
         </Header>
         <ResultWindowSection>
-          {tendencyResult?.map((item, i) =>
+          {tendencyResult.map((item, i) =>
             item === 0 ? (
               <Card key={i}>
                 <Icon src={QuestionData[i].image_urlA} />

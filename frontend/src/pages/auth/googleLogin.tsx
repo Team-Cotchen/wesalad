@@ -29,12 +29,13 @@ const googleLogin = () => {
     const imageUrl = data?.image_url;
     const loginId = data?.id;
 
-    dispatch(
-      setSignUpInfo({
-        key: 'imageUrl',
-        value: imageUrl,
-      }),
-    );
+    // TODO: persist 적용할 예정
+    // dispatch(
+    //   setSignUpInfo({
+    //     key: 'imageUrl',
+    //     value: imageUrl,
+    //   }),
+    // );
 
     if (token !== undefined) {
       localStorage.setItem('accessToken', token.access);

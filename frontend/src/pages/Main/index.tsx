@@ -20,17 +20,17 @@ const Main: FunctionComponent = () => {
   const [paginationBtnNumber, setPaginationBtnNumber] = useState(4);
   const [paginationString, setPaginationString] = useState('');
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(
-        `http://172.20.10.6:8080/posts?${paginationString}&${queryString}`,
-      );
-      const data = await response.json();
-      // console.log(data);
-      // setPromoCards(data);
-      setPaginationBtnNumber(Math.ceil(data.length / LIMIT));
-    })();
-  }, [queryString, location.search]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await fetch(
+  //       `http://172.20.10.6:8080/posts?${paginationString}&${queryString}`,
+  //     );
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setPromoCards(data);
+  //     setPaginationBtnNumber(Math.ceil(data.length / LIMIT));
+  //   })();
+  // }, [queryString, location.search]);
 
   const makeQueryString = (queryKey: string, queryValue: string) => {
     const newQueryString = `${queryKey}=${queryValue}`;

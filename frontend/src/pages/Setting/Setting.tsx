@@ -33,15 +33,6 @@ const Setting = () => {
   const [showPopup, setShowPopup] = useState(false);
   const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
   const [user, setUser] = useState<IFetchResultData>();
-
-  // 첫페이지 렌더링 시 token 유무 검증
-  useEffect(() => {
-    if (token.access === null) {
-      message.warning('로그인이 필요합니다.');
-      return navigate('/');
-    }
-  }, [navigate]);
-
   const [userName, setUserName] = useState('');
   const [userOrdinalNumber, setUserOrdinalNumber] = useState(0);
   const [userStackModi, setUserStackModi] = useState<string[]>([]);
@@ -89,6 +80,14 @@ const Setting = () => {
     };
     userInfo();
   }, [user?.name, user?.ordinal_number]);
+
+  // 첫페이지 렌더링 시 token 유무 검증
+  useEffect(() => {
+    if (userName === undefined) {
+      message.warning('로그인이 필요합니다.');
+      return navigate('/');
+    }
+  }, [navigate, userName]);
 
   const onCompleteClick = async () => {
     if (!userName) {
@@ -149,6 +148,7 @@ const Setting = () => {
     if (deleteUserId) {
       dispatch(clearStep());
       localStorage.clear();
+      message.success('회원탈퇴가 완료되었어요!🤧');
       navigate('/');
     } else {
       message.warning('회원 탈퇴에 실패하였어요! 잠시 후 다시 시도해주세요.');
@@ -162,7 +162,7 @@ const Setting = () => {
         <Container>
           <Title>내 정보 수정하기</Title>
           <ProfileContainer>
-            <ProfileImg src={imageUrl} />
+            <ProfileImg src={user?.google_account?.image_url} />
             <UserInfoContainer>
               <Section>
                 <DetailTitle>
