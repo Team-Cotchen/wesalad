@@ -236,7 +236,8 @@ class ProfileTest(APITestCase):
             f'{self.test_url}', 
             {
                 'name'          : 'test_user_updated',
-                'ordinal_number': 19,                
+                'ordinal_number': 19,
+                'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json', **header)
         print(response.content)
@@ -250,6 +251,7 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 19,
+                'stacks'        : 'stack_test_title_3,stack_test_title_4'
              },
             format='json')
         print(response.content)
@@ -259,7 +261,7 @@ class ProfileTest(APITestCase):
     
     # def test_fail_wesalad_user_profile_update_with_wrong_answer_information(self):
     #     header   = {'HTTP_access' : self.access_token}
-    #     response = self.client.put(
+    #     response = self.client.patch(
     #         f'{self.test_url}', 
     #         {
     #             'name'          : 'test_user_updated',
@@ -272,22 +274,21 @@ class ProfileTest(APITestCase):
     # 
     #     self.assertEqual(response.status_code, 400)    
     #     self.assertEqual(response.content, b'{"ERROR":"ANSWER_MATCHING_QUERY_DOES_NOT_EXIST."}')
-    # 
-    # def test_fail_wesalad_user_profile_update_with_wrong_stack_information(self):
-    #     header   = {'HTTP_access' : self.access_token}
-    #     response = self.client.put(
-    #         f'{self.test_url}', 
-    #         {
-    #             'name'          : 'test_user_updated',
-    #             'ordinal_number': 19,
-    #             'answers'       : 'answer_test_description_4',
-    #             'stacks'        : 'stack_test_title_50'
-    #          },
-    #         format='json', **header)
-    #     print(response.content)
-    # 
-    #     self.assertEqual(response.status_code, 400)    
-    #     self.assertEqual(response.content, b'{"ERROR":"STACK_MATCHING_QUERY_DOES_NOT_EXIST."}')
+    
+    def test_fail_wesalad_user_profile_update_with_wrong_stack_information(self):
+        header   = {'HTTP_access' : self.access_token}
+        response = self.client.patch(
+            f'{self.test_url}', 
+            {
+                'name'          : 'test_user_updated',
+                'ordinal_number': 19,
+                'stacks'        : 'stack_test_title_50'
+             },
+            format='json', **header)
+        print(response.content)
+    
+        self.assertEqual(response.status_code, 400)    
+        self.assertEqual(response.content, b'{"ERROR":"STACK_MATCHING_QUERY_DOES_NOT_EXIST."}')
     
     def test_fail_wesalad_user_profile_update_with_wrong_type(self):
         header   = {'HTTP_access' : self.access_token}
@@ -296,6 +297,7 @@ class ProfileTest(APITestCase):
             {
                 'name'          : 'test_user_updated',
                 'ordinal_number': 'df',
+                'stacks'        : 'stack_test_title_3'
              },
             format='json', **header)
         print(response.json())
