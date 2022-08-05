@@ -36,7 +36,7 @@ const Setting = () => {
 
   // 첫페이지 렌더링 시 token 유무 검증
   useEffect(() => {
-    if (token.access === undefined) {
+    if (token.access === null) {
       message.warning('로그인이 필요합니다.');
       return navigate('/');
     }
@@ -59,7 +59,12 @@ const Setting = () => {
 
   useEffect(() => {
     const userInfo = async () => {
-      const { data } = await axios.get(`${API.userModiorDell}`);
+      const { data } = await axios.get(`${API.userModiorDell}`, {
+        headers: {
+          access: `${token.access}`,
+          refresh: `${token.refresh}`,
+        },
+      });
       setUser(data);
 
       if (user === undefined) {
@@ -98,8 +103,6 @@ const Setting = () => {
       message.warning('기수를 숫자로 입력해주세요.');
       return;
     } else {
-      message.success('된다');
-
       const fetchByUserModi = async () => {
         const stacksToString = String(userStackModi);
         const ordinalToNumber = Number(userOrdinalNumber);
@@ -117,7 +120,8 @@ const Setting = () => {
 
             headers: {
               'Content-Type': 'application/json',
-              authorization: `${token.access} ${token.refresh}`,
+              access: `${token.access}`,
+              refresh: `${token.refresh}`,
             },
             data: setFetchFormData,
           });
@@ -135,7 +139,12 @@ const Setting = () => {
   };
 
   const onDeleteClick = async () => {
-    const deleteUserId = await axios.delete(`${API.userModiorDell}`);
+    const deleteUserId = await axios.delete(`${API.userModiorDell}`, {
+      headers: {
+        access: `${token.access}`,
+        refresh: `${token.refresh}`,
+      },
+    });
 
     if (deleteUserId) {
       dispatch(clearStep());
