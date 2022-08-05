@@ -36,7 +36,7 @@ const Setting = () => {
 
   // 첫페이지 렌더링 시 token 유무 검증
   useEffect(() => {
-    if (token.access !== undefined) {
+    if (token.access === undefined) {
       message.warning('로그인이 필요합니다.');
       return navigate('/');
     }
