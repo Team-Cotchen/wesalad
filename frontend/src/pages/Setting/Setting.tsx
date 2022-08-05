@@ -276,7 +276,7 @@ const ButtonContainer = styled.div`
   button {
     width: 100px;
     border: 1px solid ${({ theme }) => theme.mainGreen};
-    background-color: #fff;
+    background-color: white;
     padding: 5px 0px;
     margin-right: 10px;
     border-radius: 4px;
