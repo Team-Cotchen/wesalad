@@ -16,17 +16,21 @@ const LoginUser = () => {
   const [user, setUser] = useState<IFetchResultData>();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const getUserImageUrl = async () => {
-    const { data } = await axios.get(`${API.userModiorDell}`, {
-      headers: {
-        access: `${token.access}`,
-        refresh: `${token.refresh}`,
-      },
-    });
+  useEffect(() => {
+    const getUserImageUrl = async () => {
+      const { data } = await axios.get(`${API.userModiorDell}`, {
+        headers: {
+          access: `${token.access}`,
+          refresh: `${token.refresh}`,
+        },
+      });
 
-    setUser(data);
-    if (user === undefined) return;
-  };
+      setUser(data);
+      if (user === undefined) return;
+    };
+
+    getUserImageUrl();
+  }, [user]);
 
   useEffect(() => {
     const handleCloseMenu = (event: MouseEvent) => {
