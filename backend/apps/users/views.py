@@ -15,7 +15,7 @@ from django.contrib.auth    import get_user_model
 from apps.utils.decorators  import check_token
 from apps.utils.utils       import error_message
 from .models                import GoogleSocialAccount
-from .serializers           import UserSerializer, UserCreateSerializer
+from .serializers           import UserSerializer, UserCreateSerializer, UserUpdateSerializer
 
 User = get_user_model()
 
@@ -134,15 +134,11 @@ class ProfileAPI(APIView):
         try:
             user = request.user
             
-            serializer = UserSerializer(user, data=request.data)
-            answers    = request.data.get('answers')
-            stacks     = request.data.get('stacks')
+            serializer = UserUpdateSerializer(user, data=request.data)
             
             if serializer.is_valid():
-                serializer.save(
-                    answers = answers,
-                    stacks = stacks
-                )
+                serializer.save()
+                
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except ValueError:
