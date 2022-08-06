@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import theme from 'styles/theme';
 import Nav from 'components/Nav/Nav';
 import { message } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'redux/store';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearStep } from 'redux/reducers/loginSlice';
 import { IFetchResultData } from 'components/LoginStep/loginStep.types';
@@ -26,7 +25,6 @@ const Setting = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
-  // const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
   const [user, setUser] = useState<IFetchResultData>();
   const [userName, setUserName] = useState('');
   const [userOrdinalNumber, setUserOrdinalNumber] = useState(0);
@@ -37,6 +35,14 @@ const Setting = () => {
     access: localStorage.getItem('accessToken'),
     refresh: localStorage.getItem('refreshToken'),
   };
+
+  // 첫페이지 렌더링 시 token 유무 검증
+  useEffect(() => {
+    if (token.access === null) {
+      message.warning('로그인이 필요합니다.');
+      return navigate('/');
+    }
+  }, [navigate, token.access]);
 
   const openModal = () => {
     document.body.style.overflow = 'hidden';
@@ -80,15 +86,6 @@ const Setting = () => {
     };
     userInfo();
   }, [user?.name, user?.ordinal_number]);
-
-  // 첫페이지 렌더링 시 token 유무 검증
-  // TODO 수정예정
-  // useEffect(() => {
-  //   if (userName === undefined) {
-  //     message.warning('로그인이 필요합니다.');
-  //     return navigate('/');
-  //   }
-  // }, [navigate, userName]);
 
   const onCompleteClick = async () => {
     if (!userName) {

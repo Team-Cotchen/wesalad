@@ -30,7 +30,6 @@ const LoginUser = () => {
 
     getUserImageUrl();
   }, []);
-  console.log(token);
 
   useEffect(() => {
     const handleCloseMenu = (event: MouseEvent) => {
