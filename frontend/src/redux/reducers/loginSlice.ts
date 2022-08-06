@@ -2,8 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   currentStep: 1,
-  signupId: undefined,
-  loginId: undefined,
+  id: undefined,
   imageUrl: undefined,
   modalVisible: false,
 };
