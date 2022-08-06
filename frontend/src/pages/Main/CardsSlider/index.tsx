@@ -17,7 +17,7 @@ const CardsSlider = ({ data }: any) => {
     autoplaySpeed: 2000,
     centerMode: true,
     variableWidth: true,
-    centerPadding: '0px',
+    centerPadding: '10px',
   };
 
   return (
@@ -36,6 +36,11 @@ const StyledSlider = styled(Slider)`
   margin-top: 30px;
   width: 100%;
 
+  .slick-list {
+    width: 1300px;
+    margin: auto;
+  }
+
   .slick-slider {
     display: flex;
   }
@@ -44,19 +49,23 @@ const StyledSlider = styled(Slider)`
     height: 100%;
   }
   .slick-dots {
-    display: none !important;
+    display: flex;
   }
   .slick-arrow {
     color: pink;
-    width: 30px;
+    transform: translate(50%, 100px);
+    cursor: pointer;
   }
   .slick-prev {
     position: absolute;
-    top: 20px;
+    z-index: 100;
+    background-color: blue;
+    left: 10px;
   }
   .slick-next {
     position: absolute;
-    top: 20px;
-    left: 40px;
+    z-index: 100;
+    top: 40%;
+    left: 100px;
   }
 `;

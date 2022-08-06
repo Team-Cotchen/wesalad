@@ -7,18 +7,69 @@ import Filter from 'pages/Main/Filter';
 import Card from 'pages/Main/Card';
 import CardsSlider from './CardsSlider';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import API from 'config';
+import { DetailModel } from 'types/detailmodel';
 
 const LIMIT = 20;
 
 const Main: FunctionComponent = () => {
   //데이터 받아올 때 담는 변수
-  // const [promoCards, setPromoCards] = useState([]);
+  const [regularCards, setReguarCards] = useState<DetailModel[]>([]);
+  const [recommendCards, setRecommendCards] = useState<DetailModel[]>([]);
   const [queryString, setQueryString] = useState('');
   const queryListRef = useRef<string[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [paginationBtnNumber, setPaginationBtnNumber] = useState(4);
+  const [paginationBtnNumber, setPaginationBtnNumber] = useState(0);
   const [paginationString, setPaginationString] = useState('');
+  const finalQueryRef = useRef<string | undefined>();
+  const stackListRef = useRef<string>();
+  const [userId, setUserId] = useState(1);
+
+  // const getRecommendationData = async () => {
+  //   try {
+  //     // userId는 store에서 가져오기
+  //     // const {data} =await axios.get(API.getPosts?user=1)
+  //     // setRecommendCards(data)
+  //     setRecommendCards(CARDS_DATA);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
+  const getRegularData = async () => {
+    try {
+      if (queryString === '') {
+        const { data } = await axios.get(API.getPosts);
+        setReguarCards(data.results);
+        setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
+      } else {
+        const { data } = await axios.get(`${API.getPosts}?${queryString}`);
+        console.log(data);
+        setReguarCards(data.results);
+        setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getRegularData();
+  }, []);
+
+  useEffect(() => {
+    if (paginationString && queryString) {
+      finalQueryRef.current = `?${paginationString}&${queryString}`;
+    } else if (queryString) {
+      finalQueryRef.current = `?${queryString}`;
+    } else if (paginationString) {
+      finalQueryRef.current = `?${paginationString}`;
+    }
+    navigate(finalQueryRef.current);
+    // getData();
+  }, [paginationString, queryString]);
 
   // useEffect(() => {
   //   (async () => {
@@ -35,7 +86,7 @@ const Main: FunctionComponent = () => {
   const makeQueryString = (queryKey: string, queryValue: string) => {
     const newQueryString = `${queryKey}=${queryValue}`;
     if (queryKey === 'seeAll') {
-      setQueryString('');
+      navigate('');
       return;
     } else if (
       queryKey !== 'stack' &&
@@ -52,6 +103,8 @@ const Main: FunctionComponent = () => {
     setQueryString(`${queryListRef.current.join('&')}`);
   };
 
+  console.log(queryString);
+
   const makePagination = (btnNum: number) => {
     const paginationString = `offset=${btnNum * LIMIT}&limit=${LIMIT}`;
     setPaginationString(paginationString);
@@ -65,14 +118,18 @@ const Main: FunctionComponent = () => {
         <DivisionLine />
         <CardSectionWrap>
           <Head>
-            <Description>서두르세요! 한 자리 남았어요!</Description>
+            <Description>위샐러드 추천하는 나에게 맞는 프로젝트</Description>
             <HighlightLabel>
-              비니빈 드레싱만 있으면 완성되는 샐러드!
+              이런 프로젝트가 잘 맞으실 것 같아요!
             </HighlightLabel>
           </Head>
-          <CardWrapper>
-            <CardsSlider data={CARDS_DATA} />
-          </CardWrapper>
+          {/* <CardWrapper>
+            <CardsSlider data={recommendCards} />
+          </CardWrapper> */}
+          <NotUserWrap>
+            <NotUserText>아직 등록된 성향이 없네요!</NotUserText>
+            <NotUserButton>먼저 내 성향을 알아볼까요?</NotUserButton>
+          </NotUserWrap>
         </CardSectionWrap>
         <DivisionLineTwo />
         <CardSectionWrap>
@@ -82,7 +139,7 @@ const Main: FunctionComponent = () => {
           </Head>
           <Filter makeQueryString={makeQueryString} />
           <CardWrapper>
-            {CARDS_DATA.map((item) => (
+            {regularCards.map((item: any) => (
               <Card key={item.id} cardtype="regular" {...item} />
             ))}
           </CardWrapper>
@@ -137,8 +194,12 @@ const HighlightLabel = styled.span`
 const CardWrapper = styled.div`
   margin-top: 15px;
   display: flex;
+  flex-wrap: wrap;
   font-family: ‘Black Han Sans’, sans-serif;
   overflow: hidden;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Description = styled.p`
@@ -170,4 +231,33 @@ const PaginationBtn = styled.button`
   text-decoration: none;
   color: white;
   cursor: pointer;
+`;
+
+const NotUserWrap = styled.div`
+  border-radius: 5px;
+  text-align: center;
+  padding: 20px;
+  background-color: #e7e7e7;
+  width: 500px;
+  margin: auto;
+  margin-top: 40px;
+`;
+
+const NotUserText = styled.div`
+  padding: 10px;
+  font-size: ${({ theme }) => theme.fontRegular};
+`;
+
+const NotUserButton = styled.button`
+  padding: 7px 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid ${({ theme }) => theme.mainGreen};
+  background-color: ${({ theme }) => theme.mainGreen};
+  font-size: ${({ theme }) => theme.fontRegular};
+
+  &:hover {
+    text-decoration-line: underline;
+    cursor: pointer;
+  }
 `;

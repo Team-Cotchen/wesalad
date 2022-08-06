@@ -6,36 +6,32 @@ export interface CardsProps {
   cardtype: string;
   title: string;
   period: string;
-  number_of_front: number;
-  number_of_back: number;
+  number_of_front: string;
+  number_of_back: string;
   start_date: string;
   post_stack: IPostStack[];
-  post_place: IPostPlace[];
-  post_answer: IPostAnswer[];
+  post_place: { id: number; title: string };
+  post_answer: [
+    {
+      primary_answer: {
+        id: number;
+        description: string;
+        image_url: string;
+      }[];
+      secondary_answer: {
+        id: number;
+        description: string;
+        image_url: string;
+      }[];
+    },
+  ];
 }
 
 interface IPostStack {
-  stack: {
-    title: string;
-    image_url: string;
-  };
-}
-
-interface IPostPlace {
-  place: {
-    title: string;
-  };
-}
-interface IPostAnswer {
-  is_primary: boolean;
-  answer: {
-    question: {
-      content: string;
-    };
-    content: string;
-    description: string;
-    image_url: string;
-  };
+  id: number;
+  title: string;
+  image_url: string;
+  description: string;
 }
 
 const Card: FunctionComponent<CardsProps> = ({
@@ -50,55 +46,55 @@ const Card: FunctionComponent<CardsProps> = ({
   cardtype,
 }) => {
   return (
-    <MainCard cardtype={cardtype}>
-      <CardTitle>{title}</CardTitle>
-      <CardDescriptions>
-        <CardDescription>
-          <DescriptionIcon>
-            <AiOutlineCheck />
-          </DescriptionIcon>
-          <DescriptionText>
-            {post_place[0].place.title} / {period}
-          </DescriptionText>
-        </CardDescription>
-        <CardDescription>
-          <DescriptionIcon>
-            <AiOutlineCheck />
-          </DescriptionIcon>
-          <DescriptionText>
-            {number_of_front + number_of_back}명(프 {number_of_front}명 / 백{' '}
-            {number_of_back}명)
-          </DescriptionText>
-        </CardDescription>
-        <CardDescription>
-          <DescriptionIcon>
-            <AiOutlineCheck />
-          </DescriptionIcon>
-          <DescriptionText>{start_date} 시작</DescriptionText>
-        </CardDescription>
-      </CardDescriptions>
-      <CharacterCardAndStakLogos>
-        <ChacracterCardsWrapper>
-          <CardsDescription>이런 분을 찾아요!</CardsDescription>
-          {post_answer.map(({ answer }) => (
-            <ChacracterCardWrapper color="#693BFB" key={answer.image_url}>
-              <CharacterCardImg
-                src={answer.image_url}
-                alt={answer.description}
-              />
-              <ChacracterCardText>{answer.description}</ChacracterCardText>
-            </ChacracterCardWrapper>
-          ))}
-        </ChacracterCardsWrapper>
-        <StackLogos>
-          {post_stack.map(({ stack }) => (
-            <StackLogo key={stack.image_url}>
-              <Img src={stack.image_url} alt={stack.title} />
-            </StackLogo>
-          ))}
-        </StackLogos>
-      </CharacterCardAndStakLogos>
-    </MainCard>
+    <div>
+      <MainCard cardtype={cardtype}>
+        <CardTitle>{title}</CardTitle>
+        <CardDescriptions>
+          <CardDescription>
+            <DescriptionIcon>
+              <AiOutlineCheck />
+            </DescriptionIcon>
+            <DescriptionText>
+              {post_place.title} / {period}
+            </DescriptionText>
+          </CardDescription>
+          <CardDescription>
+            <DescriptionIcon>
+              <AiOutlineCheck />
+            </DescriptionIcon>
+            <DescriptionText>
+              프론트 {number_of_front} / 백 {number_of_back}
+            </DescriptionText>
+          </CardDescription>
+          <CardDescription>
+            <DescriptionIcon>
+              <AiOutlineCheck />
+            </DescriptionIcon>
+            <DescriptionText>{start_date} 시작</DescriptionText>
+          </CardDescription>
+        </CardDescriptions>
+        <CharacterCardAndStakLogos>
+          <ChacracterCardsWrapper>
+            <CardsDescription>이런 분을 찾아요!</CardsDescription>
+            {post_answer?.[0]?.primary_answer?.map(
+              ({ description, image_url }) => (
+                <ChacracterCardWrapper color="#693BFB" key={image_url}>
+                  <CharacterCardImg src={image_url} alt={description} />
+                  <ChacracterCardText>{description}</ChacracterCardText>
+                </ChacracterCardWrapper>
+              ),
+            )}
+          </ChacracterCardsWrapper>
+          <StackLogos>
+            {post_stack.map(({ title, image_url }) => (
+              <StackLogo key={title + image_url}>
+                <Img src={image_url} alt={title} />
+              </StackLogo>
+            ))}
+          </StackLogos>
+        </CharacterCardAndStakLogos>
+      </MainCard>
+    </div>
   );
 };
 
@@ -109,9 +105,9 @@ interface IMainCard {
 }
 
 const MainCard = styled.div<IMainCard>`
-  width: 400px;
+  min-width: 400px;
   height: 550px;
-  margin-right: 20px;
+  margin: 20px;
   padding: 20px 25px;
   border: 1px solid
     ${({ theme, cardtype }) =>
@@ -121,7 +117,7 @@ const MainCard = styled.div<IMainCard>`
 
 const StackLogos = styled.div`
   display: flex;
-  margin-top: 20px;
+  padding-bottom: 15px;
 `;
 
 const StackLogo = styled.div`

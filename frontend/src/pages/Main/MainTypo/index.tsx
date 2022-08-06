@@ -118,6 +118,7 @@ const Text = styled.h1`
   font-weight: ${({ theme }) => theme.weightBold};
   letter-spacing: 5px;
   animation: ${linearAnimationOne} 8s infinite;
+  line-height: 160px;
 `;
 
 const TextTwo = styled(Text)`

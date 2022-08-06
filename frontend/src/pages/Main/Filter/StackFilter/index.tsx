@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface StackFilterProps {
   stack: string;
-  makeQueryString: (queryKey: string, queryValue: string) => void;
+  makeQueryString: (queryKey: string, queryValue: number) => void;
 }
 
 const StackFilter = ({ stack, makeQueryString }: StackFilterProps) => {
@@ -17,11 +17,13 @@ const StackFilter = ({ stack, makeQueryString }: StackFilterProps) => {
       setStackList(FRONT_STACK_LIST);
     } else if (stack === '백엔드') {
       setStackList(BACK_STACK_LIST);
+    } else if (stack === '기타') {
+      setStackList(COMMON_STACK_LIST);
     }
   }, [stack]);
 
-  const handleStackClick = (value: string) => {
-    makeQueryString('stack', value);
+  const handleStackClick = (id: number, value: string) => {
+    makeQueryString('stack', id);
     chosenStackList.includes(value)
       ? setChosenStackList(chosenStackList.filter((stack) => stack !== value))
       : setChosenStackList([...chosenStackList, value]);
@@ -33,7 +35,7 @@ const StackFilter = ({ stack, makeQueryString }: StackFilterProps) => {
         {stackList &&
           stackList.map(({ id, value }) => (
             <FilterOption
-              onClick={() => handleStackClick(value)}
+              onClick={() => handleStackClick(id, value)}
               key={id}
               isChosen={chosenStackList.includes(value)}
             >
@@ -74,36 +76,33 @@ const FilterOption = styled.div<IFilterOptionProps>`
 `;
 
 const FRONT_STACK_LIST = [
-  { id: 0, value: 'Javascript' },
-  { id: 1, value: 'Typescript' },
-  { id: 2, value: 'React' },
-  { id: 3, value: 'Vue' },
-  { id: 4, value: 'Node.js' },
-  { id: 5, value: 'Spring' },
-  { id: 6, value: 'Java' },
-  { id: 7, value: 'Next.js' },
-  { id: 8, value: 'Express' },
-  { id: 9, value: 'Go' },
-  { id: 10, value: 'C' },
-  { id: 11, value: 'Python' },
-  { id: 12, value: 'Django' },
-  { id: 13, value: 'Swift' },
-  { id: 14, value: 'Kotlin' },
+  { id: 1, value: 'Javascript' },
+  { id: 2, value: 'Typescript' },
+  { id: 3, value: 'React' },
+  { id: 4, value: 'Vue' },
+  { id: 5, value: 'Svelte' },
+  { id: 6, value: 'Nextjs' },
+  { id: 7, value: 'Flutter' },
+  { id: 8, value: 'ReactNative' },
 ];
 
 const BACK_STACK_LIST = [
+  { id: 9, value: 'Python' },
+  { id: 10, value: 'Django' },
+  { id: 11, value: 'Nodejs' },
+  { id: 12, value: 'Nestjs' },
+  { id: 13, value: 'Java' },
+  { id: 14, value: 'Spring' },
   { id: 15, value: 'MySQL' },
   { id: 16, value: 'MongoDB' },
-  { id: 17, value: 'PHP' },
-  { id: 18, value: 'GraphQL' },
-  { id: 19, value: 'Firebase' },
-  { id: 20, value: 'ReactNative' },
-  { id: 21, value: 'Unity' },
-  { id: 22, value: 'Flutter' },
-  { id: 23, value: 'AWS' },
-  { id: 24, value: 'Kubernetes' },
-  { id: 25, value: 'Docker' },
-  { id: 26, value: 'Git' },
-  { id: 27, value: 'Figma' },
-  { id: 28, value: 'Zeplin' },
+];
+
+const COMMON_STACK_LIST = [
+  { id: 17, value: 'GraphQL' },
+  { id: 18, value: 'AWS' },
+  { id: 19, value: 'Kubernetes' },
+  { id: 20, value: 'Docker' },
+  { id: 21, value: 'Git' },
+  { id: 22, value: 'Figma' },
+  { id: 23, value: 'Zeplin' },
 ];
