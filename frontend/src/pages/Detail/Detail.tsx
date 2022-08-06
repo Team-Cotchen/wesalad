@@ -69,6 +69,7 @@ const Detail: FunctionComponent = () => {
 
   const goToEdit = () => {
     navigate(`/edit/${id}`);
+    console.log('hi');
   };
 
   const logout = () => {
