@@ -10,7 +10,7 @@ import { ModalProps, IBasicInfo } from 'components/LoginStep/loginStep.types';
 import { useSelector, useDispatch } from 'react-redux';
 import { nextStep } from 'redux/reducers/loginSlice';
 import { RootState } from 'redux/store';
-import 'antd/dist/antd.min.css';
+import 'antd/dist/antd.less';
 import { message } from 'antd';
 import { devices } from 'styles/devices';
 

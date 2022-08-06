@@ -12,7 +12,7 @@ import axios from 'axios';
 import Modal from 'components/Modal/Modal';
 import DeleteBtn from 'components/SettingContainer/DeleteBtn';
 import StackModiSection from 'components/SettingContainer/setStackModiSection';
-import 'antd/dist/antd.min.css';
+import 'antd/dist/antd.less';
 import AnswerModiSection from 'components/SettingContainer/setAnswerModiSection';
 
 export interface IUserAnswerModi {
@@ -281,13 +281,13 @@ const ButtonContainer = styled.div`
   margin-top: 30px;
 
   button {
-    width: 100px;
+    width: 80px;
     border: 1px solid ${({ theme }) => theme.mainGreen};
     background-color: white;
-    padding: 5px 0px;
+    padding: 3px 0px;
     margin-right: 10px;
     border-radius: 4px;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
 
     &:hover {

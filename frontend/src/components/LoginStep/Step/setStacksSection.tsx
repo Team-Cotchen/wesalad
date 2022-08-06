@@ -7,7 +7,7 @@ import { Select } from 'antd';
 import { ITitle, IInfoSection } from 'components/LoginStep/loginStep.types';
 
 import { OptionModel } from 'components/PostForm/PostForm.model';
-import 'antd/dist/antd.min.css';
+import 'antd/dist/antd.less';
 const { Option } = Select;
 import BackButton from 'components/BackButton';
 import { OPTIONS } from 'assets/data/Options.constant';
