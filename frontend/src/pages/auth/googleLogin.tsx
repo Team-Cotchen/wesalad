@@ -27,7 +27,6 @@ const googleLogin = () => {
     const token = data?.token;
     const googleAccountId = data?.google_account_id;
     const imageUrl = data?.image_url;
-    const loginId = data?.id;
 
     dispatch(
       setSignUpInfo({
@@ -39,16 +38,11 @@ const googleLogin = () => {
     if (token !== undefined) {
       localStorage.setItem('accessToken', token.access);
       localStorage.setItem('refreshToken', token.refresh);
-      dispatch(
-        setSignUpInfo({
-          key: 'loginId',
-          value: loginId,
-        }),
-      );
+      localStorage.setItem('id', token.user_id);
     } else {
       dispatch(
         setSignUpInfo({
-          key: 'signupId',
+          key: 'id',
           value: googleAccountId,
         }),
       );

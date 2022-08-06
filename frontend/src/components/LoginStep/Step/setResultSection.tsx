@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 const setResultSection = ({ handleClose, basicInfo }: any) => {
   const tendencyResult = basicInfo.answers as number[];
   const answerChangeForm: string[] = [];
-  const id = useSelector((state: RootState) => state.login.signupId);
+  const id = useSelector((state: RootState) => state.login.id);
   const navigate = useNavigate();
 
   const changeToFetchForm = () => {
@@ -58,6 +58,9 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
         const token = res.data.token;
         localStorage.setItem('accessToken', token.access);
         localStorage.setItem('refreshToken', token.refresh);
+
+        const loginId = res.data.id;
+        localStorage.setItem('id', loginId);
       }
 
       handleClose();
