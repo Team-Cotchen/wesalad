@@ -97,7 +97,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
       message.warning('로그인이 필요합니다.');
       return navigate('/');
     }
-  }, [navigate]);
+  }, [navigate, access]);
 
   const EditForm = async (values: FormatModel) => {
     try {
