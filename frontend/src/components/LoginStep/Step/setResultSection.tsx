@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import API from 'config';
 import { ITitle } from 'components/LoginStep/loginStep.types';
 import axios from 'axios';
-import {} from 'react-redux';
 import { RootState } from 'redux/store';
 import { QuestionData } from 'assets/data/QuestionData';
 import { keyframes } from 'styled-components';

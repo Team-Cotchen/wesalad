@@ -10,17 +10,17 @@ export interface OptionModel {
 }
 
 export interface FormModel {
-  category: string | undefined;
-  stacks: string[] | undefined;
-  applyway: string | undefined;
-  applyway_info: string | undefined;
-  place: string | undefined;
-  title: string | undefined;
-  number_of_front: string | undefined;
-  number_of_back: string | undefined;
-  period: string | undefined;
+  category?: string;
+  stacks?: string[];
+  applyway?: string;
+  applyway_info?: string;
+  place?: string;
+  title?: string;
+  number_of_front?: string;
+  number_of_back?: string;
+  period?: string;
   start_date: moment.Moment;
-  flavor: string | undefined;
+  flavor?: string;
   status?: string | boolean;
 }
 
