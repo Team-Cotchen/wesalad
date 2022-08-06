@@ -61,7 +61,6 @@ const PostFormModal: FunctionComponent<Props> = ({
       setPrimaryCards(primaryCards.filter((item) => item !== card));
     }
 
-    // When selecting again after selection is completed
     if (isAdditional) {
       setAdditionalCards(additionalCards.filter((item) => item !== card));
     }

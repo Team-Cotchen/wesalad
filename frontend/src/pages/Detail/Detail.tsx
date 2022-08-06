@@ -1,65 +1,81 @@
 import axios from 'axios';
-import { message } from 'antd';
+import { message, Popconfirm, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { FiExternalLink } from 'react-icons/fi';
-import React, { useEffect, useState, FunctionComponent } from 'react';
+import { useDispatch } from 'react-redux';
+import React, {
+  useEffect,
+  useState,
+  FunctionComponent,
+  useCallback,
+} from 'react';
+import { clearStep } from 'redux/reducers/loginSlice';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { BASE_URL } from 'config';
+import customHttp from 'utils/Axios';
 import Nav from 'components/Nav/Nav';
 import Card from 'components/Card';
 import PostBackButton from 'components/PostBackButton';
+import type { DetailModel } from 'pages/Detail/Detail.model';
 
 import theme from 'styles/theme';
 import { devices } from 'styles/devices';
 
-import getToken, { BASE_URL } from 'config';
-
-import type { DetailModel } from 'pages/Detail/DetailModel';
-
-const { refresh, access } = getToken.getToken();
-
 const Detail: FunctionComponent = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
   const [detailInfo, setDetailInfo] = useState<DetailModel>();
 
-  const getDetails = async () => {
+  const getDetails = useCallback(async () => {
     try {
-      const { data } = await axios.get(`${BASE_URL}/posts/${id}`);
-      //const { data } = await axios.get(`/data/cardsdata.json`);
-
+      const { data } = await axios.get(`${BASE_URL}/api/posts/${id}`);
       setDetailInfo(data);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     getDetails();
-  }, []);
-
-  const goToEdit = () => {
-    navigate(`/edit/${id}`);
-  };
+  }, [getDetails]);
 
   const deletePost = async () => {
     try {
-      const { data } = await axios.delete(`${BASE_URL}/posts/${id}`, {
-        headers: {
-          refresh: refresh ?? '',
-          access: access ?? '',
-        },
-      });
+      const res = await customHttp.delete(`${BASE_URL}/api/posts/${id}`);
 
-      if (data) {
+      if (res.status === 204) {
         message.success('해당 게시글이 삭제되었습니다.');
         navigate('/');
       }
     } catch (err) {
       console.log(err);
-      message.error('해당 게시글이 삭제되지 않았습니다.');
+
+      if (
+        (err as { response: { data: { ERROR: string } } }).response?.data
+          ?.ERROR === 'YOUR_LOGIN_HAS_EXPIRED'
+      ) {
+        logout();
+      } else if (
+        (err as { response: { data: string } }).response.data ===
+        'POST_DOES_NOT_EXIST'
+      )
+        message.error('해당 게시글은 이미 삭제되었습니다.');
+      else message.error('해당 게시글이 삭제되지 않았습니다.');
     }
+  };
+
+  const goToEdit = () => {
+    navigate(`/edit/${id}`);
+  };
+
+  const logout = () => {
+    message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
+    navigate('/');
+    dispatch(clearStep());
+    localStorage.clear();
   };
 
   return (
@@ -89,6 +105,11 @@ const Detail: FunctionComponent = () => {
                 'YYYY년 mm월 DD일 HH:mm:ss',
               )}
             </Date>
+            {detailInfo?.status === 'active' ? (
+              <StatusTag color="blue">현재 모집 중</StatusTag>
+            ) : (
+              <StatusTag color="gray">모집 마감</StatusTag>
+            )}
           </HeaderInfo>
         </Header>
         <Line />
@@ -100,10 +121,10 @@ const Detail: FunctionComponent = () => {
               <Flavor>
                 <FlavorImg
                   alt="pepper"
-                  src={detailInfo?.post_flavor[0]?.image_url}
+                  src={detailInfo?.post_flavor?.image_url}
                 />
-                {detailInfo?.post_flavor[0]?.title}
-                <FlavorDetail>{`(${detailInfo?.post_flavor[0]?.description})`}</FlavorDetail>
+                {detailInfo?.post_flavor?.title}
+                <FlavorDetail>{`(${detailInfo?.post_flavor?.description})`}</FlavorDetail>
               </Flavor>
             </Spicy>
           </Title>
@@ -115,7 +136,7 @@ const Detail: FunctionComponent = () => {
               </ListItem>
               <ListItem>
                 <ItemTitle>진행 방식 </ItemTitle>
-                <Content>{detailInfo?.post_place}</Content>
+                <Content>{detailInfo?.post_place.title}</Content>
               </ListItem>
               <ListItem>
                 <ItemTitle>프론트엔드 모집 인원</ItemTitle>
@@ -147,22 +168,22 @@ const Detail: FunctionComponent = () => {
               </ListItem>
               <ListItem>
                 <ItemTitle>연락 방법</ItemTitle>
-                <Content>{detailInfo?.post_applyway[0].title}</Content>
+                <Content>{detailInfo?.post_applyway.title}</Content>
               </ListItem>
               <ListItem>
                 <ItemTitle>연락할 곳</ItemTitle>
                 <Content>
-                  {detailInfo?.post_applyway[0].title !== '이메일' ? (
+                  {detailInfo?.post_applyway.title !== '이메일' ? (
                     <ExternalLink
                       target="_blank"
                       rel="noreferrer"
-                      href={detailInfo?.post_applyway[0].description}
+                      href={detailInfo?.post_applyway.description}
                     >
-                      {detailInfo?.post_applyway[0].description}
+                      {detailInfo?.post_applyway.description}
                       <FiExternalLink />
                     </ExternalLink>
                   ) : (
-                    detailInfo?.post_applyway[0].description
+                    detailInfo?.post_applyway.description
                   )}
                 </Content>
               </ListItem>
@@ -216,8 +237,15 @@ const Detail: FunctionComponent = () => {
           </MainContent>
           <Line />
         </Introduction>
-        <EditButton onClick={goToEdit}>수정</EditButton>
-        <DeleteButton onClick={deletePost}>삭제</DeleteButton>
+        {localStorage.getItem('id') !== undefined &&
+          localStorage.getItem('id') === detailInfo?.user.id && (
+            <>
+              <EditButton onClick={goToEdit}>수정</EditButton>
+              <Popconfirm title="삭제하시겠습니까?" onConfirm={deletePost}>
+                <DeleteButton>삭제</DeleteButton>
+              </Popconfirm>
+            </>
+          )}
       </Wrapper>
     </>
   );
@@ -280,6 +308,10 @@ const TitleLine = styled.div`
 const HeaderInfo = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const StatusTag = styled(Tag)`
+  margin: 0 15px;
 `;
 
 const UserInfo = styled.div`

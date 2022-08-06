@@ -20,17 +20,17 @@ export const OPTIONS = {
   FLAVOR: [
     {
       title: '매운맛',
-      description: '주 00 시간 이상',
+      description: '주 4 시간 이상',
       image: 'https://i.ibb.co/x3JHb8W/03-hot.png',
     },
     {
       title: '중간맛',
-      description: '주 00 시간 ~ 00시간',
+      description: '주 2 시간 ~ 4시간',
       image: 'https://i.ibb.co/7pjqfWM/02-medium.png',
     },
     {
       title: '순한맛',
-      description: '주 00 시간 이하',
+      description: '주 2 시간 이하',
       image: 'https://i.ibb.co/F8Q9Nc1/01-mild.png',
     },
   ],
@@ -107,4 +107,20 @@ export const OPTIONS = {
       name: '워커홀릭 베이컨',
     },
   ],
+};
+
+export const OPTION_TITLES = {
+  applyway: '연락 방법',
+  applyway_info: '연락 주소',
+  category: '프로젝트 타입',
+  number_of_back: '프론트엔드 모집 인원',
+  number_of_front: '백엔드 모집 인원',
+  period: '진행 기간',
+  place: '진행 방식',
+  stacks: '기술 스택',
+  start_date: '시작 예정일',
+  title: '제목',
+  flavor: '프로젝트 맵기',
+  answers: '성향 카드',
+  description: '자세한 소개',
 };

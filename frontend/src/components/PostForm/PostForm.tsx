@@ -1,27 +1,51 @@
-import { Select, DatePicker, Checkbox, message, Form, Button } from 'antd';
-import axios from 'axios';
+import {
+  Select,
+  DatePicker,
+  Checkbox,
+  message,
+  Form,
+  Button,
+  Switch,
+} from 'antd';
 import React, { useState, FunctionComponent, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearStep } from 'redux/reducers/loginSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ImPointRight } from 'react-icons/im';
 import { VscCircleOutline } from 'react-icons/vsc';
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 
+import { BASE_URL, TINYMCE_API_KEY } from 'config';
+
 import { OPTIONS } from 'assets/data/Options.constant';
+import customHttp, { AuthVerify } from 'utils/Axios';
 
 import PostFormModal from 'components/PostForm/PostFormModal';
 import Card from 'components/Card';
 import Nav from 'components/Nav/Nav';
-import type { FormModel, PostModel } from 'components/PostForm/PostForm.model';
+import type {
+  FormatModel,
+  FormModel,
+  PostModel,
+} from 'components/PostForm/PostForm.model';
 
 import theme from 'styles/theme';
 import { devices } from 'styles/devices';
 
-import getToken, { BASE_URL, TINYMCE_API_KEY } from 'config';
+import {
+  convertToImgCard,
+  unSelectedItems,
+  convertToFormatted,
+} from 'components/PostForm/Post.functions';
 
-const { refresh, access } = getToken.getToken();
+import getToken from 'config';
+
+import { useEffect } from 'react';
+
 const { Option } = Select;
 const { Item } = Form;
+const { access } = getToken.getToken();
 
 interface Props {
   mode: 'edit' | 'creation';
@@ -32,6 +56,17 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
   const { id } = useParams();
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [additionalCards, setAdditionalCards] = useState<string[]>(
+    mode === 'edit' ? defaultPost.additional : [],
+  );
+  const [primaryCards, setPrimaryCards] = useState<string[]>(
+    mode === 'edit' ? defaultPost.primary : [],
+  );
+  const [applyWay, setApplyWay] = useState<unknown>();
+  const [flavor, setFlavor] = useState(defaultPost?.fields?.flavor);
+  const [description, setDescription] = useState(defaultPost?.description);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const {
@@ -42,30 +77,9 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
     APPLY_WAY,
     FLAVOR,
     STACKS,
-    CARD_LIST,
   } = OPTIONS;
-
-  const [additionalCards, setAdditionalCards] = useState<string[]>(
-    mode === 'edit' ? defaultPost.additional : [],
-  );
-  const [primaryCards, setPrimaryCards] = useState<string[]>(
-    mode === 'edit' ? defaultPost.primary : [],
-  );
-  const [applyWay, setApplyWay] = useState<unknown>();
-  const [flavor, setFlavor] = useState(defaultPost?.fields?.flavor);
-  const [description, setDescription] = useState('');
-
-  const convertToImgCard = (cards: string[]) =>
-    cards.map((name) => {
-      return {
-        name,
-        image_url: CARD_LIST.find((card) => card.name === name)?.image_url,
-      };
-    });
-
   const PRYMARY_CARDS = convertToImgCard(primaryCards);
   const ADDITIONAL_CARDS = convertToImgCard(additionalCards);
-
   const ALL_CARDS = useMemo(
     () =>
       [...primaryCards, ...additionalCards].map((item) => {
@@ -74,89 +88,86 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
     [primaryCards, additionalCards],
   );
 
-  const EditForm = async (formData: FormData) => {
-    try {
-      const res = await axios.put(`${BASE_URL}/posts/${id}`, {
-        headers: {
-          'Content-Type': `multipart/form-data`,
-          refresh,
-          access,
-        },
-        data: formData,
-      });
+  useEffect(() => {
+    if (
+      access === '' ||
+      access === null ||
+      AuthVerify() === 'Refresh Token Expired'
+    ) {
+      message.warning('로그인이 필요합니다.');
+      return navigate('/');
+    }
+  }, [navigate]);
 
-      if (res.status === 200) {
-        message.success('수정되었습니다.');
+  const EditForm = async (values: FormatModel) => {
+    try {
+      const res = await customHttp.put(`/api/posts/${id}`, values);
+
+      if (res.status === 200 && AuthVerify()) {
+        message.success('해당 게시글이 수정되었습니다.');
 
         const id = (res.data as { id: number }).id;
 
         navigate(`/project/${id}`);
       }
-
-      console.log(res);
     } catch (err) {
       console.log(err);
-      message.error('수정되지 않았습니다.');
 
-      console.log((err as any).response);
       if (
         (err as { response: { data: { ERROR: string } } }).response.data
           ?.ERROR === 'YOUR_LOGIN_HAS_EXPIRED'
       ) {
-        message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
+        logout();
+      } else {
+        message.error('게시글이 수정되지 않았습니다.');
       }
     }
   };
 
-  const CreateForm = async (formData: FormData) => {
+  const CreateForm = async (values: FormatModel) => {
     try {
-      // 만약 이렇게해서 안될시 formData 꺼내서 url 옆에 적어줄것
-      const res = await axios.post(`${BASE_URL}/posts/create`, {
-        headers: {
-          'Content-Type': `multipart/form-data`,
-          refresh,
-          access,
-        },
-        data: formData,
-      });
+      const { status, data } = await customHttp.post(`/api/posts`, values);
 
-      if (res.status === 201) {
+      if (status === 201) {
         message.success('프로젝트가 성공적으로 생성되었습니다! 🎉');
-        const id = (res.data as { id: number }).id;
 
+        const id = (data as { id: number }).id;
         navigate(`/project/${id}`);
       }
     } catch (err) {
       console.log(err);
-      message.error('프로젝트가 생성되지 않았습니다.');
 
       if (
-        (err as { response: { data: { ERROR: string } } }).response.data
+        (err as { response: { data: { ERROR: string } } }).response?.data
           ?.ERROR === 'YOUR_LOGIN_HAS_EXPIRED'
       ) {
-        message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
-        navigate('/google/callback');
+        logout();
+      } else {
+        message.error('프로젝트가 생성되지 않았습니다.');
       }
     }
   };
 
-  // validate 필요 ->  required - validation 처리 함수 만들기
   const submitForm = async (values: FormModel) => {
-    const formData = new FormData();
-    const formattedValues = {
-      ...values,
-      start_date: values.start_date.format('YYYY-MM-DD'),
-      answers: JSON.stringify(ALL_CARDS),
-      stacks: JSON.stringify(values.stacks),
-      flavor,
-      description,
-    };
+    if (unSelectedItems(values, flavor, ALL_CARDS, description).length > 0) {
+      return message.error(
+        `${unSelectedItems(
+          values,
+          flavor,
+          ALL_CARDS,
+          description,
+        )} 작성해주세요.`,
+      );
+    }
 
-    Object.entries(formattedValues).forEach(([key, value]) =>
-      formData.append(key, value),
+    const formattedValues = convertToFormatted(
+      values,
+      flavor,
+      ALL_CARDS,
+      description,
     );
 
-    mode === 'edit' ? EditForm(formData) : CreateForm(formData);
+    mode === 'edit' ? EditForm(formattedValues) : CreateForm(formattedValues);
   };
 
   const handleFlavor = (e: React.MouseEvent<HTMLElement>) => {
@@ -167,12 +178,11 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
     checkbox.checked && setFlavor(checkbox.name);
   };
 
-  const handleEditorChange = (content: string) => {
-    setDescription(content);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
+  const logout = () => {
+    message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
+    navigate('/');
+    dispatch(clearStep());
+    localStorage.clear();
   };
 
   return (
@@ -201,6 +211,22 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
             <Line />
             <Main>
               <SelectList>
+                {mode === 'edit' && (
+                  <ListItem
+                    name="status"
+                    valuePropName="checked"
+                    label={
+                      <StyledLabel>
+                        <StyledCircle />
+                        &nbsp; 현재 모집 중
+                      </StyledLabel>
+                    }
+                    colon={false}
+                  >
+                    <StatusSwitch unCheckedChildren="마감" />
+                  </ListItem>
+                )}
+
                 <ListItem
                   name="category"
                   label={
@@ -211,7 +237,12 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   }
                   colon={false}
                 >
-                  <StyledSelect bordered={false} placeholder="스터디/프로젝트">
+                  <StyledSelect
+                    bordered={false}
+                    placeholder={
+                      <div style={{ color: 'black' }}>스터디/프로젝트</div>
+                    }
+                  >
                     {CATEGORY.map((category) => (
                       <Option key={category} value={category}>
                         {category}
@@ -224,12 +255,17 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   label={
                     <StyledLabel>
                       <StyledCircle />
-                      &nbsp; 진행방식
+                      &nbsp; 진행 방식
                     </StyledLabel>
                   }
                   colon={false}
                 >
-                  <StyledSelect bordered={false}>
+                  <StyledSelect
+                    placeholder={
+                      <div style={{ color: 'black' }}>온라인/오프라인</div>
+                    }
+                    bordered={false}
+                  >
                     {PLACE.map((place) => (
                       <Option key={place} value={place}>
                         {place}
@@ -248,7 +284,11 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   colon={false}
                 >
                   <StyledSelect
-                    placeholder="사용할 기술 스택을 골라주세요."
+                    placeholder={
+                      <div style={{ color: 'black' }}>
+                        사용할 기술 스택을 골라주세요.
+                      </div>
+                    }
                     bordered={false}
                     mode="multiple"
                     optionLabelProp="label"
@@ -274,7 +314,9 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                 >
                   <StyledSelect
                     bordered={false}
-                    placeholder="인원 미정 ~ 5명 이상"
+                    placeholder={
+                      <div style={{ color: 'black' }}>인원 미정 ~ 5명 이상</div>
+                    }
                   >
                     {NUM_OF_DEVELOPER.map((num) => (
                       <Option key={num} value={num}>
@@ -295,7 +337,9 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                 >
                   <StyledSelect
                     bordered={false}
-                    placeholder="인원 미정 ~ 5명 이상"
+                    placeholder={
+                      <div style={{ color: 'black' }}>인원 미정 ~ 5명 이상</div>
+                    }
                   >
                     {NUM_OF_DEVELOPER.map((num) => (
                       <Option key={num} value={num}>
@@ -314,7 +358,14 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   }
                   colon={false}
                 >
-                  <StyledSelect bordered={false}>
+                  <StyledSelect
+                    placeholder={
+                      <div style={{ color: 'black' }}>
+                        기간 미정 ~ 6개월 이상
+                      </div>
+                    }
+                    bordered={false}
+                  >
                     {PERIOD.map((num) => (
                       <Option key={num} value={num}>
                         {num}
@@ -376,7 +427,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                     &nbsp; 우리 팀 성향
                   </StyledLabel>
                   <TagBox>
-                    <PickButton onClick={openModal}>
+                    <PickButton onClick={() => setIsModalOpen(true)}>
                       <ImPointRight /> &nbsp;
                       {primaryCards.length === 0
                         ? '팀 성향 고르기 Click!'
@@ -466,15 +517,12 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   placeholder: '프로젝트에 대해 소개해주세요.',
                   height: 700,
                   menubar: false,
-                  // plugins: ['image'],
                   paste_data_images: true,
-                  // automatic_uploads: true,
-                  // images_upload_url: `${BASE_URL}/posts/create`, // 서버주소 이어야 하지 않을까? => 만약 안되면 image 아이콘 없애고 drag 만 되는 걸로 바꾸기
                   toolbar:
                     'undo redo  | styles | styleselect  | fontsizeselect  | bold italic | alignleft aligncenter alignright alignjustify | outdent indent ',
                   resize: false,
                 }}
-                onEditorChange={handleEditorChange}
+                onEditorChange={(content: string) => setDescription(content)}
               />
             </EditorBox>
           </DetailInfo>
@@ -583,6 +631,12 @@ const Main = styled.main`
 
   @media screen and ${devices.tablet} {
     display: block;
+  }
+`;
+
+const StatusSwitch = styled(Switch)`
+  @media screen and ${devices.mobile} {
+    left: 30px;
   }
 `;
 
