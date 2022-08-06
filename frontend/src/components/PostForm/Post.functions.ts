@@ -1,5 +1,5 @@
 import { OPTIONS, OPTION_TITLES } from 'assets/data/Options.constant';
-import { FormModel } from './PostForm.model';
+import { FormModel } from 'components/PostForm/PostForm.model';
 
 const { CARD_LIST } = OPTIONS;
 
@@ -13,9 +13,9 @@ export const convertToImgCard = (cards: string[]) =>
 
 export const unSelectedItems = (
   values: FormModel,
-  flavor: string | undefined,
-  answers: { description: string; is_primary: boolean }[] | undefined,
-  description: string | undefined,
+  flavor?: string,
+  answers?: { description: string; is_primary: boolean }[],
+  description?: string,
 ) => {
   const unSelectedItems = Object.entries({
     ...values,
@@ -32,9 +32,9 @@ export const unSelectedItems = (
 
 export const convertToFormatted = (
   values: FormModel,
-  flavor: string | undefined,
-  answers: { description: string; is_primary: boolean }[] | undefined,
-  description: string | undefined,
+  flavor?: string,
+  answers?: { description: string; is_primary: boolean }[],
+  description?: string,
 ) => {
   const {
     applyway,

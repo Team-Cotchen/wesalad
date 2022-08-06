@@ -45,7 +45,6 @@ import { useEffect } from 'react';
 
 const { Option } = Select;
 const { Item } = Form;
-const { access } = getToken.getToken();
 
 interface Props {
   mode: 'edit' | 'creation';
@@ -55,6 +54,7 @@ interface Props {
 const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
   const { id } = useParams();
   const [form] = Form.useForm();
+  const { access } = getToken.getToken();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
