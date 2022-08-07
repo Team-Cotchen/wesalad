@@ -60,12 +60,14 @@ const StyledSlider = styled(Slider)`
     position: absolute;
     z-index: 100;
     background-color: blue;
+
     left: 10px;
   }
   .slick-next {
     position: absolute;
     z-index: 100;
-    top: 40%;
+    right: 100x;
     left: 100px;
+    background-color: red;
   }
 `;

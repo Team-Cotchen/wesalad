@@ -13,11 +13,11 @@ import PostBackButton from 'components/PostBackButton';
 import theme from 'styles/theme';
 import { devices } from 'styles/devices';
 
-import getToken, { BASE_URL } from 'config';
+import { getToken, BASE_URL } from 'config';
 
 import type { DetailModel } from 'pages/Detail/DetailModel';
 
-const { refresh, access } = getToken.getToken();
+const { access, refresh, id } = getToken();
 
 const Detail: FunctionComponent = () => {
   const { id } = useParams();

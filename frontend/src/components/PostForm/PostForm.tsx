@@ -17,9 +17,9 @@ import type { FormModel, PostModel } from 'components/PostForm/PostForm.model';
 import theme from 'styles/theme';
 import { devices } from 'styles/devices';
 
-import getToken, { BASE_URL, TINYMCE_API_KEY } from 'config';
+import { BASE_URL, TINYMCE_API_KEY, getToken } from 'config';
 
-const { refresh, access } = getToken.getToken();
+const { refresh, access } = getToken();
 const { Option } = Select;
 const { Item } = Form;
 

@@ -8,8 +8,10 @@ import Card from 'pages/Main/Card';
 import CardsSlider from './CardsSlider';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import API from 'config';
+import API, { getToken } from 'config';
 import { DetailModel } from 'types/detailmodel';
+import Modal from 'components/Modal/Modal';
+import LoginModal from 'components/LoginStep/LoginModal';
 
 const LIMIT = 20;
 
@@ -23,20 +25,22 @@ const Main: FunctionComponent = () => {
   const location = useLocation();
   const [paginationBtnNumber, setPaginationBtnNumber] = useState(0);
   const [paginationString, setPaginationString] = useState('');
-  const finalQueryRef = useRef<string | undefined>();
+  const finalQueryRef = useRef<string>();
   const stackListRef = useRef<string>();
   const [userId, setUserId] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { access, id } = getToken();
 
-  // const getRecommendationData = async () => {
-  //   try {
-  //     // userId는 store에서 가져오기
-  //     // const {data} =await axios.get(API.getPosts?user=1)
-  //     // setRecommendCards(data)
-  //     setRecommendCards(CARDS_DATA);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const getRecommendationData = async () => {
+    try {
+      const { data } = await axios.get(`${API.getPosts}?user=${id}`);
+      setRecommendCards(data.results);
+      console.log(data.results);
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('check');
+  };
 
   const getRegularData = async () => {
     try {
@@ -46,7 +50,6 @@ const Main: FunctionComponent = () => {
         setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
       } else {
         const { data } = await axios.get(`${API.getPosts}?${queryString}`);
-        console.log(data);
         setReguarCards(data.results);
         setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
       }
@@ -57,6 +60,7 @@ const Main: FunctionComponent = () => {
 
   useEffect(() => {
     getRegularData();
+    getRecommendationData();
   }, []);
 
   useEffect(() => {
@@ -67,7 +71,11 @@ const Main: FunctionComponent = () => {
     } else if (paginationString) {
       finalQueryRef.current = `?${paginationString}`;
     }
-    navigate(finalQueryRef.current);
+    if (finalQueryRef.current) {
+      navigate(finalQueryRef.current);
+    }
+
+    // navigate(finalQueryRef.current);
     // getData();
   }, [paginationString, queryString]);
 
@@ -83,7 +91,7 @@ const Main: FunctionComponent = () => {
   //   })();
   // }, [queryString, location.search]);
 
-  const makeQueryString = (queryKey: string, queryValue: string) => {
+  const makeQueryString = (queryKey: string, queryValue: number) => {
     const newQueryString = `${queryKey}=${queryValue}`;
     if (queryKey === 'seeAll') {
       navigate('');
@@ -103,12 +111,26 @@ const Main: FunctionComponent = () => {
     setQueryString(`${queryListRef.current.join('&')}`);
   };
 
-  console.log(queryString);
-
   const makePagination = (btnNum: number) => {
     const paginationString = `offset=${btnNum * LIMIT}&limit=${LIMIT}`;
     setPaginationString(paginationString);
   };
+
+  const openModal = () => {
+    document.body.style.overflow = 'hidden';
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    document.body.style.overflow = 'auto';
+    setIsModalOpen(false);
+  };
+
+  const handleNotUserBtn = () => {
+    openModal();
+  };
+
+  localStorage.removeItem('id');
 
   return (
     <>
@@ -123,13 +145,18 @@ const Main: FunctionComponent = () => {
               이런 프로젝트가 잘 맞으실 것 같아요!
             </HighlightLabel>
           </Head>
-          {/* <CardWrapper>
-            <CardsSlider data={recommendCards} />
-          </CardWrapper> */}
-          <NotUserWrap>
-            <NotUserText>아직 등록된 성향이 없네요!</NotUserText>
-            <NotUserButton>먼저 내 성향을 알아볼까요?</NotUserButton>
-          </NotUserWrap>
+          {!access ? (
+            <CardWrapper>
+              <CardsSlider data={recommendCards} />
+            </CardWrapper>
+          ) : (
+            <NotUserWrap>
+              <NotUserText>아직 등록된 성향이 없네요!</NotUserText>
+              <NotUserButton onClick={handleNotUserBtn}>
+                먼저 내 성향을 알아볼까요?
+              </NotUserButton>
+            </NotUserWrap>
+          )}
         </CardSectionWrap>
         <DivisionLineTwo />
         <CardSectionWrap>
@@ -152,6 +179,9 @@ const Main: FunctionComponent = () => {
           </PaginationBtnWrap>
         </CardSectionWrap>
       </Wrapper>
+      <Modal onClose={closeModal} visible={isModalOpen}>
+        <LoginModal handleClose={closeModal} />
+      </Modal>
     </>
   );
 };

@@ -1,7 +1,38 @@
-import React, { FunctionComponent } from 'react';
+import { message } from 'antd';
+import React, { FunctionComponent, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { getToken } from 'config';
+import { useNavigate } from 'react-router-dom';
+import Modal from 'components/Modal/Modal';
+import LoginModal from 'components/LoginStep/LoginModal';
 
 const MainTypo: FunctionComponent = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { access, id } = getToken();
+  const onAlertMessage = () => {
+    message.warning(`수정될 수 있도록 만들고 있어요. 
+    조금만 기다려주세요. 🙏`);
+  };
+
+  const openModal = () => {
+    document.body.style.overflow = 'hidden';
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    document.body.style.overflow = 'auto';
+    setIsOpen(false);
+  };
+
+  const handleCheckMyCharacter = () => {
+    if (access) {
+      navigate('/settings');
+    } else {
+      openModal();
+    }
+  };
+
   return (
     <>
       <MainTypoDiv>
@@ -11,8 +42,10 @@ const MainTypo: FunctionComponent = () => {
           <TextThree>SALAD</TextThree>
         </MainText>
         <BtnWrapper>
-          <FindCharacterBtn>내 협업 성향 알아보기</FindCharacterBtn>
-          <BoardBtn>자랑보드 보러가기</BoardBtn>
+          <FindCharacterBtn onClick={handleCheckMyCharacter}>
+            내 협업 성향 알아보기
+          </FindCharacterBtn>
+          <BoardBtn onClick={() => onAlertMessage}>자랑보드 보러가기</BoardBtn>
         </BtnWrapper>
       </MainTypoDiv>
       <SubTitle>
@@ -24,6 +57,9 @@ const MainTypo: FunctionComponent = () => {
           이번달 인기샐러드 구경하고 내 샐러드 찾으러 가보세요!
         </TitleText>
       </SubTitle>
+      <Modal onClose={closeModal} visible={isOpen}>
+        <LoginModal handleClose={closeModal} />
+      </Modal>
     </>
   );
 };
