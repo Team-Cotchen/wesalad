@@ -11,7 +11,7 @@ const MainTypo: FunctionComponent = () => {
   const navigate = useNavigate();
   const { access, id } = getToken();
   const onAlertMessage = () => {
-    message.warning(`수정될 수 있도록 만들고 있어요. 
+    message.warning(`서비스 준비중에 있어요. 
     조금만 기다려주세요. 🙏`);
   };
 
@@ -45,7 +45,7 @@ const MainTypo: FunctionComponent = () => {
           <FindCharacterBtn onClick={handleCheckMyCharacter}>
             내 협업 성향 알아보기
           </FindCharacterBtn>
-          <BoardBtn onClick={() => onAlertMessage}>자랑보드 보러가기</BoardBtn>
+          <BoardBtn onClick={onAlertMessage}>자랑보드 보러가기</BoardBtn>
         </BtnWrapper>
       </MainTypoDiv>
       <SubTitle>

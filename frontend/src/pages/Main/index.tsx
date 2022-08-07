@@ -1,7 +1,6 @@
 import Nav from 'components/Nav/Nav';
-import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { CARDS_DATA } from 'pages/Main/cardsdata';
 import MainTypo from 'pages/Main/MainTypo';
 import Filter from 'pages/Main/Filter';
 import Card from 'pages/Main/Card';
@@ -17,102 +16,69 @@ const LIMIT = 20;
 
 const Main: FunctionComponent = () => {
   //데이터 받아올 때 담는 변수
-  const [regularCards, setReguarCards] = useState<DetailModel[]>([]);
+  const [filteredCards, setFilteredCards] = useState<DetailModel[]>([]);
   const [recommendCards, setRecommendCards] = useState<DetailModel[]>([]);
-  const [queryString, setQueryString] = useState('');
-  const queryListRef = useRef<string[]>([]);
-  const navigate = useNavigate();
-  const location = useLocation();
   const [paginationBtnNumber, setPaginationBtnNumber] = useState(0);
   const [paginationString, setPaginationString] = useState('');
-  const finalQueryRef = useRef<string>();
-  const stackListRef = useRef<string>();
-  const [userId, setUserId] = useState(1);
+  const [queryStringList, setQueryStringList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { access, id } = getToken();
+
+  const { search } = useLocation();
+  const navigate = useNavigate();
 
   const getRecommendationData = async () => {
     try {
       const { data } = await axios.get(`${API.getPosts}?user=${id}`);
       setRecommendCards(data.results);
-      console.log(data.results);
-    } catch (e) {
-      console.log(e);
-    }
-    console.log('check');
-  };
-
-  const getRegularData = async () => {
-    try {
-      if (queryString === '') {
-        const { data } = await axios.get(API.getPosts);
-        setReguarCards(data.results);
-        setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
-      } else {
-        const { data } = await axios.get(`${API.getPosts}?${queryString}`);
-        setReguarCards(data.results);
-        setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
-      }
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error();
     }
   };
 
-  useEffect(() => {
-    getRegularData();
-    getRecommendationData();
-  }, []);
-
-  useEffect(() => {
-    if (paginationString && queryString) {
-      finalQueryRef.current = `?${paginationString}&${queryString}`;
-    } else if (queryString) {
-      finalQueryRef.current = `?${queryString}`;
-    } else if (paginationString) {
-      finalQueryRef.current = `?${paginationString}`;
-    }
-    if (finalQueryRef.current) {
-      navigate(finalQueryRef.current);
-    }
-
-    // navigate(finalQueryRef.current);
-    // getData();
-  }, [paginationString, queryString]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetch(
-  //       `http://172.20.10.6:8080/posts?${paginationString}&${queryString}`,
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setPromoCards(data);
-  //     setPaginationBtnNumber(Math.ceil(data.length / LIMIT));
-  //   })();
-  // }, [queryString, location.search]);
-
-  const makeQueryString = (queryKey: string, queryValue: number) => {
-    const newQueryString = `${queryKey}=${queryValue}`;
-    if (queryKey === 'seeAll') {
-      navigate('');
+  const changeQueryStringList = (queryKey: string, queryValue: number) => {
+    const queryString = `${queryKey}=${queryValue}`;
+    if (queryKey === 'all') {
+      setQueryStringList([]);
       return;
-    } else if (
-      queryKey !== 'stack' &&
-      !queryListRef.current.join().includes('stack')
-    ) {
-      queryListRef.current = [newQueryString];
+    } else if (queryKey === 'flavor') {
+      const stringWithoutFlavor = queryStringList.filter(
+        (item) => !item.includes('flavor'),
+      );
+      const newFlavorString = [...stringWithoutFlavor, queryString];
+      setQueryStringList(newFlavorString);
+    } else if (queryStringList?.includes(queryString)) {
+      setQueryStringList(
+        queryStringList?.filter((item) => item !== queryString),
+      );
+    } else setQueryStringList([...queryStringList, queryString]);
+  };
+
+  const changeLocation = () => {
+    if (!paginationString) {
+      navigate(`?${queryStringList.join('&')}`);
+    } else if (!queryStringList) {
+      navigate(`?${paginationString}`);
     } else {
-      queryListRef.current.includes(newQueryString)
-        ? (queryListRef.current = queryListRef.current.filter(
-            (query) => query !== newQueryString,
-          ))
-        : queryListRef.current.push(newQueryString);
+      navigate(`?${[paginationString, ...queryStringList].join('&')}`);
     }
-    setQueryString(`${queryListRef.current.join('&')}`);
+  };
+
+  const getFilteredCards = async () => {
+    try {
+      const { data } = await axios.get(`${API.getPosts}${search}`);
+      console.log(`${API.getPosts}${search}`);
+      setFilteredCards(data.results);
+      console.log(data.results);
+      setPaginationBtnNumber(Math.ceil(data.results.length / LIMIT));
+    } catch (error) {
+      console.error();
+    }
   };
 
   const makePagination = (btnNum: number) => {
-    const paginationString = `offset=${btnNum * LIMIT}&limit=${LIMIT}`;
+    const paginationString = `page=${btnNum}`;
+
     setPaginationString(paginationString);
   };
 
@@ -130,7 +96,18 @@ const Main: FunctionComponent = () => {
     openModal();
   };
 
-  localStorage.removeItem('id');
+  useEffect(() => {
+    getRecommendationData();
+  }, []);
+
+  useEffect(() => {
+    getFilteredCards();
+    console.log(search);
+  }, [search]);
+
+  useEffect(() => {
+    changeLocation();
+  }, [paginationString, queryStringList]);
 
   return (
     <>
@@ -145,7 +122,7 @@ const Main: FunctionComponent = () => {
               이런 프로젝트가 잘 맞으실 것 같아요!
             </HighlightLabel>
           </Head>
-          {!access ? (
+          {id ? (
             <CardWrapper>
               <CardsSlider data={recommendCards} />
             </CardWrapper>
@@ -164,9 +141,9 @@ const Main: FunctionComponent = () => {
             <Description>나에게 꼭 맞는 샐러드 찾아볼까요?</Description>
             <HighlightLabel>내 취향에 맞는 샐러드 고르기</HighlightLabel>
           </Head>
-          <Filter makeQueryString={makeQueryString} />
+          <Filter changeQueryStringList={changeQueryStringList} />
           <CardWrapper>
-            {regularCards.map((item: any) => (
+            {filteredCards.map((item: any) => (
               <Card key={item.id} cardtype="regular" {...item} />
             ))}
           </CardWrapper>

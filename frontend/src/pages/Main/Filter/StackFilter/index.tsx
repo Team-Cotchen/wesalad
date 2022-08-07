@@ -1,33 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-interface StackFilterProps {
-  stack: string;
-  makeQueryString: (queryKey: string, queryValue: number) => void;
+interface IStackFilter {
+  handleStackClick: (id: number, value: string) => void;
+  chosenStackList: string[];
+  isClicked: string;
 }
 
-const StackFilter = ({ stack, makeQueryString }: StackFilterProps) => {
+const StackFilter: FunctionComponent<IStackFilter> = ({
+  handleStackClick,
+  chosenStackList,
+  isClicked,
+}: IStackFilter) => {
   const [stackList, setStackList] = useState<
     { id: number; value: string }[] | null
   >(null);
-  const [chosenStackList, setChosenStackList] = useState<string[]>([]);
 
   useEffect(() => {
-    if (stack === '프론트엔드') {
+    if (isClicked === '프론트엔드') {
       setStackList(FRONT_STACK_LIST);
-    } else if (stack === '백엔드') {
+    } else if (isClicked === '백엔드') {
       setStackList(BACK_STACK_LIST);
-    } else if (stack === '기타') {
-      setStackList(COMMON_STACK_LIST);
-    }
-  }, [stack]);
-
-  const handleStackClick = (id: number, value: string) => {
-    makeQueryString('stack', id);
-    chosenStackList.includes(value)
-      ? setChosenStackList(chosenStackList.filter((stack) => stack !== value))
-      : setChosenStackList([...chosenStackList, value]);
-  };
+    } else setStackList(COMMON_STACK_LIST);
+  }, [isClicked]);
 
   return (
     <>

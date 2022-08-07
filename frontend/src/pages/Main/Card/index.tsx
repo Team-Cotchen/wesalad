@@ -70,7 +70,7 @@ const Card: FunctionComponent<CardsProps> = ({
             <DescriptionIcon>
               <AiOutlineCheck />
             </DescriptionIcon>
-            <DescriptionText>{start_date} 시작</DescriptionText>
+            <DescriptionText>{start_date.slice(0, 10)} 시작</DescriptionText>
           </CardDescription>
         </CardDescriptions>
         <CharacterCardAndStakLogos>

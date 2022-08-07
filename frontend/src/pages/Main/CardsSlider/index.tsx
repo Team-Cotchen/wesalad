@@ -52,22 +52,19 @@ const StyledSlider = styled(Slider)`
     display: flex;
   }
   .slick-arrow {
-    color: pink;
-    transform: translate(50%, 100px);
+    color: black;
     cursor: pointer;
   }
   .slick-prev {
     position: absolute;
     z-index: 100;
-    background-color: blue;
-
     left: 10px;
+    background-color: black;
   }
   .slick-next {
     position: absolute;
     z-index: 100;
-    right: 100x;
-    left: 100px;
-    background-color: red;
+    right: 0px;
+    background-color: black;
   }
 `;

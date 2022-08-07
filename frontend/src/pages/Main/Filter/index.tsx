@@ -2,44 +2,63 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import StackFilter from './StackFilter';
 
-interface FilterProps {
-  makeQueryString: (queryKey: string, queryValue: number) => void;
+interface IFilter {
+  changeQueryStringList: (queryKey: string, queryValue: number) => void;
 }
 
-const Filter: FunctionComponent<FilterProps> = ({ makeQueryString }) => {
-  const [chosenFilter, setChosenFilter] = useState('모두 보기');
+const Filter: FunctionComponent<IFilter> = ({ changeQueryStringList }) => {
+  const [isClicked, setIsClicked] = useState('모두 보기');
+  const [chosenStackList, setChosenStackList] = useState<string[]>([]);
 
   useEffect(() => {
-    setChosenFilter('모두 보기');
+    setIsClicked('모두 보기');
   }, []);
 
-  const handleFilterClick = (name: string, queryId: number) => {
-    setChosenFilter(name);
-    if (name === '중간맛' || name === '순한맛' || name === '매운맛') {
-      makeQueryString('flavor', queryId);
-    } else if (name === '모두 보기') {
-      makeQueryString('seeAll', 1);
+  const handleFilterClick = (
+    name: string,
+    queryKey: string,
+    queryValue: number,
+  ) => {
+    setIsClicked(name);
+    if (queryKey === 'stack') {
+      return;
+    } else if (queryKey === 'all') {
+      setChosenStackList([]);
+    }
+    changeQueryStringList(queryKey, queryValue);
+  };
+
+  const handleStackClick = (id: number, value: string) => {
+    changeQueryStringList('stack', id);
+    if (chosenStackList.includes(value)) {
+      setChosenStackList(chosenStackList.filter((stack) => stack !== value));
+    } else {
+      setChosenStackList([...chosenStackList, value]);
     }
   };
 
   return (
     <>
       <FilterWrapper>
-        {FILTER_LIST.map(({ id, name, queryId }) => (
+        {FILTER_LIST.map(({ id, name, queryKey, queryValue }) => (
           <FilterBtn
-            onClick={() => handleFilterClick(name, queryId)}
+            onClick={() => handleFilterClick(name, queryKey, queryValue)}
             key={id}
-            isChosen={chosenFilter === name}
+            isChosen={isClicked === name}
           >
             {name}
           </FilterBtn>
         ))}
       </FilterWrapper>
       <FilterDivLine />
-      {(chosenFilter === '프론트엔드' ||
-        chosenFilter === '백엔드' ||
-        chosenFilter === '기타') && (
-        <StackFilter stack={chosenFilter} makeQueryString={makeQueryString} />
+      {(isClicked === '프론트엔드' ||
+        isClicked === '백엔드' ||
+        isClicked === '기타') && (
+        <StackFilter
+          isClicked={isClicked}
+          handleStackClick={handleStackClick}
+          chosenStackList={chosenStackList}
+        />
       )}
     </>
   );
@@ -78,11 +97,11 @@ const FilterDivLine = styled.div`
 `;
 
 const FILTER_LIST = [
-  { id: 0, name: '모두 보기', queryId: 0 },
-  { id: 2, name: '매운맛', queryId: 3 },
-  { id: 3, name: '중간맛', queryId: 2 },
-  { id: 4, name: '순한맛', queryId: 1 },
-  { id: 5, name: '프론트엔드', queryId: 0 },
-  { id: 6, name: '백엔드', queryId: 0 },
-  { id: 7, name: '기타', queryId: 0 },
+  { id: 0, name: '모두 보기', queryKey: 'all', queryValue: 0 },
+  { id: 2, name: '매운맛', queryKey: 'flavor', queryValue: 3 },
+  { id: 3, name: '중간맛', queryKey: 'flavor', queryValue: 2 },
+  { id: 4, name: '순한맛', queryKey: 'flavor', queryValue: 1 },
+  { id: 5, name: '프론트엔드', queryKey: 'stack', queryValue: 0 },
+  { id: 6, name: '백엔드', queryKey: 'stack', queryValue: 0 },
+  { id: 7, name: '기타', queryKey: 'stack', queryValue: 0 },
 ];
