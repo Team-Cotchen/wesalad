@@ -2,8 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 
 import getToken, { BASE_URL, setAccessToken } from 'config';
 
-const { refresh, access } = getToken.getToken();
-
 const parseJwt = (token: string | null) => {
   if (token) return JSON.parse(atob(token.split('.')[1]));
 };
@@ -14,8 +12,8 @@ export const renewAccessToken = (token: string) => {
 };
 
 export const AuthVerify = () => {
-  const decodedAccess = parseJwt(access);
-  const decodedRefresh = parseJwt(refresh);
+  const decodedAccess = parseJwt(getToken.getToken().access);
+  const decodedRefresh = parseJwt(getToken.getToken().refresh);
 
   if (decodedAccess?.exp * 1000 < Date.now()) {
     return 'Access Token Expired';
@@ -33,8 +31,8 @@ const customHttp = axios.create({
   timeout: 8000,
   headers: {
     'Content-Type': `application/json`,
-    access: access ?? '',
-    refresh: refresh ?? '',
+    access: getToken.getToken().access ?? '',
+    refresh: getToken.getToken().refresh ?? '',
   },
 });
 
@@ -46,7 +44,7 @@ export const onFulfilled = async (res: AxiosResponse) => {
 
     res.config.headers = {
       'Content-Type': `application/json`,
-      refresh: refresh ?? '',
+      refresh: getToken.getToken().refresh ?? '',
       access: newAccess,
     };
 
