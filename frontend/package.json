@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "react-scripts --max_old_space_size=4096 build",
-    "start": "node scripts/start.js",
-    "test": "node scripts/test.js"
+    "start": "craco start",
+    "build": "craco --max_old_space_size=4096 build",
+    "test": "craco test"
   },
   "babel": {
     "presets": [
@@ -82,6 +82,7 @@
     ]
   },
   "dependencies": {
+    "@craco/craco": "^6.4.5",
     "@reduxjs/toolkit": "^1.8.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -152,6 +153,7 @@
     "babel-loader": "^8.2.5",
     "babel-plugin-named-asset-import": "^0.3.8",
     "babel-preset-react-app": "^10.0.1",
+    "craco-less": "^2.0.0",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",

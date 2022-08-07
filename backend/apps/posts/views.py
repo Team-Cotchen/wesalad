@@ -10,7 +10,7 @@ from .serializers          import PostSerializer
 
 
 class PostListView(generics.ListCreateAPIView):
-    queryset         = Post.objects.exclude(status='inactive')
+    queryset         = Post.objects.filter(status='active')
     serializer_class = PostSerializer
     pagination_class = PostListPagination
     filter_backends  = [PostListFilterBackend]
@@ -44,7 +44,7 @@ class PostListView(generics.ListCreateAPIView):
 
 
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset         = Post.objects.exclude(status='inactive')
+    queryset         = Post.objects.exclude(status='deleted')
     serializer_class = PostSerializer
     pagination_class = PostListPagination
     
@@ -87,6 +87,6 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
         if error:
             return Response(error_message(error), status=status.HTTP_400_BAD_REQUEST)
         
-        post.status = 'inactive'
+        post.status = 'deleted'
         post.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
