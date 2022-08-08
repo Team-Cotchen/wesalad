@@ -27,7 +27,7 @@ const MainTypo: FunctionComponent = () => {
 
   const handleCheckMyCharacter = () => {
     if (access) {
-      navigate('/settings');
+      navigate('/setting');
     } else {
       openModal();
     }

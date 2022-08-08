@@ -39,4 +39,4 @@ export const {
   setSignUpInfo,
   clearStep,
 } = loginSlice.actions;
-export default loginSlice;
+export default loginSlice.reducer;
