@@ -2,6 +2,13 @@ import axios, { AxiosResponse } from 'axios';
 
 import getToken, { BASE_URL, setAccessToken } from 'config';
 
+const { access, refresh } = getToken.getToken();
+
+const customHttp = axios.create({
+  baseURL: BASE_URL,
+  timeout: 8000,
+});
+
 const parseJwt = (token: string | null) => {
   if (token) return JSON.parse(atob(token.split('.')[1]));
 };
@@ -26,16 +33,6 @@ export const AuthVerify = () => {
   return true;
 };
 
-const customHttp = axios.create({
-  baseURL: BASE_URL,
-  timeout: 8000,
-  headers: {
-    'Content-Type': `application/json`,
-    access: getToken.getToken().access ?? '',
-    refresh: getToken.getToken().refresh ?? '',
-  },
-});
-
 export const onFulfilled = async (res: AxiosResponse) => {
   if (AuthVerify() === 'Access Token Expired') {
     const { access: newAccess } = res.data;
@@ -44,13 +41,24 @@ export const onFulfilled = async (res: AxiosResponse) => {
 
     res.config.headers = {
       'Content-Type': `application/json`,
-      refresh: getToken.getToken().refresh ?? '',
+      refresh: refresh ?? '',
       access: newAccess,
     };
 
     return await axios(res.config);
   } else return res;
 };
+
+customHttp.interceptors.request.use(
+  (config) => {
+    config.headers = {
+      'Content-Type': `application/json`,
+      refresh: refresh ?? '',
+      access: access ?? '',
+    };
+  },
+  (err) => Promise.reject(err),
+);
 
 customHttp.interceptors.response.use(onFulfilled);
 
