@@ -179,7 +179,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
   };
 
   const logout = () => {
-    message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
+    message.warn('로그인이 만료되었습니다. 다시 로그인해주세요.');
     navigate('/');
     dispatch(clearStep());
     localStorage.clear();
@@ -416,7 +416,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   <ContactInput
                     placeholder={
                       APPLY_WAY?.find(({ title }) => title === applyWay)
-                        ?.info || '카카오톡 오픈 채팅'
+                        ?.info || '카카오톡 오픈채팅'
                     }
                   />
                 </ListItem>

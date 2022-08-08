@@ -72,7 +72,7 @@ const Detail: FunctionComponent = () => {
   };
 
   const logout = () => {
-    message.warn('로그아웃이 되었습니다. 다시 로그인해주세요.');
+    message.warn('로그인이 만료되었습니다. 다시 로그인해주세요.');
     navigate('/');
     dispatch(clearStep());
     localStorage.clear();
@@ -238,7 +238,8 @@ const Detail: FunctionComponent = () => {
           <Line />
         </Introduction>
         {localStorage.getItem('id') !== undefined &&
-          localStorage.getItem('id') === detailInfo?.user.id && (
+          Number(localStorage.getItem('id')) ===
+            Number(detailInfo?.user.id) && (
             <>
               <EditButton onClick={goToEdit}>수정</EditButton>
               <Popconfirm title="삭제하시겠습니까?" onConfirm={deletePost}>
