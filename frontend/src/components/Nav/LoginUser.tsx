@@ -1,42 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
+import API from 'config';
 import DropdownItem from 'components/Nav/Dropdown';
 import { IoMdArrowDropdown } from 'react-icons/io';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
-
-/* TODO : TEST
 import { IFetchResultData } from 'components/LoginStep/loginStep.types';
-import axios from 'axios';
-import API from 'config';
-*/
 
 const LoginUser = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
-  console.log(imageUrl);
-  // const [user, setUser] = useState<IFetchResultData>();
+  const [user, setUser] = useState<IFetchResultData>();
 
-  // const token = {
-  //   access: localStorage.getItem('accessToken'),
-  //   refresh: localStorage.getItem('refreshToken'),
-  // };
+  const token = {
+    access: localStorage.getItem('accessToken'),
+    refresh: localStorage.getItem('refreshToken'),
+  };
 
-  // useEffect(() => {
-  //   const getUserImageUrl = async () => {
-  //     const { data } = await axios.get(`${API.userModiorDell}`, {
-  //       headers: {
-  //         access: `${token.access}`,
-  //         refresh: `${token.refresh}`,
-  //       },
-  //     });
-  //     setUser(data);
-  //     if (user === undefined) return;
-  //   };
+  useEffect(() => {
+    const getUserImageUrl = async () => {
+      const { data } = await axios.get(`${API.userModiorDell}`, {
+        headers: {
+          access: `${token.access}`,
+          refresh: `${token.refresh}`,
+        },
+      });
+      setUser(data);
+      if (user === undefined) return;
+    };
 
-  //   getUserImageUrl();
-  // }, []);
+    getUserImageUrl();
+  }, []);
 
   useEffect(() => {
     const handleCloseMenu = (event: MouseEvent) => {
@@ -54,8 +47,7 @@ const LoginUser = () => {
         ref={menuRef}
         onClick={() => setMenuVisible(!menuVisible)}
       >
-        {/* <img src={user?.google_account?.image_url} /> */}
-        <img src={imageUrl} />
+        <img src={user?.google_account?.image_url} />
         <ArrowIcon size={20} />
       </ProfileSection>
       {menuVisible && <DropdownItem />}
