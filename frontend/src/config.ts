@@ -7,13 +7,15 @@ const API = {
   signup: `${BASE_URL}/api/users/signup`,
   callback: `${BASE_URL}/api/users/google/login`,
   userModiorDell: `${BASE_URL}/api/users/profile`,
+  getPosts: `${BASE_URL}/api/posts`,
+};
 
-  getToken: () => {
-    const access = localStorage.getItem('accessToken');
-    const refresh = localStorage.getItem('refreshToken');
+export const getToken = () => {
+  const access = localStorage.getItem('accessToken');
+  const refresh = localStorage.getItem('refreshToken');
+  const id = localStorage.getItem('id');
 
-    return { access, refresh };
-  },
+  return { access, refresh, id };
 };
 
 export const setAccessToken = (token: string) =>
