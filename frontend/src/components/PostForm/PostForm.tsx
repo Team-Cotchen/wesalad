@@ -39,7 +39,7 @@ import {
   convertToFormatted,
 } from 'components/PostForm/Post.functions';
 
-import getToken from 'config';
+import { getToken } from 'config';
 
 import { useEffect } from 'react';
 
@@ -54,7 +54,7 @@ interface Props {
 const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
   const { id } = useParams();
   const [form] = Form.useForm();
-  const { access } = getToken.getToken();
+  const { access } = getToken();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

@@ -1,8 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import getToken, { BASE_URL, setAccessToken } from 'config';
-
-const { access, refresh } = getToken.getToken();
+import { getToken, BASE_URL, setAccessToken } from 'config';
 
 const customHttp = axios.create({
   baseURL: BASE_URL,
@@ -19,8 +17,8 @@ export const renewAccessToken = (token: string) => {
 };
 
 export const AuthVerify = () => {
-  const decodedAccess = parseJwt(getToken.getToken().access);
-  const decodedRefresh = parseJwt(getToken.getToken().refresh);
+  const decodedAccess = parseJwt(getToken().access);
+  const decodedRefresh = parseJwt(getToken().refresh);
 
   if (decodedAccess?.exp * 1000 < Date.now()) {
     return 'Access Token Expired';
@@ -41,7 +39,7 @@ export const onFulfilled = async (res: AxiosResponse) => {
 
     res.config.headers = {
       'Content-Type': `application/json`,
-      refresh: refresh ?? '',
+      refresh: getToken().refresh ?? '',
       access: newAccess,
     };
 
@@ -53,8 +51,8 @@ customHttp.interceptors.request.use(
   (config) => {
     config.headers = {
       'Content-Type': `application/json`,
-      refresh: refresh ?? '',
-      access: access ?? '',
+      refresh: getToken().refresh ?? '',
+      access: getToken().access ?? '',
     };
   },
   (err) => Promise.reject(err),
