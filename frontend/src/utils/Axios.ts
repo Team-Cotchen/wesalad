@@ -54,6 +54,7 @@ customHttp.interceptors.request.use(
       refresh: getToken().refresh ?? '',
       access: getToken().access ?? '',
     };
+    return config;
   },
   (err) => Promise.reject(err),
 );
