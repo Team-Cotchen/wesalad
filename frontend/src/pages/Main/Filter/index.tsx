@@ -71,7 +71,8 @@ interface IFilterBtn {
 }
 
 const FilterWrapper = styled.ul`
-  margin: 30px 0;
+  margin: 30px auto;
+  ${({ theme }) => theme.flexMixIn('center', 'center')}
 `;
 
 const FilterBtn = styled.li<IFilterBtn>`
@@ -92,6 +93,8 @@ const FilterBtn = styled.li<IFilterBtn>`
 `;
 
 const FilterDivLine = styled.div`
+  margin: 0 auto;
+  width: 90%;
   border: 1px solid #d0d0d0;
   margin-bottom: 30px;
 `;
