@@ -833,7 +833,7 @@ const Description = styled.div`
   display: flex;
   flex-direction: column;
   span {
-    margin-top: 15px;
+    margin-top: 6px;
     font-size: 14px;
   }
 
