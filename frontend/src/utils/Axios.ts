@@ -1,6 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 import { getToken, BASE_URL, setAccessToken } from 'config';
+=======
+import { BASE_URL, getToken, setAccessToken } from 'config';
+>>>>>>> fc9a1e2 (Fix : git conflict 해결)
+=======
+import { getToken, BASE_URL, setAccessToken } from 'config';
+>>>>>>> 1a32d09 (wip)
 
 const customHttp = axios.create({
   baseURL: BASE_URL,
@@ -54,6 +62,8 @@ customHttp.interceptors.request.use(
       refresh: getToken().refresh ?? '',
       access: getToken().access ?? '',
     };
+
+    return config;
   },
   (err) => Promise.reject(err),
 );
