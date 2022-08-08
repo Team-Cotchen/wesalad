@@ -66,11 +66,9 @@ const Main: FunctionComponent = () => {
 
   const getFilteredCards = async () => {
     try {
-      const { data } = await axios.get(`${API.getPosts}${search}`);
-      console.log(`${API.getPosts}${search}`);
+      const { data } = await axios.get(`${API.getPosts}${search || `?page=1`}`);
       setFilteredCards(data.results);
-      console.log(data.results);
-      setPaginationBtnNumber(Math.ceil(data.results.length / LIMIT));
+      setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
     } catch (error) {
       console.error();
     }
@@ -149,7 +147,10 @@ const Main: FunctionComponent = () => {
           </CardWrapper>
           <PaginationBtnWrap>
             {[...Array(paginationBtnNumber).keys()].map((item, index) => (
-              <PaginationBtn onClick={() => makePagination(index)} key={index}>
+              <PaginationBtn
+                onClick={() => makePagination(index + 1)}
+                key={index}
+              >
                 {index + 1}
               </PaginationBtn>
             ))}
@@ -221,9 +222,7 @@ const DivisionLineTwo = styled(DivisionLine)`
 `;
 
 const PaginationBtnWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${({ theme }) => theme.flexMixIn('center', 'center')}
   max-width: 200px;
   margin: 30px auto;
 `;
@@ -231,12 +230,16 @@ const PaginationBtnWrap = styled.div`
 const PaginationBtn = styled.button`
   width: 40px;
   height: 40px;
+  margin-right: 15px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.mainViolet};
-  box-shadow: none;
   outline: none;
   text-decoration: none;
   color: white;
+  border: none;
+  text-decoration: none;
+  line-height: 1;
+  text-align: center;
   cursor: pointer;
 `;
 

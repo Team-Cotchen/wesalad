@@ -50,8 +50,7 @@ interface IFilterOptionProps {
 
 const FilterOptions = styled.div`
   font-family: ‘Black Han Sans’, sans-serif;
-  display: flex;
-  align-items: center;
+  ${({ theme }) => theme.flexMixIn('center', 'center')}
   flex-wrap: wrap;
 `;
 
@@ -62,6 +61,7 @@ const FilterOption = styled.div<IFilterOptionProps>`
   padding: 15px 20px;
   font-size: ${({ theme }) => theme.fontRegular};
   opacity: ${({ isChosen }) => (isChosen ? 1 : 0.3)};
+  background-color: ${({ isChosen }) => (isChosen ? '#e6e6e6' : '#ffffff')};
   cursor: pointer;
 
   &:hover {
