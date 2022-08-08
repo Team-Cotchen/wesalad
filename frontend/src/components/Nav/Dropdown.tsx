@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { clearStep } from 'redux/reducers/loginSlice';
 import { message } from 'antd';
-import { devices } from 'styles/devices';
 
 const DropdownItem = () => {
   const navigate = useNavigate();
