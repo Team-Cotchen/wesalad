@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import DropdownItem from 'components/Nav/Dropdown';
 import { IoMdArrowDropdown } from 'react-icons/io';
