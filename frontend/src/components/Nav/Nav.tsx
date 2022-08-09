@@ -9,6 +9,8 @@ import Modal from 'components/Modal/Modal';
 import LoginModal from 'components/LoginStep/LoginModal';
 import LoginUser from 'components/Nav/LoginUser';
 
+import { devices } from 'styles/devices';
+
 const Nav = () => {
   const isGetToken = window.localStorage.getItem('accessToken') === null;
   const navigate = useNavigate();
@@ -66,11 +68,19 @@ const Wrapper = styled.div`
   padding: 15px 0;
   border-bottom: 1px solid #dfe1e6;
   background-color: white;
+
+  @media screen and ${devices.mobile} {
+    padding: 0;
+  }
 `;
 
 const NavBox = styled.div`
   ${({ theme }) => theme.flexMixIn('space-between', 'center')}
   padding: 0px 110px;
+
+  @media screen and ${devices.mobile} {
+    padding: 10px;
+  }
 `;
 
 const NavLeft = styled.div`
@@ -85,11 +95,20 @@ const LogoImg = styled.img`
   width: 2.6rem;
   height: 2.6rem;
   margin: 0 10px;
+
+  @media screen and ${devices.mobile} {
+    width: 2rem;
+    height: 2rem;
+  }
 `;
 
 const Logo = styled.span`
   display: inline-block;
   font-size: ${({ theme }) => theme.fontMedium};
+
+  @media screen and ${devices.mobile} {
+    font-size: ${({ theme }) => theme.fontSemiMedium};
+  }
 `;
 
 const NavRight = styled.div`
@@ -102,6 +121,10 @@ const NewPost = styled.div`
 
   &:hover {
     cursor: pointer;
+  }
+
+  @media screen and ${devices.mobile} {
+    font-size: ${({ theme }) => theme.fontSmall};
   }
 `;
 

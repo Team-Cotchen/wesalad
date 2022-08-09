@@ -7,16 +7,14 @@ import {
   Button,
   Switch,
 } from 'antd';
-import React, { useState, FunctionComponent, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
-import { clearStep } from 'redux/reducers/loginSlice';
+import React, { useState, FunctionComponent, useMemo, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ImPointRight } from 'react-icons/im';
 import { VscCircleOutline } from 'react-icons/vsc';
 import { Editor } from '@tinymce/tinymce-react';
 import styled from 'styled-components';
 
-import { BASE_URL, TINYMCE_API_KEY } from 'config';
+import { BASE_URL, TINYMCE_API_KEY, getToken } from 'config';
 
 import { OPTIONS } from 'assets/data/Options.constant';
 import customHttp, { AuthVerify } from 'utils/Axios';
@@ -39,10 +37,6 @@ import {
   convertToFormatted,
 } from 'components/PostForm/Post.functions';
 
-import { getToken } from 'config';
-
-import { useEffect } from 'react';
-
 const { Option } = Select;
 const { Item } = Form;
 
@@ -56,7 +50,6 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
   const [form] = Form.useForm();
   const { access } = getToken();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [additionalCards, setAdditionalCards] = useState<string[]>(
     mode === 'edit' ? defaultPost.additional : [],
@@ -89,12 +82,13 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
   );
 
   useEffect(() => {
-    if (
-      access === '' ||
-      access === null ||
-      AuthVerify() === 'Refresh Token Expired'
-    ) {
+    if (access === '' || access === null) {
       message.warning('로그인이 필요합니다.');
+      return navigate('/');
+    }
+
+    if (AuthVerify() === 'Refresh Token Expired') {
+      message.warning('로그인이 만료되었습니다. 다시 로그인 해주세요.');
       return navigate('/');
     }
   }, [navigate, access]);
@@ -111,16 +105,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
         navigate(`/project/${id}`);
       }
     } catch (err) {
-      console.log(err);
-
-      if (
-        (err as { response: { data: { ERROR: string } } }).response.data
-          ?.ERROR === 'YOUR_LOGIN_HAS_EXPIRED'
-      ) {
-        logout();
-      } else {
-        message.error('게시글이 수정되지 않았습니다.');
-      }
+      message.error('게시글이 수정되지 않았습니다.');
     }
   };
 
@@ -135,16 +120,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
         navigate(`/project/${id}`);
       }
     } catch (err) {
-      console.log(err);
-
-      if (
-        (err as { response: { data: { ERROR: string } } }).response?.data
-          ?.ERROR === 'YOUR_LOGIN_HAS_EXPIRED'
-      ) {
-        logout();
-      } else {
-        message.error('프로젝트가 생성되지 않았습니다.');
-      }
+      message.error('프로젝트가 생성되지 않았습니다.');
     }
   };
 
@@ -176,13 +152,6 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
     const checkbox = e.target as HTMLInputElement;
 
     checkbox.checked && setFlavor(checkbox.name);
-  };
-
-  const logout = () => {
-    message.warn('로그인이 만료되었습니다. 다시 로그인해주세요.');
-    navigate('/');
-    dispatch(clearStep());
-    localStorage.clear();
   };
 
   return (
@@ -514,12 +483,13 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                 init={{
                   referrer_policy: 'origin',
                   export_cors_hosts: [`${BASE_URL}`],
-                  placeholder: '프로젝트에 대해 소개해주세요.',
+                  placeholder:
+                    '프로젝트에 대해 소개해주세요. (이미지를 올리고 싶다면 드래그를 해주세요!)',
                   height: 700,
-                  menubar: false,
                   paste_data_images: true,
+                  menubar: false,
                   toolbar:
-                    'undo redo  | styles | styleselect  | fontsizeselect  | bold italic | alignleft aligncenter alignright alignjustify | outdent indent ',
+                    'undo redo  | styles | styleselect  | forecolor| fontsizeselect  | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | code',
                   resize: false,
                 }}
                 onEditorChange={(content: string) => setDescription(content)}
@@ -528,7 +498,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
           </DetailInfo>
           <ButtonBox>
             <StyledButton
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/myposts')}
               style={{ background: '#99999' }}
             >
               취소
@@ -550,18 +520,20 @@ export default PostForm;
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.wrapper()}
+  padding : 0 35px;
 
   @media screen and ${devices.laptop} {
-    overflow-x: hidden;
-    width: 900px;
+    width: 800px;
+    padding: 0px;
   }
 
   @media screen and ${devices.tablet} {
-    width: 720px;
+    width: 650px;
   }
 
   @media screen and ${devices.mobile} {
     width: 500px;
+    padding-right: 10px;
   }
 `;
 
@@ -624,6 +596,10 @@ const Line = styled.div`
 const MiddleLine = styled.div`
   width: 100%;
   margin-top: -120px;
+
+  @media screen and ${devices.laptop} {
+    display: block;
+  }
 `;
 
 const Main = styled.main`
@@ -641,11 +617,7 @@ const StatusSwitch = styled(Switch)`
 `;
 
 const SelectList = styled.ul`
-  width: 690px;
-
-  @media screen and ${devices.mobile} {
-    width: 480px;
-  }
+  width: 100%;
 `;
 
 const ListItem = styled(Item)`
@@ -679,6 +651,15 @@ const StyledSelect = styled(Select)`
   border-radius: 3px;
   background-color: #f4f5f7;
   cursor: pointer;
+
+  @media screen and ${devices.tablet} {
+    font-size: 17px;
+    margin-left: 20px;
+  }
+
+  @media screen and ${devices.mobile} {
+    font-size: 15px;
+  }
 `;
 
 const StyledCircle = styled(VscCircleOutline)`
@@ -697,6 +678,15 @@ const ContactInput = styled.input`
   border-radius: 3px;
   background-color: #f4f5f7;
   font-size: 14px;
+
+  @media screen and ${devices.tablet} {
+    font-size: 17px;
+    margin-left: 20px;
+  }
+
+  @media screen and ${devices.mobile} {
+    font-size: 15px;
+  }
 `;
 
 const TagBox = styled.div`
@@ -742,12 +732,20 @@ const CardBox = styled.div`
   border: transparant 1px solid;
   border-radius: 10px;
   background: #f4f5f7;
+
+  @media screen and ${devices.laptop} {
+    width: 550px;
+  }
+
+  @media screen and ${devices.mobile} {
+    width: 440px;
+  }
 `;
 
 const CardBoxLabel = styled.span`
   position: absolute;
   left: 20px;
-  top: -5px;
+  top: -10px;
   font-size: ${theme.fontMicro};
   color: ${theme.mainViolet};
 `;
@@ -759,6 +757,15 @@ const StyledDatePicker = styled(DatePicker)`
   border: 1px transparent solid;
   border-radius: 3px;
   background-color: #f4f5f7;
+
+  @media screen and ${devices.tablet} {
+    font-size: 17px;
+    margin-left: 20px;
+  }
+
+  @media screen and ${devices.mobile} {
+    font-size: 15px;
+  }
 `;
 
 const PickButton = styled(Button)`
@@ -767,15 +774,19 @@ const PickButton = styled(Button)`
   display: block;
   padding: 0 10px;
   height: 35px;
+  transform: translate(-5px, -15px);
   border-radius: 30px;
   border: 0;
   color: #fff;
+  font-size: 16px;
   font-weight: ${theme.weightBold};
   background-color: ${theme.mainViolet};
+
   cursor: pointer;
 
   @media screen and ${devices.laptop} {
-    transform: translate(-70px, -10px);
+    transform: translate(-65px, -15px);
+    font-size: 14px;
   }
 
   @media screen and ${devices.tablet} {
@@ -786,7 +797,7 @@ const PickButton = styled(Button)`
 
 const FlavorBox = styled.div`
   margin: 25px 0;
-  padding: 30px;
+  padding: 30px 20px;
   width: 350px;
   height: 350px;
   background-color: #f4f5f7;
@@ -795,7 +806,7 @@ const FlavorBox = styled.div`
 
   @media screen and ${devices.tablet} {
     margin-top: 50px;
-    transform: translateX(50%);
+    transform: translateX(125px);
   }
 
   @media screen and ${devices.mobile} {
@@ -859,7 +870,7 @@ const DetailInfo = styled.div`
   margin: 80px 0;
 
   @media screen and ${devices.laptop} {
-    margin: 80px 20px 100px 20px;
+    margin: 210px 20px 100px 20px;
   }
 
   @media screen and ${devices.tablet} {

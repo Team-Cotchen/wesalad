@@ -1,3 +1,5 @@
+import { Spin } from 'antd';
+
 import axios from 'axios';
 import moment from 'moment';
 import React, { FunctionComponent, useEffect, useState } from 'react';
@@ -10,6 +12,8 @@ import PostForm from 'components/PostForm/PostForm';
 import type { DetailModel } from 'pages/Detail/Detail.model';
 import type { PostModel } from 'components/PostForm/PostForm.model';
 
+import { LoadingOutlined } from '@ant-design/icons';
+
 const Edit: FunctionComponent = () => {
   const { id } = useParams();
 
@@ -19,7 +23,6 @@ const Edit: FunctionComponent = () => {
     const getData = async () => {
       try {
         const { data } = await axios.get(`${BASE_URL}/api/posts/${id}`);
-
         convertToPostData(data);
       } catch (err) {
         console.log(err);
@@ -57,7 +60,7 @@ const Edit: FunctionComponent = () => {
       period,
       start_date: moment(start_date, 'YYYY-MM-DD'),
       flavor: post_flavor?.title,
-      status,
+      status: status === 'active' ? true : false,
     };
 
     const primary =
@@ -73,7 +76,15 @@ const Edit: FunctionComponent = () => {
   };
 
   return (
-    <>{postToEdit && <PostForm mode="edit" defaultPost={postToEdit} />} </>
+    <>
+      {postToEdit ? (
+        <PostForm mode="edit" defaultPost={postToEdit} />
+      ) : (
+        <div style={{ position: 'absolute', top: '45%', right: '45%' }}>
+          <Spin indicator={<LoadingOutlined style={{ fontSize: '40px' }} />} />
+        </div>
+      )}
+    </>
   );
 };
 
