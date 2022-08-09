@@ -16,6 +16,8 @@ from apps.utils.decorators  import check_token
 from apps.utils.utils       import error_message
 from .models                import GoogleSocialAccount
 from .serializers           import UserSerializer, UserCreateSerializer, UserUpdateSerializer
+from apps.posts.serializers import PostSerializer
+from apps.posts.models      import Post
 
 User = get_user_model()
 
@@ -163,3 +165,12 @@ class ProfileAPI(APIView):
         user.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class MyPostsAPI(APIView):
+    @check_token
+    def get(self, request):
+        user       = request.user
+        queryset   = Post.objects.filter(user=user)
+        serializer = PostSerializer(queryset, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)        
