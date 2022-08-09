@@ -40,6 +40,7 @@ const Detail: FunctionComponent = () => {
 
   useEffect(() => {
     getDetails();
+    window.scrollTo(0, 0);
   }, [getDetails]);
 
   return (

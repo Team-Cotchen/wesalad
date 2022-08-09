@@ -1,35 +1,45 @@
-import { Spin } from 'antd';
-
+import { Spin, message } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {
+  FunctionComponent,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { BASE_URL } from 'config';
 
 import PostForm from 'components/PostForm/PostForm';
 
-import type { DetailModel } from 'pages/Detail/Detail.model';
 import type { PostModel } from 'components/PostForm/PostForm.model';
-
-import { LoadingOutlined } from '@ant-design/icons';
+import type { DetailModel } from 'pages/Detail/Detail.model';
 
 const Edit: FunctionComponent = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [postToEdit, setPostToEdit] = useState<PostModel>();
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await axios.get(`${BASE_URL}/api/posts/${id}`);
-        convertToPostData(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getData();
+  const getData = useCallback(async () => {
+    try {
+      const { data } = await axios.get(`${BASE_URL}/api/posts/${id}`);
+      convertToPostData(data);
+    } catch (err) {
+      console.log(err);
+    }
   }, [id]);
+
+  useEffect(() => {
+    if (Number(localStorage.getItem('id')) !== Number(id)) {
+      navigate('/');
+      return message.warning('해당 게시글에 대한 권한이 없습니다.');
+    } else {
+      getData();
+    }
+  }, [id, navigate, getData]);
 
   const convertToPostData = (data: DetailModel) => {
     const {
