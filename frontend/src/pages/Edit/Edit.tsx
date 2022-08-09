@@ -19,27 +19,20 @@ import type { DetailModel } from 'pages/Detail/Detail.model';
 
 const Edit: FunctionComponent = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [postToEdit, setPostToEdit] = useState<PostModel>();
 
-  const getData = useCallback(async () => {
-    try {
-      const { data } = await axios.get(`${BASE_URL}/api/posts/${id}`);
-      convertToPostData(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [id]);
-
   useEffect(() => {
-    if (Number(localStorage.getItem('id')) !== Number(id)) {
-      navigate('/');
-      return message.warning('해당 게시글에 대한 권한이 없습니다.');
-    } else {
-      getData();
-    }
-  }, [id, navigate, getData]);
+    const getData = async () => {
+      try {
+        const { data } = await axios.get(`${BASE_URL}/api/posts/${id}`);
+        convertToPostData(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
+  }, [id]);
 
   const convertToPostData = (data: DetailModel) => {
     const {
@@ -56,6 +49,7 @@ const Edit: FunctionComponent = () => {
       title,
       post_flavor,
       status,
+      user,
     } = data;
 
     const fields = {
@@ -71,6 +65,7 @@ const Edit: FunctionComponent = () => {
       start_date: moment(start_date, 'YYYY-MM-DD'),
       flavor: post_flavor?.title,
       status: status === 'active' ? true : false,
+      id: user.id,
     };
 
     const primary =

@@ -91,7 +91,15 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
       message.warning('로그인이 만료되었습니다. 다시 로그인 해주세요.');
       return navigate('/');
     }
-  }, [navigate, access]);
+
+    if (
+      mode === 'edit' &&
+      Number(localStorage.getItem('id')) !== Number(defaultPost?.fields?.id)
+    ) {
+      navigate('/');
+      return message.warning('해당 게시글에 대한 권한이 없습니다.');
+    }
+  }, [navigate, access, mode, defaultPost?.fields?.id]);
 
   const EditForm = async (values: FormatModel) => {
     try {

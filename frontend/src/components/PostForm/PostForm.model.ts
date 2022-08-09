@@ -22,6 +22,7 @@ export interface FormModel {
   start_date: moment.Moment;
   flavor?: string;
   status?: string | boolean;
+  id?: string;
 }
 
 export interface PostModel {
