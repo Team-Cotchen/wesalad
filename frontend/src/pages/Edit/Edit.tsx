@@ -1,14 +1,21 @@
+import { Spin, message } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {
+  FunctionComponent,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { BASE_URL } from 'config';
 
 import PostForm from 'components/PostForm/PostForm';
 
-import type { DetailModel } from 'pages/Detail/Detail.model';
 import type { PostModel } from 'components/PostForm/PostForm.model';
+import type { DetailModel } from 'pages/Detail/Detail.model';
 
 const Edit: FunctionComponent = () => {
   const { id } = useParams();
@@ -19,7 +26,6 @@ const Edit: FunctionComponent = () => {
     const getData = async () => {
       try {
         const { data } = await axios.get(`${BASE_URL}/api/posts/${id}`);
-
         convertToPostData(data);
       } catch (err) {
         console.log(err);
@@ -43,6 +49,7 @@ const Edit: FunctionComponent = () => {
       title,
       post_flavor,
       status,
+      user,
     } = data;
 
     const fields = {
@@ -57,7 +64,8 @@ const Edit: FunctionComponent = () => {
       period,
       start_date: moment(start_date, 'YYYY-MM-DD'),
       flavor: post_flavor?.title,
-      status,
+      status: status === 'active' ? true : false,
+      id: user.id,
     };
 
     const primary =
@@ -73,7 +81,15 @@ const Edit: FunctionComponent = () => {
   };
 
   return (
-    <>{postToEdit && <PostForm mode="edit" defaultPost={postToEdit} />} </>
+    <>
+      {postToEdit ? (
+        <PostForm mode="edit" defaultPost={postToEdit} />
+      ) : (
+        <div style={{ position: 'absolute', top: '45%', right: '45%' }}>
+          <Spin indicator={<LoadingOutlined style={{ fontSize: '40px' }} />} />
+        </div>
+      )}
+    </>
   );
 };
 

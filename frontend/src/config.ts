@@ -13,6 +13,7 @@ const API = {
 export const getToken = () => {
   const access = localStorage.getItem('accessToken');
   const refresh = localStorage.getItem('refreshToken');
+
   const id = localStorage.getItem('id');
 
   return { access, refresh, id };

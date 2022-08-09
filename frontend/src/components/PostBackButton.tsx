@@ -9,7 +9,7 @@ import { devices } from 'styles/devices';
 const PostBackButton = () => {
   const navigate = useNavigate();
 
-  return <BackButton onClick={() => navigate('/')} />;
+  return <BackButton onClick={() => navigate(-1)} />;
 };
 
 export default PostBackButton;

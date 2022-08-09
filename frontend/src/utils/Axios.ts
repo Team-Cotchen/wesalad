@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
+import { message } from 'antd';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { getToken, BASE_URL, setAccessToken } from 'config';
 
@@ -47,6 +48,18 @@ export const onFulfilled = async (res: AxiosResponse) => {
   } else return res;
 };
 
+const onRejected = (err: AxiosError) => {
+  console.log(err);
+  if (
+    (err as { response: { data: { ERROR: string } } }).response?.data?.ERROR ===
+    'YOUR_LOGIN_HAS_EXPIRED'
+  ) {
+    localStorage.clear();
+    window.location.replace(BASE_URL);
+    return message.warn('로그인이 만료되었습니다. 다시 로그인해주세요.');
+  } else return err;
+};
+
 customHttp.interceptors.request.use(
   (config) => {
     config.headers = {
@@ -59,6 +72,6 @@ customHttp.interceptors.request.use(
   (err) => Promise.reject(err),
 );
 
-customHttp.interceptors.response.use(onFulfilled);
+customHttp.interceptors.response.use(onFulfilled, onRejected);
 
 export default customHttp;

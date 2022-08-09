@@ -57,14 +57,13 @@ const CardWrapper = styled.div<{
   margin: 10px 10px;
 
   border: ${({ type }) => {
-    const borderType = type ? type : 'default';
     const borderStyle = {
       primary: `1px solid #F23D3D`,
       additional: `1px solid ${theme.mainViolet}`,
       default: '1px solid #dbdbdb',
     };
 
-    return borderStyle[borderType];
+    return borderStyle[type || 'default'];
   }};
   border-radius: 20px;
   background: white;

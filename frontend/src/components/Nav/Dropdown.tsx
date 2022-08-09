@@ -20,7 +20,7 @@ const DropdownItem = () => {
   return (
     <Wrapper>
       <ul>
-        <Link to="/">
+        <Link to="/myposts">
           <li>내 작성글</li>
         </Link>
         <Link to="/setting">
