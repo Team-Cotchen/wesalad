@@ -494,7 +494,7 @@ const Stackimage = styled.img`
   margin: 5px 10px 0px 0;
   width: 45px;
   height: 45px;
-  ㄴ @media screen and ${devices.laptop} {
+  @media screen and ${devices.laptop} {
     transform: translate(0px, -10px);
     width: 33px;
     height: 33px;
