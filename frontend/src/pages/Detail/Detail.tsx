@@ -141,7 +141,7 @@ const Detail: FunctionComponent = () => {
                 <ListItem>
                   <ItemTitle>연락할 곳</ItemTitle>
                   <Content>
-                    {detailInfo?.post_applyway.title !== '이메일' ? (
+                    {detailInfo?.post_applyway.title === '카카오톡 오픈채팅' ? (
                       <ExternalLink
                         target="_blank"
                         rel="noreferrer"
@@ -494,11 +494,7 @@ const Stackimage = styled.img`
   margin: 5px 10px 0px 0;
   width: 45px;
   height: 45px;
-  border: 1px solid #dbdbdb;
-  border-radius: 50%;
-  padding: 2px;
-
-  @media screen and ${devices.laptop} {
+  ㄴ @media screen and ${devices.laptop} {
     transform: translate(0px, -10px);
     width: 33px;
     height: 33px;
