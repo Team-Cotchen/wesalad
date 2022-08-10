@@ -492,9 +492,13 @@ const ItemTitle = styled.div`
 const Stackimage = styled.img`
   transform: translate(0px, -14px);
   margin: 5px 10px 0px 0;
+  padding: 2px;
   width: 45px;
   height: 45px;
-  ㄴ @media screen and ${devices.laptop} {
+  border: 1px solid #dbdbdb;
+  border-radius: 50%;
+
+  @media screen and ${devices.laptop} {
     transform: translate(0px, -10px);
     width: 33px;
     height: 33px;
