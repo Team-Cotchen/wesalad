@@ -43,6 +43,10 @@ const Detail: FunctionComponent = () => {
     window.scrollTo(0, 0);
   }, [getDetails]);
 
+  {
+    console.log(detailInfo);
+  }
+
   return (
     <>
       <Nav />
@@ -119,23 +123,17 @@ const Detail: FunctionComponent = () => {
               </ListSection>
               <ListSection>
                 <ListItem>
-                  <ItemTitle>기술 스택</ItemTitle>
-                  <Content>
-                    {detailInfo?.post_stack?.map(({ image_url }, idx) => (
-                      <Stackimage key={idx} src={image_url} />
-                    ))}
-                  </Content>
-                </ListItem>
-                <ListItem>
-                  <ItemTitle>진행 기간</ItemTitle>
-                  <Content>{detailInfo?.period}</Content>
-                </ListItem>
-                <ListItem>
                   <ItemTitle>시작 예정일</ItemTitle>
                   <Content>
                     {dayjs(detailInfo?.start_date).format('YYYY-MM-DD')}
                   </Content>
                 </ListItem>
+
+                <ListItem>
+                  <ItemTitle>진행 기간</ItemTitle>
+                  <Content>{detailInfo?.period}</Content>
+                </ListItem>
+
                 <ListItem>
                   <ItemTitle>연락 방법</ItemTitle>
                   <Content>{detailInfo?.post_applyway.title}</Content>
@@ -157,6 +155,14 @@ const Detail: FunctionComponent = () => {
                     )}
                   </Content>
                 </ListItem>
+                <ListItem>
+                  <ItemTitle>기술 스택</ItemTitle>
+                  <Content>
+                    {detailInfo?.post_stack?.map(({ image_url }, idx) => (
+                      <Stackimage key={idx} src={image_url} />
+                    ))}
+                  </Content>
+                </ListItem>
               </ListSection>
             </InfoList>
           </BasicInfo>
@@ -165,7 +171,9 @@ const Detail: FunctionComponent = () => {
               <Salad src="https://i.ibb.co/PrKjyH6/salad.png" />
               우리는 이런 재료를 가진 팀원들과 함께 하고 싶어요.
             </SemiTitle>
+
             <CardBox>
+              <CardBoxLabel>메인 재료</CardBoxLabel>
               {detailInfo?.post_answer?.[0]?.primary_answer?.map(
                 ({ description, image_url }) => (
                   <Card
@@ -176,8 +184,13 @@ const Detail: FunctionComponent = () => {
                   />
                 ),
               )}
+            </CardBox>
+            <CardBox>
+              {detailInfo?.post_answer?.[1]?.secondary_answer && (
+                <CardBoxLabel>추가 재료</CardBoxLabel>
+              )}
 
-              {detailInfo?.post_answer?.[0]?.secondary_answer?.map(
+              {detailInfo?.post_answer?.[1]?.secondary_answer?.map(
                 ({ description, image_url }) => (
                   <Card
                     id={description}
@@ -478,20 +491,23 @@ const ItemTitle = styled.div`
 
 const Stackimage = styled.img`
   transform: translate(0px, -14px);
-  margin-bottom: -20px;
-  width: 40px;
-  height: 40px;
+  margin: 5px 10px 0px 0;
+  width: 45px;
+  height: 45px;
+  border: 1px solid #dbdbdb;
+  border-radius: 50%;
+  padding: 2px;
 
   @media screen and ${devices.laptop} {
     transform: translate(0px, -10px);
-    width: 35px;
-    height: 35px;
+    width: 33px;
+    height: 33px;
   }
 
   @media screen and ${devices.mobile} {
     transform: translate(0px, -17px);
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
   }
 `;
 
@@ -508,13 +524,19 @@ const PersonalityList = styled.div`
 `;
 
 const CardBox = styled.div`
-margin-top: 30px;
-padding-bottom 20px;
-border-radius: 3px;
+  position: relative;
+  margin-top: 30px;
+  border: transparant 1px solid;
+  border-radius: 10px;
+  background: #f4f5f7;
+`;
 
-@media screen and ${devices.laptop} {
-  margin-top: 0px;
-}
+const CardBoxLabel = styled.span`
+  position: absolute;
+  left: 20px;
+  top: -10px;
+  font-size: ${theme.fontMicro};
+  color: ${theme.mainViolet};
 `;
 
 const SemiTitle = styled.h3`

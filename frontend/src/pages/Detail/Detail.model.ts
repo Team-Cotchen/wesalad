@@ -8,6 +8,8 @@ export interface DetailModel {
         description: string;
         image_url: string;
       }[];
+    },
+    {
       secondary_answer: {
         id: number;
         description: string;
