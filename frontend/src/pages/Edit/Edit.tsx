@@ -73,7 +73,7 @@ const Edit: FunctionComponent = () => {
       [];
 
     const additional =
-      post_answer?.[0]?.secondary_answer?.map(
+      post_answer?.[1]?.secondary_answer?.map(
         ({ description }) => description,
       ) || [];
 
