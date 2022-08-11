@@ -99,6 +99,8 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
       navigate('/');
       return message.warning('해당 게시글에 대한 권한이 없습니다.');
     }
+
+    window.scrollTo(0, 0);
   }, [navigate, access, mode, defaultPost?.fields?.id]);
 
   const EditForm = async (values: FormatModel) => {
@@ -507,7 +509,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
           <ButtonBox>
             <StyledButton
               onClick={() => navigate('/myposts')}
-              style={{ background: '#99999' }}
+              style={{ background: '#99999', border: '1px solid #dbdbdb' }}
             >
               취소
             </StyledButton>
@@ -929,11 +931,11 @@ const ButtonBox = styled.div`
   font-family: 'Jua', sans-serif;
   position: absolute;
   right: 10px;
-  bottom: -60px;
+  bottom: -70px;
 `;
 
 const StyledButton = styled(Button)`
-  margin: 0 10px;
+  margin: 10px;
   padding: 10px;
   width: 80px;
   height: 50px;

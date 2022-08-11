@@ -100,7 +100,6 @@ const Main: FunctionComponent = () => {
 
   useEffect(() => {
     getFilteredCards();
-    console.log(search);
   }, [search]);
 
   useEffect(() => {
