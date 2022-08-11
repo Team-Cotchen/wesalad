@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'redux/store';
+import { useDispatch } from 'react-redux';
+import { useRootState } from 'redux/hooks/useRootState';
 import { nextStep } from 'redux/reducers/loginSlice';
 import { Select } from 'antd';
 import { ITitle, IInfoSection } from 'components/LoginStep/loginStep.types';
-
 import { OptionModel } from 'components/PostForm/PostForm.model';
 import 'antd/dist/antd.less';
 const { Option } = Select;
@@ -20,7 +19,7 @@ const setStacksSection = ({
   name,
 }: Pick<IInfoSection, 'handleBasicInfo' | 'name'>) => {
   const dispatch = useDispatch();
-  const loginStep = useSelector((state: RootState) => state.login.currentStep);
+  const loginStep = useRootState((state) => state.login.currentStep);
   const { STACKS }: IStacks = OPTIONS;
 
   return (

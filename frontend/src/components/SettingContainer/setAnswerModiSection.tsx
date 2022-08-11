@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { IUserAnswerModi } from 'pages/Setting/Setting';
-import { devices } from 'styles/devices';
 import { message } from 'antd';
+import { devices } from 'styles/devices';
 
 interface ISetAnswerModiProps {
   userAnswerModi: IUserAnswerModi[] | undefined;
@@ -23,7 +23,7 @@ const setAnswerModiContainer = ({
       <Wrapper>
         <ResultWindowSection>
           {userAnswerModi?.map(({ answers, imageUrl, id }) => (
-            <Card onClick={onAlertMessage} key={id}>
+            <Card key={id}>
               <Icon src={imageUrl}></Icon>
               {answers}
             </Card>
@@ -58,7 +58,6 @@ const Card = styled.li`
 
   &:hover {
     border: 1px solid ${({ theme }) => theme.mainViolet};
-    cursor: pointer;
   }
 `;
 

@@ -11,9 +11,11 @@ import API from 'config';
 import axios from 'axios';
 import Modal from 'components/Modal/Modal';
 import DeleteBtn from 'components/SettingContainer/DeleteBtn';
+import QuestionSection from 'components/LoginStep/Step/setQuestionSection';
 import StackModiSection from 'components/SettingContainer/setStackModiSection';
-import 'antd/dist/antd.less';
 import AnswerModiSection from 'components/SettingContainer/setAnswerModiSection';
+import 'antd/dist/antd.less';
+import { QuestionData } from 'assets/data/QuestionData';
 
 export interface IUserAnswerModi {
   id: number;
@@ -25,11 +27,15 @@ const Setting = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
+  const [showAnswerPopup, setShowAnswerPopup] = useState(false);
   const [user, setUser] = useState<IFetchResultData>();
   const [userName, setUserName] = useState('');
   const [userOrdinalNumber, setUserOrdinalNumber] = useState(0);
   const [userStackModi, setUserStackModi] = useState<string[]>([]);
   const [userAnswerModi, setUserAnswerModi] = useState<IUserAnswerModi[]>();
+  const [questionNum, setQuestionNum] = useState<number>(0);
+  const [questionAnswer, setQuestionAnswer] = useState<number[]>([]);
+  const answerChangeForm: string[] = [];
 
   const token = {
     access: localStorage.getItem('accessToken'),
@@ -44,14 +50,35 @@ const Setting = () => {
     }
   }, [navigate, token.access]);
 
-  const openModal = () => {
+  // 회원 삭제
+  const openModalDelete = () => {
     document.body.style.overflow = 'hidden';
     setShowPopup((state) => !state);
   };
 
-  const closeModal = () => {
+  const closeModalDelete = () => {
     document.body.style.overflow = 'auto';
     setShowPopup((state) => !state);
+  };
+
+  // 성향 수정
+  const openModalModify = () => {
+    document.body.style.overflow = 'hidden';
+    setShowAnswerPopup((state) => !state);
+  };
+
+  const closeModalModify = () => {
+    document.body.style.overflow = 'auto';
+    setShowAnswerPopup((state) => !state);
+  };
+
+  const changeToFetchForm = () => {
+    questionAnswer.map((item, i) => {
+      item === 0
+        ? answerChangeForm.push(QuestionData[i].resultA)
+        : answerChangeForm.push(QuestionData[i].resultB);
+    });
+    return answerChangeForm;
   };
 
   useEffect(() => {
@@ -87,6 +114,42 @@ const Setting = () => {
     userInfo();
   }, [user?.name, user?.ordinal_number]);
 
+  const fetchByUserModi = async () => {
+    const stacksToString = String(userStackModi);
+    const ordinalToNumber = Number(userOrdinalNumber);
+    const answerToString = String(changeToFetchForm());
+
+    const setFetchFormData = {
+      name: userName,
+      ordinal_number: ordinalToNumber,
+      answers: answerToString,
+      stacks: stacksToString,
+    };
+
+    try {
+      const res = await axios({
+        method: 'patch',
+        url: `${API.userModiorDell}`,
+
+        headers: {
+          'Content-Type': 'application/json',
+          access: `${token.access}`,
+          refresh: `${token.refresh}`,
+        },
+        data: setFetchFormData,
+      });
+
+      if (res.status === 201) {
+        message.success('회원정보 수정이 완료되었습니다. 🌈');
+        setQuestionAnswer([]);
+        // TODO: 확인 후 FIX
+        // navigate('/setting');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onCompleteClick = async () => {
     if (!userName) {
       message.warning('이름을 적어주세요.');
@@ -100,37 +163,6 @@ const Setting = () => {
       message.warning('기수를 숫자로 입력해주세요.');
       return;
     } else {
-      const fetchByUserModi = async () => {
-        const stacksToString = String(userStackModi);
-        const ordinalToNumber = Number(userOrdinalNumber);
-
-        const setFetchFormData = {
-          name: userName,
-          ordinal_number: ordinalToNumber,
-          stacks: stacksToString,
-        };
-
-        try {
-          const res = await axios({
-            method: 'patch',
-            url: `${API.userModiorDell}`,
-
-            headers: {
-              'Content-Type': 'application/json',
-              access: `${token.access}`,
-              refresh: `${token.refresh}`,
-            },
-            data: setFetchFormData,
-          });
-
-          if (res.status === 201) {
-            message.success('회원정보 수정이 완료되었습니다. 🌈');
-            navigate('/');
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
       fetchByUserModi();
     }
   };
@@ -150,6 +182,19 @@ const Setting = () => {
       navigate('/');
     } else {
       message.warning('회원 탈퇴에 실패하였어요! 잠시 후 다시 시도해주세요.');
+    }
+  };
+
+  const handleBtnNum = (num: number) => {
+    setQuestionAnswer((prev) => [...prev, num]);
+
+    if (QuestionData.length !== questionNum + 1) {
+      setQuestionNum(questionNum + 1);
+    } else {
+      message.success('성향 수정 완료되었습니다!');
+      setQuestionNum(0);
+      closeModalModify();
+      fetchByUserModi();
     }
   };
 
@@ -195,7 +240,11 @@ const Setting = () => {
               setUserStackModi={setUserStackModi}
             />
 
-            <h1>성향 확인하기</h1>
+            <AnswerModiHeader>
+              <h1>성향 확인하기</h1>
+              <button onClick={openModalModify}>수정하기</button>
+            </AnswerModiHeader>
+
             <AnswerModiSection
               userAnswerModi={userAnswerModi}
               setUserAnswerModi={setUserAnswerModi}
@@ -204,12 +253,18 @@ const Setting = () => {
 
           <ButtonContainer>
             <button onClick={onCompleteClick}>완료</button>
-            <button onClick={openModal}>회원탈퇴</button>
+            <button onClick={openModalDelete}>회원탈퇴</button>
           </ButtonContainer>
         </Container>
 
-        <Modal onClose={closeModal} visible={showPopup}>
-          <DeleteBtn onClose={closeModal} onDelete={onDeleteClick} />
+        <Modal onClose={closeModalDelete} visible={showPopup}>
+          <DeleteBtn onClose={closeModalDelete} onDelete={onDeleteClick} />
+        </Modal>
+
+        <Modal onClose={closeModalModify} visible={showAnswerPopup}>
+          <ModalWrapper>
+            <QuestionSection {...{ questionNum, handleBtnNum }} />
+          </ModalWrapper>
         </Modal>
       </Wrapper>
     </>
@@ -315,4 +370,41 @@ const SelectSection = styled.div`
     font-size: 1.5rem;
     margin: 20px 0px 5px 10px;
   }
+`;
+
+const AnswerModiHeader = styled.div`
+  ${({ theme }) => theme.flexMixIn('start', 'center')};
+  margin: 20px 0px 10px 10px;
+
+  h1 {
+    margin: 0;
+    line-height: 40px;
+  }
+
+  button {
+    width: 70px;
+    border: 1px solid ${({ theme }) => theme.mainViolet};
+    background-color: white;
+    margin-left: 10px;
+    margin-bottom: 2px;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${({ theme }) => theme.mainViolet};
+      color: white;
+    }
+  }
+`;
+
+const ModalWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 42rem;
+  height: 30rem;
+  border-radius: 5px;
+  background-color: white;
+  transform: translate(-50%, -50%);
 `;

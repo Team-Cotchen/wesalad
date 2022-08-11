@@ -7,12 +7,12 @@ import QuestionSection from 'components/LoginStep/Step/setQuestionSection';
 import ResultSection from 'components/LoginStep/Step/setResultSection';
 import { QuestionData } from 'assets/data/QuestionData';
 import { ModalProps, IBasicInfo } from 'components/LoginStep/loginStep.types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { nextStep } from 'redux/reducers/loginSlice';
-import { RootState } from 'redux/store';
 import 'antd/dist/antd.less';
 import { message } from 'antd';
 import { devices } from 'styles/devices';
+import { useRootState } from 'redux/hooks/useRootState';
 
 const SOCIAL_LOGIN = 1;
 const SET_JOININFO = 2;
@@ -27,7 +27,7 @@ enum BasicInfoKeys {
 
 const LoginModal = ({ handleClose }: ModalProps) => {
   const dispatch = useDispatch();
-  const loginStep = useSelector((state: RootState) => state.login.currentStep);
+  const loginStep = useRootState((state) => state.login.currentStep);
   const [questionNum, setQuestionNum] = useState<number>(0);
   const [basicInfo, setBasicInfo] = useState<IBasicInfo>({
     name: '',

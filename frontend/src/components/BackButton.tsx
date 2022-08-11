@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'redux/store';
+import { useDispatch } from 'react-redux';
+import { useRootState } from 'redux/hooks/useRootState';
 import { previousStep } from 'redux/reducers/loginSlice';
 
 const BackBtn = () => {
-  const loginStep = useSelector((state: RootState) => state.login.currentStep);
+  const loginStep = useRootState((state) => state.login.currentStep);
   const dispatch = useDispatch();
 
   const handleToBack = () => {
