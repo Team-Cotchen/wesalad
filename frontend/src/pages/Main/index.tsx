@@ -141,8 +141,8 @@ const Main: FunctionComponent = () => {
           </Head>
           <Filter changeQueryStringList={changeQueryStringList} />
           <CardWrapper>
-            {filteredCards.map((item: any) => (
-              <Card key={item.id} cardtype="regular" {...item} />
+            {filteredCards.map((item) => (
+              <Card key={item.id} cardtype="regular" {...item} id={item.id} />
             ))}
           </CardWrapper>
           <PaginationBtnWrap>
