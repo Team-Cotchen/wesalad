@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import BackButton from 'components/BackButton';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
 import { ITitle } from 'components/LoginStep/loginStep.types';
 import { IInfoSection } from 'components/LoginStep/loginStep.types';
 import { devices } from 'styles/devices';
+import { useRootState } from 'redux/hooks/useRootState';
 
 const setInfoSection = ({ handleBasicInfo, handleLoginStep }: IInfoSection) => {
-  const imageUrl = useSelector((state: RootState) => state.login.imageUrl);
+  const imageUrl = useRootState((state) => state.login.imageUrl);
 
   return (
     <>

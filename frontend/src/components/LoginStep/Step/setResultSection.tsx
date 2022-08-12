@@ -1,10 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useRootState } from 'redux/hooks/useRootState';
 import styled from 'styled-components';
 import API from 'config';
 import { ITitle } from 'components/LoginStep/loginStep.types';
 import axios from 'axios';
-import { RootState } from 'redux/store';
 import { QuestionData } from 'assets/data/QuestionData';
 import { keyframes } from 'styled-components';
 import { devices } from 'styles/devices';
@@ -14,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 const setResultSection = ({ handleClose, basicInfo }: any) => {
   const tendencyResult = basicInfo.answers as number[];
   const answerChangeForm: string[] = [];
-  const id = useSelector((state: RootState) => state.login.id);
+  const id = useRootState((state) => state.login.id);
   const navigate = useNavigate();
 
   const changeToFetchForm = () => {

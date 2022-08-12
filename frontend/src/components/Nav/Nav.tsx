@@ -2,22 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import logo from 'assets/images/logo.png';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useRootState } from 'redux/hooks/useRootState';
 import { setModalVisible } from 'redux/reducers/loginSlice';
-import { RootState } from 'redux/store';
 import Modal from 'components/Modal/Modal';
 import LoginModal from 'components/LoginStep/LoginModal';
 import LoginUser from 'components/Nav/LoginUser';
-
 import { devices } from 'styles/devices';
 
 const Nav = () => {
   const isGetToken = window.localStorage.getItem('accessToken') === null;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const modalVisible = useSelector(
-    (state: RootState) => state.login.modalVisible,
-  );
+  const modalVisible = useRootState((state) => state.login.modalVisible);
 
   const openModal = () => {
     document.body.style.overflow = 'hidden';
