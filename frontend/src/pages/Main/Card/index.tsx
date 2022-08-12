@@ -1,8 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { AiOutlineCheck } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 export interface CardsProps {
+  id: number;
   cardtype: string;
   title: string;
   period: string;
@@ -35,6 +37,7 @@ interface IPostStack {
 }
 
 const Card: FunctionComponent<CardsProps> = ({
+  id,
   title,
   period,
   number_of_front,
@@ -45,56 +48,59 @@ const Card: FunctionComponent<CardsProps> = ({
   post_answer,
   cardtype,
 }) => {
+  const navigate = useNavigate();
+  const handleCardClick = (id: number) => {
+    navigate(`project/${id}`);
+  };
+
   return (
-    <div>
-      <MainCard cardtype={cardtype}>
-        <CardTitle>{title}</CardTitle>
-        <CardDescriptions>
-          <CardDescription>
-            <DescriptionIcon>
-              <AiOutlineCheck />
-            </DescriptionIcon>
-            <DescriptionText>
-              {post_place.title} / {period}
-            </DescriptionText>
-          </CardDescription>
-          <CardDescription>
-            <DescriptionIcon>
-              <AiOutlineCheck />
-            </DescriptionIcon>
-            <DescriptionText>
-              프론트 {number_of_front} / 백 {number_of_back}
-            </DescriptionText>
-          </CardDescription>
-          <CardDescription>
-            <DescriptionIcon>
-              <AiOutlineCheck />
-            </DescriptionIcon>
-            <DescriptionText>{start_date.slice(0, 10)} 시작</DescriptionText>
-          </CardDescription>
-        </CardDescriptions>
-        <CharacterCardAndStakLogos>
-          <ChacracterCardsWrapper>
-            <CardsDescription>이런 분을 찾아요!</CardsDescription>
-            {post_answer?.[0]?.primary_answer?.map(
-              ({ description, image_url }) => (
-                <ChacracterCardWrapper color="#693BFB" key={image_url}>
-                  <CharacterCardImg src={image_url} alt={description} />
-                  <ChacracterCardText>{description}</ChacracterCardText>
-                </ChacracterCardWrapper>
-              ),
-            )}
-          </ChacracterCardsWrapper>
-          <StackLogos>
-            {post_stack.map(({ title, image_url }) => (
-              <StackLogo key={title + image_url}>
-                <Img src={image_url} alt={title} />
-              </StackLogo>
-            ))}
-          </StackLogos>
-        </CharacterCardAndStakLogos>
-      </MainCard>
-    </div>
+    <MainCard cardtype={cardtype} onClick={() => handleCardClick(id)}>
+      <CardTitle>{title}</CardTitle>
+      <CardDescriptions>
+        <CardDescription>
+          <DescriptionIcon>
+            <AiOutlineCheck />
+          </DescriptionIcon>
+          <DescriptionText>
+            {post_place.title} / {period}
+          </DescriptionText>
+        </CardDescription>
+        <CardDescription>
+          <DescriptionIcon>
+            <AiOutlineCheck />
+          </DescriptionIcon>
+          <DescriptionText>
+            프론트 {number_of_front} / 백 {number_of_back}
+          </DescriptionText>
+        </CardDescription>
+        <CardDescription>
+          <DescriptionIcon>
+            <AiOutlineCheck />
+          </DescriptionIcon>
+          <DescriptionText>{start_date.slice(0, 10)} 시작</DescriptionText>
+        </CardDescription>
+      </CardDescriptions>
+      <CharacterCardAndStakLogos>
+        <ChacracterCardsWrapper>
+          <CardsDescription>이런 분을 찾아요!</CardsDescription>
+          {post_answer?.[0]?.primary_answer?.map(
+            ({ description, image_url }) => (
+              <ChacracterCardWrapper color="#693BFB" key={image_url}>
+                <CharacterCardImg src={image_url} alt={description} />
+                <ChacracterCardText>{description}</ChacracterCardText>
+              </ChacracterCardWrapper>
+            ),
+          )}
+        </ChacracterCardsWrapper>
+        <StackLogos>
+          {post_stack.map(({ title, image_url }) => (
+            <StackLogo key={title + image_url}>
+              <Img src={image_url} alt={title} />
+            </StackLogo>
+          ))}
+        </StackLogos>
+      </CharacterCardAndStakLogos>
+    </MainCard>
   );
 };
 
@@ -113,6 +119,7 @@ const MainCard = styled.div<IMainCard>`
     ${({ theme, cardtype }) =>
       cardtype === 'promo' ? theme.mainViolet : '#b9b9b9'};
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 const StackLogos = styled.div`
