@@ -43,10 +43,6 @@ const Detail: FunctionComponent = () => {
     window.scrollTo(0, 0);
   }, [getDetails]);
 
-  {
-    console.log(detailInfo);
-  }
-
   return (
     <>
       <Nav />
@@ -186,9 +182,10 @@ const Detail: FunctionComponent = () => {
               )}
             </CardBox>
             <CardBox>
-              {detailInfo?.post_answer?.[1]?.secondary_answer && (
-                <CardBoxLabel>추가 재료</CardBoxLabel>
-              )}
+              {detailInfo &&
+                detailInfo.post_answer[1].secondary_answer?.length > 0 && (
+                  <CardBoxLabel>추가 재료</CardBoxLabel>
+                )}
 
               {detailInfo?.post_answer?.[1]?.secondary_answer?.map(
                 ({ description, image_url }) => (
@@ -478,8 +475,7 @@ const ItemTitle = styled.div`
   color: #808080;
 
   @media screen and ${devices.laptop} {
-    width: 150px;
-    border-right: 1px solid #dbdbdb;
+    width: 135px;
     margin-right: 10px;
   }
 
@@ -491,7 +487,7 @@ const ItemTitle = styled.div`
 
 const Stackimage = styled.img`
   transform: translate(0px, -14px);
-  margin: 5px 10px 0px 0;
+  margin: 5px 10px 0 0;
   padding: 2px;
   width: 45px;
   height: 45px;
@@ -508,6 +504,7 @@ const Stackimage = styled.img`
     transform: translate(0px, -17px);
     width: 32px;
     height: 32px;
+    margin-top: 11px;
   }
 `;
 
