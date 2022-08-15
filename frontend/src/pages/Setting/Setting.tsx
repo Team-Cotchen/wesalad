@@ -19,7 +19,7 @@ import { QuestionData } from 'assets/data/QuestionData';
 
 export interface IUserAnswerModi {
   id: number;
-  answers: string;
+  answers: string | number;
   imageUrl: string;
 }
 
@@ -32,8 +32,9 @@ const Setting = () => {
   const [userName, setUserName] = useState('');
   const [userOrdinalNumber, setUserOrdinalNumber] = useState(0);
   const [userStackModi, setUserStackModi] = useState<string[]>([]);
-  const [userAnswerModi, setUserAnswerModi] = useState<IUserAnswerModi[]>();
   const [questionNum, setQuestionNum] = useState<number>(0);
+
+  const [userAnswerModi, setUserAnswerModi] = useState<IUserAnswerModi[]>();
   const [questionAnswer, setQuestionAnswer] = useState<number[]>([]);
   const answerChangeForm: string[] = [];
 
@@ -43,12 +44,12 @@ const Setting = () => {
   };
 
   // 첫페이지 렌더링 시 token 유무 검증
-  useEffect(() => {
-    if (token.access === null) {
-      message.warning('로그인이 필요합니다.');
-      return navigate('/');
-    }
-  }, [navigate, token.access]);
+  // useEffect(() => {
+  //   if (token.access === null) {
+  //     message.warning('로그인이 필요합니다.');
+  //     return navigate('/');
+  //   }
+  // }, [navigate, token.access]);
 
   // 회원 삭제
   const openModalDelete = () => {
@@ -73,17 +74,24 @@ const Setting = () => {
   };
 
   const changeToFetchForm = () => {
-    questionAnswer.map((item, i) => {
-      item === 0
-        ? answerChangeForm.push(QuestionData[i].resultA)
-        : answerChangeForm.push(QuestionData[i].resultB);
-    });
+    if (questionAnswer.length !== 0) {
+      questionAnswer.map((item, i) => {
+        item === 0
+          ? answerChangeForm.push(QuestionData[i].resultA)
+          : answerChangeForm.push(QuestionData[i].resultB);
+      });
+    } else {
+      return userAnswerModi?.map((item) => item.answers);
+    }
+
     return answerChangeForm;
   };
 
   useEffect(() => {
     const userInfo = async () => {
       const { data } = await axios.get(`${API.userModiorDell}`, {
+        // TODO: 확인후 삭제
+        // const { data } = await axios.get(`/data/userInfo.json`, {
         headers: {
           access: `${token.access}`,
           refresh: `${token.refresh}`,
@@ -140,10 +148,9 @@ const Setting = () => {
       });
 
       if (res.status === 201) {
-        message.success('회원정보 수정이 완료되었습니다. 🌈');
-        setQuestionAnswer([]);
-        // TODO: 확인 후 FIX
-        // navigate('/setting');
+        message.success('수정이 완료되었습니다. 🌈');
+        // 새로고침
+        location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -167,6 +174,19 @@ const Setting = () => {
     }
   };
 
+  const handleBtnNum = async (num: number) => {
+    setQuestionAnswer((prev) => [...prev, num]);
+
+    if (QuestionData.length !== questionNum + 1) {
+      setQuestionNum(questionNum + 1);
+    } else {
+      setQuestionNum(0);
+      closeModalModify();
+      //TODO 안될 시 setTime 또는 if문으로 조건 막아주기
+      await fetchByUserModi();
+    }
+  };
+
   const onDeleteClick = async () => {
     const deleteUserId = await axios.delete(`${API.userModiorDell}`, {
       headers: {
@@ -182,19 +202,6 @@ const Setting = () => {
       navigate('/');
     } else {
       message.warning('회원 탈퇴에 실패하였어요! 잠시 후 다시 시도해주세요.');
-    }
-  };
-
-  const handleBtnNum = (num: number) => {
-    setQuestionAnswer((prev) => [...prev, num]);
-
-    if (QuestionData.length !== questionNum + 1) {
-      setQuestionNum(questionNum + 1);
-    } else {
-      message.success('성향 수정 완료되었습니다!');
-      setQuestionNum(0);
-      closeModalModify();
-      fetchByUserModi();
     }
   };
 
@@ -245,10 +252,7 @@ const Setting = () => {
               <button onClick={openModalModify}>수정하기</button>
             </AnswerModiHeader>
 
-            <AnswerModiSection
-              userAnswerModi={userAnswerModi}
-              setUserAnswerModi={setUserAnswerModi}
-            />
+            <AnswerModiSection userAnswerModi={userAnswerModi} />
           </SelectSection>
 
           <ButtonContainer>

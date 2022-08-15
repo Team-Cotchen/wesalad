@@ -6,18 +6,9 @@ import { devices } from 'styles/devices';
 
 interface ISetAnswerModiProps {
   userAnswerModi: IUserAnswerModi[] | undefined;
-  setUserAnswerModi: Dispatch<SetStateAction<IUserAnswerModi[] | undefined>>;
 }
 
-const setAnswerModiContainer = ({
-  userAnswerModi,
-  setUserAnswerModi,
-}: ISetAnswerModiProps) => {
-  const onAlertMessage = () => {
-    message.warning(`수정될 수 있도록 만들고 있어요. 
-    조금만 기다려주세요. 🙏`);
-  };
-
+const setAnswerModiContainer = ({ userAnswerModi }: ISetAnswerModiProps) => {
   return (
     <>
       <Wrapper>
