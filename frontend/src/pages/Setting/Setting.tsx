@@ -90,7 +90,7 @@ const Setting = () => {
   useEffect(() => {
     const userInfo = async () => {
       const { data } = await axios.get(`${API.userModiorDell}`, {
-        // TODO: 확인후 삭제
+        // TODO: 삭제
         // const { data } = await axios.get(`/data/userInfo.json`, {
         headers: {
           access: `${token.access}`,
@@ -148,9 +148,9 @@ const Setting = () => {
       });
 
       if (res.status === 201) {
+        // TODO:
+        window.location.replace('/');
         message.success('수정이 완료되었습니다. 🌈');
-        // 새로고침
-        location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -174,18 +174,19 @@ const Setting = () => {
     }
   };
 
-  const handleBtnNum = async (num: number) => {
+  const handleBtnNum = (num: number) => {
     setQuestionAnswer((prev) => [...prev, num]);
 
     if (QuestionData.length !== questionNum + 1) {
       setQuestionNum(questionNum + 1);
     } else {
-      setQuestionNum(0);
       closeModalModify();
-      //TODO 안될 시 setTime 또는 if문으로 조건 막아주기
-      await fetchByUserModi();
     }
   };
+
+  if (questionAnswer.length === 5) {
+    fetchByUserModi();
+  }
 
   const onDeleteClick = async () => {
     const deleteUserId = await axios.delete(`${API.userModiorDell}`, {
