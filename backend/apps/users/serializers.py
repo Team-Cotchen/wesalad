@@ -91,8 +91,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserUpdateSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     google_account = GoogleSocialAccountSerializer(required=False)
+    user_answers   = UserAnswerSerializer(source='useranswers',many=True, required=False)
     user_stacks    = UserStackSerializer(source='userstacks',many=True, required=False)
     
     @transaction.atomic()
@@ -101,27 +102,22 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             stacks = None
         else:   
             stacks = validated_data.pop('stacks').split(',')
-            
-        user.name = validated_data['name']
+
+        answers = validated_data.pop('answers').split(',')
+        
+        user.name           = validated_data['name']
         user.ordinal_number = validated_data['ordinal_number']
         user.save()
         
+        user.useranswers.all().delete()
         user.userstacks.all().delete()
         
+        [user.useranswers.create(answer = Answer.objects.get(description=answer)) for answer in answers]
+        
         if stacks:
-                [user.userstacks.create(stack = Stack.objects.get(title=stack)) for stack in stacks]
-    
+            [user.userstacks.create(stack = Stack.objects.get(title=stack)) for stack in stacks]
+            
         return user
-    
-    class Meta:
-        model  = User
-        fields = ['name', 'ordinal_number', 'google_account', 'user_stacks']
-
-
-class UserSerializer(serializers.ModelSerializer):
-    google_account = GoogleSocialAccountSerializer(required=False)
-    user_answers   = UserAnswerSerializer(source='useranswers',many=True, required=False)
-    user_stacks    = UserStackSerializer(source='userstacks',many=True, required=False)
     
     class Meta:
         model  = User

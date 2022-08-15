@@ -15,7 +15,7 @@ from django.contrib.auth    import get_user_model
 from apps.utils.decorators  import check_token
 from apps.utils.utils       import error_message
 from .models                import GoogleSocialAccount
-from .serializers           import UserSerializer, UserCreateSerializer, UserUpdateSerializer
+from .serializers           import UserSerializer, UserCreateSerializer
 from apps.posts.serializers import PostSerializer
 from apps.posts.models      import Post
 
@@ -134,14 +134,17 @@ class ProfileAPI(APIView):
     @check_token
     def patch(self, request):
         try:
-            user   = request.user
-            stacks = request.data.get('stacks')
+            user = request.user
             
-            serializer = UserUpdateSerializer(user, data=request.data)
+            serializer = UserSerializer(user, data=request.data)
+            answers    = request.data.get('answers')
+            stacks     = request.data.get('stacks')
+            
             
             if serializer.is_valid():
                 serializer.save(
-                    stacks = stacks,
+                    answers = answers,
+                    stacks = stacks
                 )
                 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
