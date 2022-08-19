@@ -16,6 +16,7 @@ import StackModiSection from 'components/SettingContainer/setStackModiSection';
 import AnswerModiSection from 'components/SettingContainer/setAnswerModiSection';
 import 'antd/dist/antd.less';
 import { QuestionData } from 'assets/data/QuestionData';
+import { AuthVerify } from 'utils/Axios';
 
 export interface IUserAnswerModi {
   id: number;
@@ -44,12 +45,19 @@ const Setting = () => {
   };
 
   // 첫페이지 렌더링 시 token 유무 검증
-  // useEffect(() => {
-  //   if (token.access === null) {
-  //     message.warning('로그인이 필요합니다.');
-  //     return navigate('/');
-  //   }
-  // }, [navigate, token.access]);
+  useEffect(() => {
+    if (token.access === null) {
+      message.warning('로그인이 필요합니다.');
+      return navigate('/');
+    }
+
+    if (AuthVerify() === 'Refresh Token Expired') {
+      message.warning('로그인이 만료되었습니다. 다시 로그인 해주세요.');
+      dispatch(clearStep());
+      localStorage.clear();
+      return navigate('/');
+    }
+  }, [navigate, token.access]);
 
   // 회원 삭제
   const openModalDelete = () => {
@@ -90,8 +98,6 @@ const Setting = () => {
   useEffect(() => {
     const userInfo = async () => {
       const { data } = await axios.get(`${API.userModiorDell}`, {
-        // TODO: 삭제
-        // const { data } = await axios.get(`/data/userInfo.json`, {
         headers: {
           access: `${token.access}`,
           refresh: `${token.refresh}`,
@@ -148,9 +154,11 @@ const Setting = () => {
       });
 
       if (res.status === 201) {
-        // TODO:
         window.location.replace('/');
-        message.success('수정이 완료되었습니다. 🌈');
+
+        setTimeout(() => {
+          message.success('수정이 완료되었습니다. 🌈');
+        }, 2000);
       }
     } catch (error) {
       console.log(error);
@@ -250,7 +258,7 @@ const Setting = () => {
 
             <AnswerModiHeader>
               <h1>성향 확인하기</h1>
-              <button onClick={openModalModify}>수정하기</button>
+              <button onClick={openModalModify}>테스트 다시하기</button>
             </AnswerModiHeader>
 
             <AnswerModiSection userAnswerModi={userAnswerModi} />
@@ -339,6 +347,7 @@ const UserInfoContainer = styled.form`
 
 const ButtonContainer = styled.div`
   margin-top: 30px;
+  text-align: end;
 
   button {
     width: 80px;
@@ -387,7 +396,6 @@ const AnswerModiHeader = styled.div`
   }
 
   button {
-    width: 70px;
     border: 1px solid ${({ theme }) => theme.mainViolet};
     background-color: white;
     margin-left: 10px;
