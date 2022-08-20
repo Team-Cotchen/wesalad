@@ -49,7 +49,7 @@ Wesalad에서는, 부담없이 원하는 성향의 팀원들을 만나 특별하
           src="https://avatars.githubusercontent.com/geuni620"
           width="100px;"
           alt=""
-        /><br /><sub><b>박근휘</b></sub></a
+        /><br /><sub><b>휘</b></sub></a
       ><br />
     </td>
   </tr>
