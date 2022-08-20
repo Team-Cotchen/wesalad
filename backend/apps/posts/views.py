@@ -10,7 +10,7 @@ from .serializers          import PostSerializer
 
 
 class PostListView(generics.ListCreateAPIView):
-    queryset         = Post.objects.filter(status='active')
+    queryset         = Post.objects.exclude(status='deleted')
     serializer_class = PostSerializer
     pagination_class = PostListPagination
     filter_backends  = [PostListFilterBackend]
