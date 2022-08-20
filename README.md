@@ -19,7 +19,7 @@ Wesalad에서는, 부담없이 원하는 성향의 팀원들을 만나 특별하
 <br /> <br />
 
 
-## 🎳 위샐러드 개발팀, Cotchen
+## 💻 위샐러드 개발팀, Cotchen
 
 ### FE Members
 
