@@ -87,8 +87,9 @@ Wesalad에서는, 부담없이 원하는 성향의 팀원들을 만나 특별하
 | 분야           | 사용 기술                       
 | -------------- | ------------------------------- | 
 | FrontEnd       | React, Typescript               |
-| BackEnd        | Python                          |
-| Database       | MongoDB(Mongoose), MySQL        |
+| BackEnd        | Python, Djnago, DRF             |
+| Database       | MySQL                           |
+| Deplyment env  | Docker, Nginx                   |
 | Cloud Services | Amazon AWS                      |
 | TOOL           | VSCODE, Notion, Slack           |
 | DESIGN         | Figma                           |
