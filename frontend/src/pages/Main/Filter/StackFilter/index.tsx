@@ -55,13 +55,13 @@ const FilterOptions = styled.div`
 `;
 
 const FilterOption = styled.div<IFilterOptionProps>`
-  margin: 0 20px 10px 0;
-  border: 1px solid ${({ isChosen }) => (isChosen ? '#000000' : '#d0d0d0')};
+  margin: 0 20px 40px 0;
+  border: 2px solid ${({ isChosen }) => (isChosen ? '#474747' : '#d0d0d0')};
   border-radius: 30px;
   padding: 15px 20px;
   font-size: ${({ theme }) => theme.fontRegular};
   opacity: ${({ isChosen }) => (isChosen ? 1 : 0.3)};
-  background-color: ${({ isChosen }) => (isChosen ? '#e6e6e6' : '#ffffff')};
+  background-color: ${({ isChosen }) => (isChosen ? '#e8e8e8' : '#ffffff')};
   cursor: pointer;
 
   &:hover {

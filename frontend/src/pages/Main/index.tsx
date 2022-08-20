@@ -11,6 +11,7 @@ import API, { getToken } from 'config';
 import { DetailModel } from 'types/detailmodel';
 import Modal from 'components/Modal/Modal';
 import LoginModal from 'components/LoginStep/LoginModal';
+import { Switch } from 'antd';
 
 const LIMIT = 20;
 
@@ -22,14 +23,15 @@ const Main: FunctionComponent = () => {
   const [paginationString, setPaginationString] = useState('');
   const [queryStringList, setQueryStringList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { access, id } = getToken();
+  const { id } = getToken();
 
   const { search } = useLocation();
   const navigate = useNavigate();
 
   const getRecommendationData = async () => {
     try {
-      const { data } = await axios.get(`${API.getPosts}?user=${id}`);
+      const query = id ? `?user=${id}` : '';
+      const { data } = await axios.get(`${API.getPosts}${query}`);
       setRecommendCards(data.results);
     } catch (error) {
       console.error();
@@ -94,6 +96,11 @@ const Main: FunctionComponent = () => {
     openModal();
   };
 
+  const handleStatusBtnChange = () => {
+    changeQueryStringList('status', 1);
+  };
+  console.log(queryStringList);
+
   useEffect(() => {
     getRecommendationData();
   }, []);
@@ -119,7 +126,7 @@ const Main: FunctionComponent = () => {
               이런 프로젝트가 잘 맞으실 것 같아요!
             </HighlightLabel>
           </Head>
-          {id ? (
+          {!id ? (
             <CardWrapper>
               <CardsSlider data={recommendCards} />
             </CardWrapper>
@@ -139,11 +146,24 @@ const Main: FunctionComponent = () => {
             <HighlightLabel>내 취향에 맞는 샐러드 고르기</HighlightLabel>
           </Head>
           <Filter changeQueryStringList={changeQueryStringList} />
-          <CardWrapper>
-            {filteredCards.map((item) => (
-              <Card key={item.id} cardtype="regular" {...item} id={item.id} />
-            ))}
-          </CardWrapper>
+          <SwitchWrap>
+            <span>모집 중만 보기</span>
+            <Switch
+              style={{
+                backgroundColor: '#693bfb',
+                position: 'relative',
+                bottom: 2,
+              }}
+              onChange={handleStatusBtnChange}
+            ></Switch>
+          </SwitchWrap>
+          <Cards>
+            <CardWrapper>
+              {filteredCards.map((item) => (
+                <Card key={item.id} cardtype="regular" {...item} id={item.id} />
+              ))}
+            </CardWrapper>
+          </Cards>
           <PaginationBtnWrap>
             {[...Array(paginationBtnNumber).keys()].map((item, index) => (
               <PaginationBtn
@@ -269,4 +289,20 @@ const NotUserButton = styled.button`
     text-decoration-line: underline;
     cursor: pointer;
   }
+`;
+
+const SwitchWrap = styled.div`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 200px;
+  font-size: 20px;
+
+  span {
+    margin-right: 10px;
+  }
+`;
+
+const Cards = styled.div`
+  margin-top: 70px;
 `;
