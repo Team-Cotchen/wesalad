@@ -6,7 +6,7 @@ const Creation: FunctionComponent = () => {
   const fields = {
     category: undefined,
     stacks: undefined,
-    applyway: '카카오톡 오픈채팅',
+    applyway: undefined,
     applyway_info: '',
     place: undefined,
     title: '',

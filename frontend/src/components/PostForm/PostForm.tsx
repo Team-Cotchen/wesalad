@@ -216,12 +216,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   }
                   colon={false}
                 >
-                  <StyledSelect
-                    bordered={false}
-                    placeholder={
-                      <div style={{ color: 'black' }}>스터디/프로젝트</div>
-                    }
-                  >
+                  <StyledSelect bordered={false} placeholder="스터디/프로젝트">
                     {CATEGORY.map((category) => (
                       <Option key={category} value={category}>
                         {category}
@@ -239,12 +234,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   }
                   colon={false}
                 >
-                  <StyledSelect
-                    placeholder={
-                      <div style={{ color: 'black' }}>온라인/오프라인</div>
-                    }
-                    bordered={false}
-                  >
+                  <StyledSelect placeholder="온라인/오프라인" bordered={false}>
                     {PLACE.map((place) => (
                       <Option key={place} value={place}>
                         {place}
@@ -263,11 +253,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   colon={false}
                 >
                   <StyledSelect
-                    placeholder={
-                      <div style={{ color: 'black' }}>
-                        사용할 기술 스택을 골라주세요.
-                      </div>
-                    }
+                    placeholder="      사용할 기술 스택을 골라주세요."
                     bordered={false}
                     mode="multiple"
                     optionLabelProp="label"
@@ -293,9 +279,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                 >
                   <StyledSelect
                     bordered={false}
-                    placeholder={
-                      <div style={{ color: 'black' }}>인원 미정 ~ 5명 이상</div>
-                    }
+                    placeholder="인원 미정 ~ 5명 이상"
                   >
                     {NUM_OF_DEVELOPER.map((num) => (
                       <Option key={num} value={num}>
@@ -316,9 +300,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                 >
                   <StyledSelect
                     bordered={false}
-                    placeholder={
-                      <div style={{ color: 'black' }}>인원 미정 ~ 5명 이상</div>
-                    }
+                    placeholder="인원 미정 ~ 5명 이상"
                   >
                     {NUM_OF_DEVELOPER.map((num) => (
                       <Option key={num} value={num}>
@@ -338,11 +320,9 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   colon={false}
                 >
                   <StyledSelect
-                    placeholder={
-                      <div style={{ color: 'black' }}>
-                        기간 미정 ~ 6개월 이상
-                      </div>
-                    }
+                    placeholder="
+                    기간 미정 ~ 6개월 이상
+                    "
                     bordered={false}
                   >
                     {PERIOD.map((num) => (
@@ -374,7 +354,11 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   }
                   colon={false}
                 >
-                  <StyledSelect bordered={false} onChange={setApplyWay}>
+                  <StyledSelect
+                    bordered={false}
+                    placeholder="연락 방법을 골라주세요."
+                    onChange={setApplyWay}
+                  >
                     {APPLY_WAY.map(({ title }) => (
                       <Option key={title} value={title}>
                         {title}
@@ -395,7 +379,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   <ContactInput
                     placeholder={
                       APPLY_WAY?.find(({ title }) => title === applyWay)
-                        ?.info || '카카오톡 오픈채팅'
+                        ?.info || '연락 주소를 입력해주세요.'
                     }
                   />
                 </ListItem>
@@ -661,14 +645,10 @@ const StyledSelect = styled(Select)`
   border-radius: 3px;
   background-color: #f4f5f7;
   cursor: pointer;
+  font-size: 14px;
 
   @media screen and ${devices.tablet} {
-    font-size: 17px;
     margin-left: 20px;
-  }
-
-  @media screen and ${devices.mobile} {
-    font-size: 15px;
   }
 `;
 
