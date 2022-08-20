@@ -139,14 +139,6 @@ const MyPosts = () => {
             rowKey={({ id }) => id}
             style={{ fontSize: '3px' }}
             scroll={{ x: 'max-content' }}
-            onRow={({ id }) => {
-              return {
-                onClick: (e) => {
-                  if ((e.target as Element).closest('button')) return;
-                  navigate(`/project/${id}`);
-                },
-              };
-            }}
           />
         ) : (
           <div style={{ position: 'absolute', top: '45%', right: '45%' }}>
