@@ -97,5 +97,7 @@ Wesalad에서는, 부담없이 원하는 성향의 팀원들을 만나 특별하
 ![image](https://user-images.githubusercontent.com/90507720/185732961-13d65364-5449-463c-a8a2-0015c1681c8a.png)
 
 
-## 
+
+
+## 참고
 <a href = "https://wesalad.notion.site/wesalad/wesalad-3be7e3b6f66d468f8ebaee6d489a87da" target ="_blank">Wesalad 상세 설명 Notion (Wesalad 소개, api 명세서 등)</a>
