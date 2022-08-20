@@ -87,7 +87,7 @@ Wesalad에서는, 부담없이 원하는 성향의 팀원들을 만나 특별하
 | 분야           | 사용 기술                       
 | -------------- | ------------------------------- | 
 | FrontEnd       | React, Typescript               |
-| BackEnd        | Python, Djnago, DRF             |
+| BackEnd        | Python, Django, DRF             |
 | Database       | MySQL                           |
 | Deplyment env  | Docker, Nginx                   |
 | Cloud Services | Amazon AWS                      |
