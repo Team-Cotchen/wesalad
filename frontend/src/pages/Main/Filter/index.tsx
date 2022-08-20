@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import StackFilter from './StackFilter';
 
 interface IFilter {
@@ -40,13 +40,15 @@ const Filter: FunctionComponent<IFilter> = ({ changeQueryStringList }) => {
   return (
     <>
       <FilterWrapper>
-        {FILTER_LIST.map(({ id, name, queryKey, queryValue }) => (
+        {FILTER_LIST.map(({ id, name, queryKey, queryValue, description }) => (
           <FilterBtn
             onClick={() => handleFilterClick(name, queryKey, queryValue)}
             key={id}
             isChosen={isClicked === name}
+            btnDescription={description ? true : false}
           >
             {name}
+            {!!description && <BtnDescription>{description}</BtnDescription>}
           </FilterBtn>
         ))}
       </FilterWrapper>
@@ -68,6 +70,7 @@ export default Filter;
 
 interface IFilterBtn {
   isChosen: boolean;
+  btnDescription: boolean;
 }
 
 const FilterWrapper = styled.ul`
@@ -76,6 +79,7 @@ const FilterWrapper = styled.ul`
 `;
 
 const FilterBtn = styled.li<IFilterBtn>`
+  text-align: center;
   display: inline-block;
   margin-right: 10px;
   padding: 15px 25px;
@@ -90,6 +94,12 @@ const FilterBtn = styled.li<IFilterBtn>`
     background-color: ${({ theme }) => theme.mainGreen};
     color: black;
   }
+
+  ${({ btnDescription }) =>
+    btnDescription &&
+    css`
+      padding: 5px 15px;
+    `}
 `;
 
 const FilterDivLine = styled.div`
@@ -99,11 +109,34 @@ const FilterDivLine = styled.div`
   margin-bottom: 30px;
 `;
 
+const BtnDescription = styled.div`
+  font-size: 15px;
+  color: darkgray;
+`;
+
 const FILTER_LIST = [
   { id: 0, name: '모두 보기', queryKey: 'all', queryValue: 0 },
-  { id: 2, name: '매운맛', queryKey: 'flavor', queryValue: 3 },
-  { id: 3, name: '중간맛', queryKey: 'flavor', queryValue: 2 },
-  { id: 4, name: '순한맛', queryKey: 'flavor', queryValue: 1 },
+  {
+    id: 2,
+    name: '매운맛',
+    queryKey: 'flavor',
+    queryValue: 3,
+    description: '(주 4시간 이상)',
+  },
+  {
+    id: 3,
+    name: '중간맛',
+    queryKey: 'flavor',
+    queryValue: 2,
+    description: '(주 2~4시간)',
+  },
+  {
+    id: 4,
+    name: '순한맛',
+    queryKey: 'flavor',
+    queryValue: 1,
+    description: '(주 2시간 이하)',
+  },
   { id: 5, name: '프론트엔드', queryKey: 'stack', queryValue: 0 },
   { id: 6, name: '백엔드', queryKey: 'stack', queryValue: 0 },
   { id: 7, name: '기타', queryKey: 'stack', queryValue: 0 },
