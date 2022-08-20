@@ -14,9 +14,10 @@ interface ISetStackModi {
 const setStackModi = ({ userStackModi, setUserStackModi }: ISetStackModi) => {
   const { STACKS }: IStacks = OPTIONS;
 
-  const filterStacks = STACKS.filter(
-    (stack) => !userStackModi.includes(stack.title),
-  );
+  // TODO
+  // const filterStacks = STACKS.filter(
+  //   (stack) => !userStackModi.includes(stack.title),
+  // );
 
   return (
     <>
@@ -29,7 +30,7 @@ const setStackModi = ({ userStackModi, setUserStackModi }: ISetStackModi) => {
         showArrow
         onChange={(value) => setUserStackModi(value as any)}
       >
-        {filterStacks.map(({ title }, i) => (
+        {STACKS.map(({ title }, i) => (
           <Option key={i} value={title}>
             {title}
           </Option>
