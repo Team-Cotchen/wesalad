@@ -78,22 +78,6 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
             설정창에서 <span>성향 및 스택</span>을 확인할 수 있어요! 🎉
           </SubTitle>
         </Header>
-        {/* TODO: 수정예정 */}
-        {/* <ResultWindowSection>
-          {tendencyResult.map((item, i) =>
-            item === 0 ? (
-              <Card key={i}>
-                <Icon src={QuestionData[i].image_urlA} />
-                {QuestionData[i].resultA}
-              </Card>
-            ) : (
-              <Card key={i}>
-                <Icon src={QuestionData[i].image_urlB} />
-                {QuestionData[i].resultB}
-              </Card>
-            ),
-          )}
-        </ResultWindowSection> */}
         <SubmitSection>
           <SubmitBtn mode="submit" onClick={fetchByUserInfo}>
             시작하기
