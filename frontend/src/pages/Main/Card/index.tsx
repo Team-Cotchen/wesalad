@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import Tag from 'antd/lib/tag';
 
 export interface CardsProps {
   id: number;
@@ -27,6 +28,7 @@ export interface CardsProps {
       }[];
     },
   ];
+  status: string;
 }
 
 interface IPostStack {
@@ -47,6 +49,7 @@ const Card: FunctionComponent<CardsProps> = ({
   post_place,
   post_answer,
   cardtype,
+  status,
 }) => {
   const navigate = useNavigate();
   const handleCardClick = (id: number) => {
@@ -56,6 +59,16 @@ const Card: FunctionComponent<CardsProps> = ({
   return (
     <MainCard cardtype={cardtype} onClick={() => handleCardClick(id)}>
       <CardTitle>{title}</CardTitle>
+      {status === 'active' ? (
+        <Tag color="blue" style={{ position: 'absolute', right: 10, top: 20 }}>
+          현재 모집 중
+        </Tag>
+      ) : (
+        <Tag color="gray" style={{ position: 'absolute', right: 10, top: 20 }}>
+          모집 마감
+        </Tag>
+      )}
+
       <CardDescriptions>
         <CardDescription>
           <DescriptionIcon>
@@ -119,7 +132,15 @@ const MainCard = styled.div<IMainCard>`
     ${({ theme, cardtype }) =>
       cardtype === 'promo' ? theme.mainViolet : '#b9b9b9'};
   border-radius: 5px;
+  position: relative;
   cursor: pointer;
+
+  :hover {
+    transform: scale(1);
+    border: none;
+    -webkit-box-shadow: 1px 4px 40px -2px rgba(221, 221, 221, 0.95);
+    box-shadow: 1px 5px 40px -2px rgba(221, 221, 221, 0.95);
+  }
 `;
 
 const StackLogos = styled.div`

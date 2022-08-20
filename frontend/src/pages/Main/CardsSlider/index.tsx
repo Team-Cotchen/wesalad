@@ -10,14 +10,10 @@ const CardsSlider = ({ data }: any) => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
     slidesToScroll: 1,
-    arrows: true,
-    autoplay: false,
     autoplaySpeed: 2000,
     centerMode: true,
     variableWidth: true,
-    centerPadding: '10px',
   };
 
   return (
@@ -57,14 +53,17 @@ const StyledSlider = styled(Slider)`
   }
   .slick-prev {
     position: absolute;
-    z-index: 100;
+    z-index: 3;
     left: 10px;
     background-color: black;
+    border-radius: 50%;
+    color: #5f5f5f;
   }
   .slick-next {
     position: absolute;
-    z-index: 100;
+    z-index: 3;
     right: 0px;
     background-color: black;
+    border-radius: 50%;
   }
 `;
