@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import Tag from 'antd/lib/tag';
+import { devices } from 'styles/devices';
 
 export interface CardsProps {
   id: number;
@@ -124,8 +125,8 @@ interface IMainCard {
 }
 
 const MainCard = styled.div<IMainCard>`
-  min-width: 400px;
-  height: 550px;
+  min-width: 350px;
+  height: 500px;
   margin: 20px;
   padding: 20px 25px;
   border: 1px solid
@@ -145,7 +146,7 @@ const MainCard = styled.div<IMainCard>`
 
 const StackLogos = styled.div`
   display: flex;
-  padding-bottom: 15px;
+  padding-bottom: 25px;
 `;
 
 const StackLogo = styled.div`
@@ -164,7 +165,6 @@ const CardTitle = styled.div`
   font-size: ${({ theme }) => theme.fontMedium};
   font-weight: ${({ theme }) => theme.weightSemiBold};
   line-height: 1.3em;
-  height: 70px;
 `;
 
 const CardDescriptions = styled.div`
@@ -172,7 +172,7 @@ const CardDescriptions = styled.div`
 `;
 
 const CardDescription = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 `;
 
 const DescriptionIcon = styled.span`
@@ -199,7 +199,7 @@ const CharacterCardAndStakLogos = styled.div`
 `;
 
 const ChacracterCardsWrapper = styled.div`
-  margin-top: 30px;
+  margin-top: 10px;
 `;
 
 const ChacracterCardWrapper = styled.div`
