@@ -4,16 +4,27 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Card from 'pages/Main/Card';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { devices } from 'styles/devices';
 
 const CardsSlider = ({ data }: any) => {
   const sliderSettings = {
     dots: true,
     infinite: true,
     speed: 500,
+    slidesToShow: 3,
     slidesToScroll: 1,
-    autoplaySpeed: 2000,
     centerMode: true,
-    variableWidth: true,
+    nextArrow: (
+      <NextArrowWrap>
+        <IoIosArrowForward />
+      </NextArrowWrap>
+    ),
+    prevArrow: (
+      <PrevArrowWrap>
+        <IoIosArrowBack />
+      </PrevArrowWrap>
+    ),
   };
 
   return (
@@ -28,13 +39,25 @@ const CardsSlider = ({ data }: any) => {
 export default CardsSlider;
 
 const StyledSlider = styled(Slider)`
-  position: relative;
-  margin-top: 30px;
   width: 100%;
+  position: relative;
+  padding: 0 10px;
+  display: flex;
+  flex-wrap: nowrap;
+
+  @media ${devices.tablet} {
+    width: 400px;
+  }
+
+  .slick-prev::before,
+  .slick-next::before {
+    opacity: 1;
+    display: none;
+  }
 
   .slick-list {
-    width: 1300px;
     margin: auto;
+    width: 90%;
   }
 
   .slick-slider {
@@ -48,22 +71,26 @@ const StyledSlider = styled(Slider)`
     display: flex;
   }
   .slick-arrow {
-    color: black;
     cursor: pointer;
+    font-size: 100px;
   }
-  .slick-prev {
-    position: absolute;
-    z-index: 3;
-    left: 10px;
-    background-color: black;
-    border-radius: 50%;
-    color: #5f5f5f;
-  }
-  .slick-next {
-    position: absolute;
-    z-index: 3;
-    right: 0px;
-    background-color: black;
-    border-radius: 50%;
-  }
+`;
+
+const NextArrowWrap = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 42%;
+  color: lightgray;
+  right: 50px;
+
+  display: block;
+`;
+
+const PrevArrowWrap = styled.div`
+  position: absolute;
+  top: 42%;
+  left: 30px;
+  z-index: 2;
+  color: lightgray;
+  transform: translateY(-50%);
 `;

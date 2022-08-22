@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { devices } from 'styles/devices';
 import StackFilter from './StackFilter';
 
 interface IFilter {
@@ -38,7 +39,7 @@ const Filter: FunctionComponent<IFilter> = ({ changeQueryStringList }) => {
   };
 
   return (
-    <>
+    <Container>
       <FilterWrapper>
         {FILTER_LIST.map(({ id, name, queryKey, queryValue, description }) => (
           <FilterBtn
@@ -62,7 +63,7 @@ const Filter: FunctionComponent<IFilter> = ({ changeQueryStringList }) => {
           chosenStackList={chosenStackList}
         />
       )}
-    </>
+    </Container>
   );
 };
 
@@ -72,6 +73,12 @@ interface IFilterBtn {
   isChosen: boolean;
   btnDescription: boolean;
 }
+
+const Container = styled.div`
+  @media ${devices.tablet} {
+    display: none;
+  }
+`;
 
 const FilterWrapper = styled.ul`
   margin: 30px auto;

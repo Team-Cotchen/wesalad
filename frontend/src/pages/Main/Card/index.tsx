@@ -126,6 +126,7 @@ interface IMainCard {
 
 const MainCard = styled.div<IMainCard>`
   min-width: 350px;
+  max-width: 420px;
   height: 500px;
   margin: 20px;
   padding: 20px 25px;

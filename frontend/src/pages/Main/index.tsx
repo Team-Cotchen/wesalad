@@ -102,7 +102,6 @@ const Main: FunctionComponent = () => {
   const handleStatusBtnChange = () => {
     changeQueryStringList('status', 1);
   };
-  console.log(queryStringList);
 
   useEffect(() => {
     getRecommendationData();
@@ -126,10 +125,13 @@ const Main: FunctionComponent = () => {
           <Description>위샐러드 추천하는 나에게 맞는 프로젝트</Description>
           <HighlightLabel>이런 프로젝트가 잘 맞으실 것 같아요!</HighlightLabel>
         </Head>
-        {!id ? (
-          <CardWrapper>
-            <CardsSlider data={recommendCards} />
-          </CardWrapper>
+        {id ? (
+          <>
+            <Notify>PC로 확인 부탁드려요🫶🏻</Notify>
+            <RecommendCardWrapper>
+              <CardsSlider data={recommendCards} />
+            </RecommendCardWrapper>
+          </>
         ) : (
           <NotUserWrap>
             <NotUserText>아직 등록된 성향이 없네요!</NotUserText>
@@ -211,7 +213,7 @@ const DivisionLine = styled.div`
 `;
 
 const CardSectionWrap = styled.div`
-  margin: 40px 30px;
+  margin: 30px 0px;
 `;
 
 const Head = styled.div`
@@ -235,7 +237,7 @@ const HighlightLabel = styled.span`
   }
 `;
 
-const CardWrapper = styled.div`
+const RecommendCardWrapper = styled.div`
   margin-top: 15px;
   display: flex;
   flex-wrap: wrap;
@@ -244,6 +246,16 @@ const CardWrapper = styled.div`
   margin: 0 auto;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 1380px) {
+    display: none;
+  }
+`;
+
+const CardWrapper = styled(RecommendCardWrapper)`
+  @media (max-width: 1380px) {
+    display: block;
+  }
 `;
 
 const Description = styled.p`
@@ -261,6 +273,7 @@ const PaginationBtnWrap = styled.div`
   ${({ theme }) => theme.flexMixIn('center', 'center')}
   max-width: 200px;
   margin: 30px auto;
+  padding-bottom: 40px;
 `;
 
 const PaginationBtn = styled.button`
@@ -285,8 +298,11 @@ const NotUserWrap = styled.div`
   padding: 20px;
   background-color: #e7e7e7;
   width: 500px;
-  margin: auto;
+  margin: 0 auto;
   margin-top: 40px;
+  @media ${devices.mobile} {
+    width: 350px;
+  }
 `;
 
 const NotUserText = styled.div`
@@ -312,14 +328,35 @@ const SwitchWrap = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  right: 200px;
+  right: 150px;
   font-size: 20px;
 
   span {
     margin-right: 10px;
   }
+
+  @media ${devices.laptop} {
+    left: 50%;
+    width: 50%;
+    margin-top: 20px;
+  }
 `;
 
 const Cards = styled.div`
+  display: flex;
   margin-top: 70px;
+`;
+
+const Notify = styled.div`
+  margin: 20px auto;
+  text-align: center;
+  font-size: 20px;
+  color: #666666;
+  border: 1px solid;
+  padding: 20px;
+  width: 70%;
+
+  @media (min-width: 1380px) {
+    display: none;
+  }
 `;

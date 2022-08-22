@@ -5,6 +5,7 @@ import { getToken } from 'config';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'components/Modal/Modal';
 import LoginModal from 'components/LoginStep/LoginModal';
+import { devices } from 'styles/devices';
 
 const MainTypo: FunctionComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -155,6 +156,17 @@ const Text = styled.h1`
   letter-spacing: 5px;
   animation: ${linearAnimationOne} 8s infinite;
   line-height: 160px;
+  text-align: center;
+
+  @media ${devices.tablet} {
+    font-size: 130px;
+    line-height: 130px;
+  }
+
+  @media ${devices.mobile} {
+    font-size: 100px;
+    line-height: 100px;
+  }
 `;
 
 const TextTwo = styled(Text)`
@@ -168,6 +180,10 @@ const TextThree = styled(Text)`
 const BtnWrapper = styled.div`
   margin: 60px auto;
   text-align: center;
+
+  @media ${devices.tablet} {
+    padding: 0 50px;
+  }
 `;
 
 const FindCharacterBtn = styled.button`
@@ -184,6 +200,18 @@ const FindCharacterBtn = styled.button`
     background-color: white;
     color: black;
   }
+
+  @media ${devices.laptop} {
+    padding: 10px 20px;
+  }
+
+  @media ${devices.tablet} {
+    padding: 10px 20px;
+  }
+
+  @media ${devices.mobile} {
+    padding: 5px 20px;
+  }
 `;
 
 const BoardBtn = styled(FindCharacterBtn)`
@@ -195,10 +223,18 @@ const BoardBtn = styled(FindCharacterBtn)`
   &:hover {
     border: 1px solid black;
   }
+
+  @media ${devices.tablet} {
+    margin: 10px 0px;
+  }
 `;
 
 const SubTitle = styled.div`
   text-align: center;
+
+  @media ${devices.tablet} {
+    padding: 0 40px;
+  }
 `;
 
 const TitleText = styled.div`
@@ -208,5 +244,10 @@ const TitleText = styled.div`
   background: none;
   ::selection {
     background-color: ${({ theme }) => theme.mainViolet};
+  }
+
+  @media ${devices.tablet} {
+    font-size: 18px;
+    line-height: 28px;
   }
 `;
