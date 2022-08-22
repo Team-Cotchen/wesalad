@@ -142,13 +142,14 @@ const NewPost = styled.div`
 const Login = styled.button<IWrapper>`
   padding: 7px 20px;
   border-radius: 5px;
-  border: 1px solid ${({ scroll }) => (scroll ? '#000000' : '#2de466')};
+  border: 1px solid ${({ theme }) => theme.mainGreen};
   background-color: ${({ theme }) => theme.mainGreen};
   font-size: ${({ theme }) => theme.fontRegular};
+  color: black;
 
   &:hover {
     background-color: white;
     cursor: pointer;
-    color: ${({ scroll }) => (scroll ? '#000000' : '#ffffff')};
+    border: 1px solid ${({ scroll }) => (scroll ? '#000000' : '#2de466')};
   }
 `;
