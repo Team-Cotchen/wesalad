@@ -1,22 +1,25 @@
-import Nav from 'components/Nav/Nav';
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+
+import axios from 'axios';
+import { Switch } from 'antd';
+
+import Nav from 'components/Nav/Nav';
 import MainTypo from 'pages/Main/MainTypo';
 import Filter from 'pages/Main/Filter';
 import Card from 'pages/Main/Card';
 import CardsSlider from './CardsSlider';
-import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import API, { getToken } from 'config';
-import { DetailModel } from 'types/detailmodel';
 import Modal from 'components/Modal/Modal';
 import LoginModal from 'components/LoginStep/LoginModal';
-import { Switch } from 'antd';
+
+import API, { getToken } from 'config';
+import { devices } from 'styles/devices';
+import { DetailModel } from 'types/detailmodel';
 
 const LIMIT = 20;
 
 const Main: FunctionComponent = () => {
-  //데이터 받아올 때 담는 변수
   const [filteredCards, setFilteredCards] = useState<DetailModel[]>([]);
   const [recommendCards, setRecommendCards] = useState<DetailModel[]>([]);
   const [paginationBtnNumber, setPaginationBtnNumber] = useState(0);
@@ -99,7 +102,6 @@ const Main: FunctionComponent = () => {
   const handleStatusBtnChange = () => {
     changeQueryStringList('status', 1);
   };
-  console.log(queryStringList);
 
   useEffect(() => {
     getRecommendationData();
@@ -116,66 +118,65 @@ const Main: FunctionComponent = () => {
   return (
     <>
       <Nav />
-      <Wrapper>
-        <MainTypo />
-        <DivisionLine />
-        <CardSectionWrap>
-          <Head>
-            <Description>위샐러드 추천하는 나에게 맞는 프로젝트</Description>
-            <HighlightLabel>
-              이런 프로젝트가 잘 맞으실 것 같아요!
-            </HighlightLabel>
-          </Head>
-          {!id ? (
-            <CardWrapper>
+      <MainTypo />
+      <DivisionLine />
+      <CardSectionWrap>
+        <Head>
+          <Description>위샐러드 추천하는 나에게 맞는 프로젝트</Description>
+          <HighlightLabel>이런 프로젝트가 잘 맞으실 것 같아요!</HighlightLabel>
+        </Head>
+        {id ? (
+          <>
+            <Notify>PC로 확인 부탁드려요🫶🏻</Notify>
+            <RecommendCardWrapper>
               <CardsSlider data={recommendCards} />
-            </CardWrapper>
-          ) : (
-            <NotUserWrap>
-              <NotUserText>아직 등록된 성향이 없네요!</NotUserText>
-              <NotUserButton onClick={handleNotUserBtn}>
-                먼저 내 성향을 알아볼까요?
-              </NotUserButton>
-            </NotUserWrap>
-          )}
-        </CardSectionWrap>
-        <DivisionLineTwo />
-        <CardSectionWrap>
-          <Head>
-            <Description>나에게 꼭 맞는 샐러드 찾아볼까요?</Description>
-            <HighlightLabel>내 취향에 맞는 샐러드 고르기</HighlightLabel>
-          </Head>
-          <Filter changeQueryStringList={changeQueryStringList} />
-          <SwitchWrap>
-            <span>모집 중만 보기</span>
-            <Switch
-              style={{
-                backgroundColor: '#693bfb',
-                position: 'relative',
-                bottom: 2,
-              }}
-              onChange={handleStatusBtnChange}
-            ></Switch>
-          </SwitchWrap>
-          <Cards>
-            <CardWrapper>
-              {filteredCards.map((item) => (
-                <Card key={item.id} cardtype="regular" {...item} id={item.id} />
-              ))}
-            </CardWrapper>
-          </Cards>
-          <PaginationBtnWrap>
-            {[...Array(paginationBtnNumber).keys()].map((item, index) => (
-              <PaginationBtn
-                onClick={() => makePagination(index + 1)}
-                key={index}
-              >
-                {index + 1}
-              </PaginationBtn>
+            </RecommendCardWrapper>
+          </>
+        ) : (
+          <NotUserWrap>
+            <NotUserText>아직 등록된 성향이 없네요!</NotUserText>
+            <NotUserButton onClick={handleNotUserBtn}>
+              먼저 내 성향을 알아볼까요?
+            </NotUserButton>
+          </NotUserWrap>
+        )}
+      </CardSectionWrap>
+      <DivisionLineTwo />
+      <CardSectionWrap>
+        <Head>
+          <Description>나에게 꼭 맞는 샐러드 찾아볼까요?</Description>
+          <HighlightLabel>내 취향에 맞는 샐러드 고르기</HighlightLabel>
+        </Head>
+        <Filter changeQueryStringList={changeQueryStringList} />
+        <SwitchWrap>
+          <span>모집 중만 보기</span>
+          <Switch
+            style={{
+              backgroundColor: '#693bfb',
+              position: 'relative',
+              bottom: 2,
+            }}
+            onChange={handleStatusBtnChange}
+          ></Switch>
+        </SwitchWrap>
+        <Cards>
+          <CardWrapper>
+            {filteredCards.map((item) => (
+              <Card key={item.id} cardtype="regular" {...item} id={item.id} />
             ))}
-          </PaginationBtnWrap>
-        </CardSectionWrap>
-      </Wrapper>
+          </CardWrapper>
+        </Cards>
+        <PaginationBtnWrap>
+          {[...Array(paginationBtnNumber).keys()].map((item, index) => (
+            <PaginationBtn
+              onClick={() => makePagination(index + 1)}
+              key={index}
+            >
+              {index + 1}
+            </PaginationBtn>
+          ))}
+        </PaginationBtnWrap>
+      </CardSectionWrap>
       <Modal onClose={closeModal} visible={isModalOpen}>
         <LoginModal handleClose={closeModal} />
       </Modal>
@@ -186,8 +187,21 @@ const Main: FunctionComponent = () => {
 export default Main;
 
 const Wrapper = styled.div`
-  margin: 65px 100px;
+  margin: 0 auto;
   padding-bottom: 100px;
+
+  @media ${devices.laptop} {
+    width: 32rem;
+  }
+
+  @media ${devices.tablet} {
+    width: 28rem;
+  }
+
+  @media ${devices.mobile} {
+    margin: 0 auto;
+    width: 25rem;
+  }
 `;
 
 const DivisionLine = styled.div`
@@ -199,7 +213,7 @@ const DivisionLine = styled.div`
 `;
 
 const CardSectionWrap = styled.div`
-  margin: 40px 30px;
+  margin: 30px 0px;
 `;
 
 const Head = styled.div`
@@ -216,9 +230,14 @@ const HighlightLabel = styled.span`
   ::selection {
     background-color: ${({ theme }) => theme.mainGreen};
   }
+
+  @media ${devices.mobile} {
+    font-size: 30px;
+    margin-top: 0;
+  }
 `;
 
-const CardWrapper = styled.div`
+const RecommendCardWrapper = styled.div`
   margin-top: 15px;
   display: flex;
   flex-wrap: wrap;
@@ -227,6 +246,16 @@ const CardWrapper = styled.div`
   margin: 0 auto;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 1380px) {
+    display: none;
+  }
+`;
+
+const CardWrapper = styled(RecommendCardWrapper)`
+  @media (max-width: 1380px) {
+    display: block;
+  }
 `;
 
 const Description = styled.p`
@@ -244,6 +273,7 @@ const PaginationBtnWrap = styled.div`
   ${({ theme }) => theme.flexMixIn('center', 'center')}
   max-width: 200px;
   margin: 30px auto;
+  padding-bottom: 40px;
 `;
 
 const PaginationBtn = styled.button`
@@ -268,8 +298,11 @@ const NotUserWrap = styled.div`
   padding: 20px;
   background-color: #e7e7e7;
   width: 500px;
-  margin: auto;
+  margin: 0 auto;
   margin-top: 40px;
+  @media ${devices.mobile} {
+    width: 350px;
+  }
 `;
 
 const NotUserText = styled.div`
@@ -295,14 +328,35 @@ const SwitchWrap = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  right: 200px;
+  right: 150px;
   font-size: 20px;
 
   span {
     margin-right: 10px;
   }
+
+  @media ${devices.laptop} {
+    left: 50%;
+    width: 50%;
+    margin-top: 20px;
+  }
 `;
 
 const Cards = styled.div`
+  display: flex;
   margin-top: 70px;
+`;
+
+const Notify = styled.div`
+  margin: 20px auto;
+  text-align: center;
+  font-size: 20px;
+  color: #666666;
+  border: 1px solid;
+  padding: 20px;
+  width: 70%;
+
+  @media (min-width: 1380px) {
+    display: none;
+  }
 `;
