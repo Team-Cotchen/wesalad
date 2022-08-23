@@ -50,12 +50,9 @@ const Wrapper = styled.div`
     margin: 0;
   }
 
-  a {
-    color: black;
-  }
-
   li {
     margin: 0.3rem 0;
+    color: black;
     cursor: pointer;
     &:hover {
       color: ${({ theme }) => theme.mainViolet};
