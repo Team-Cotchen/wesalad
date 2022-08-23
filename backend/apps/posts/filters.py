@@ -23,7 +23,7 @@ class PostListFilterBackend(filters.BaseFilterBackend):
                     postanswers__is_primary    = True,
                     postanswers__answer_id__in = user_data
                     )
-            if status == 'active':
+            if status:
                 queryset = queryset.filter(status = 'active')
         except ValueError:
             pass
