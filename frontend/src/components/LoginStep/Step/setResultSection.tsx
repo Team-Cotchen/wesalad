@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRootState } from 'redux/hooks/useRootState';
 import styled from 'styled-components';
 import API from 'config';
@@ -11,6 +11,7 @@ import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const setResultSection = ({ handleClose, basicInfo }: any) => {
+  const [isLoading, setIsLoading] = useState(false);
   const tendencyResult = basicInfo.answers as number[];
   const answerChangeForm: string[] = [];
   const id = useRootState((state) => state.login.id);
@@ -27,6 +28,7 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
   };
 
   const fetchByUserInfo = async () => {
+    setIsLoading(true);
     const stacksToString = String(basicInfo.stacks);
     const answerToString = String(changeToFetchForm());
     const ordinalToNumber = Number(basicInfo.ordinal_number);
@@ -50,6 +52,7 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
       });
 
       if (res.status === 201) {
+        setIsLoading(false);
         message.success('축하드려요! 가입되었습니다. 🙌');
       }
 
@@ -83,6 +86,7 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
             시작하기
           </SubmitBtn>
         </SubmitSection>
+        {isLoading && <TestBoard>로딩중...</TestBoard>}
       </ResultSection>
     </>
   );
@@ -156,21 +160,6 @@ const SubTitle = styled.h1<ITitle>`
   }
 `;
 
-const ResultWindowSection = styled.div`
-  padding: 10px 10px;
-  border-radius: 30px;
-
-  @media ${devices.laptop} {
-    margin: 1rem 0;
-    height: 10rem;
-    overflow: scroll;
-  }
-
-  @media ${devices.tablet} {
-    margin: 2rem 0;
-  }
-`;
-
 const SubmitSection = styled.div`
   ${({ theme }) => theme.flexMixIn('end', 'center')}
 `;
@@ -191,29 +180,6 @@ const SubmitBtn = styled.button<{ mode: string }>`
   }
 `;
 
-const Card = styled.li`
-  display: inline-block;
-  flex: 1;
-  padding: 10px;
-  margin: 10px 10px;
-  background: white;
-  font-size: ${({ theme }) => theme.fontSmall};
-  border-radius: 20px;
-  border: 1px solid #dbdbdb;
-
-  @media ${devices.laptop} {
-    padding: 15px;
-    margin: 10px 10px;
-  }
-
-  @media ${devices.tablet} {
-    padding: 5px;
-    margin: 10px 10px;
-  }
-`;
-
-const Icon = styled.img`
-  margin-right: 4px;
-  width: 21px;
-  height: 21px;
+const TestBoard = styled.div`
+  background-color: red;
 `;

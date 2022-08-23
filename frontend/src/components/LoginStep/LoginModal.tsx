@@ -88,7 +88,7 @@ const LoginModal = ({ handleClose }: ModalProps) => {
         return <ResultSection {...{ handleClose, basicInfo }} />;
 
       default:
-        return <div></div>;
+        return <div>Loding</div>;
     }
   };
 
