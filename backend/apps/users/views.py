@@ -13,7 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth    import get_user_model
 
 from apps.utils.decorators  import check_token
-from apps.utils.utils       import error_message
+from apps.utils.utils       import error_message, WesaladEmail
 from .models                import GoogleSocialAccount
 from .serializers           import UserSerializer, UserCreateSerializer
 from apps.posts.serializers import PostSerializer
@@ -103,6 +103,7 @@ class SignUpAPI(APIView):
             serializer = UserCreateSerializer(data=request.data)
             answers    = request.data.get('answers')
             stacks     = request.data.get('stacks')
+            user_email = GoogleSocialAccount.objects.get(id=google_account_id).email
         
             if serializer.is_valid():
                 serializer.save(
@@ -110,6 +111,7 @@ class SignUpAPI(APIView):
                     answers           = answers,
                     stacks            = stacks
                 )
+                WesaladEmail(settings.GOOGLE_MAIL_ADDRESS, user_email, settings.GOOGLE_MAIL_APP_PWD).send_email()
                 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -176,4 +178,4 @@ class MyPostsAPI(APIView):
         queryset   = Post.objects.filter(user=user)
         serializer = PostSerializer(queryset, many=True)
         
-        return Response(serializer.data, status=status.HTTP_200_OK)        
+        return Response(serializer.data, status=status.HTTP_200_OK)    
