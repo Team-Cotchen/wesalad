@@ -2,7 +2,7 @@ import React from 'react';
 import GlobalStyle from 'styles/GlobalStyle';
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
-import Router from './Router';
+import App from 'App';
 import theme from 'styles/theme';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
@@ -15,7 +15,7 @@ root.render(
     <GlobalStyle />
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <Router />
+        <App />
       </ThemeProvider>
     </Provider>
   </>,

@@ -4,10 +4,11 @@ const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box; 
   outline: none;
+  font-family: 'Jua', sans-serif;
 }
 
 body{
-  font-family: 'Jua', sans-serif;
+ 
 }
 
 img{
