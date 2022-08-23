@@ -9,6 +9,7 @@ import { keyframes } from 'styled-components';
 import { devices } from 'styles/devices';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const setResultSection = ({ handleClose, basicInfo }: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -74,20 +75,31 @@ const setResultSection = ({ handleClose, basicInfo }: any) => {
 
   return (
     <>
-      <ResultSection>
-        <Header>
-          <Title fontSize="80px">감사합니다!</Title>
-          <SubTitle fontSize="25px">
-            설정창에서 <span>성향 및 스택</span>을 확인할 수 있어요! 🎉
-          </SubTitle>
-        </Header>
-        <SubmitSection>
-          <SubmitBtn mode="submit" onClick={fetchByUserInfo}>
-            시작하기
-          </SubmitBtn>
-        </SubmitSection>
-        {isLoading && <TestBoard>로딩중...</TestBoard>}
-      </ResultSection>
+      {isLoading ? (
+        <Loading>
+          <BeatLoader
+            color="#2DE466"
+            loading={isLoading}
+            margin={15}
+            size={30}
+          />
+          회원가입 중...🍀
+        </Loading>
+      ) : (
+        <ResultSection>
+          <Header>
+            <Title fontSize="80px">감사합니다!</Title>
+            <SubTitle fontSize="25px">
+              설정창에서 <span>성향 및 스택</span>을 확인할 수 있어요! 🎉
+            </SubTitle>
+          </Header>
+          <SubmitSection>
+            <SubmitBtn mode="submit" onClick={fetchByUserInfo}>
+              시작하기
+            </SubmitBtn>
+          </SubmitSection>
+        </ResultSection>
+      )}
     </>
   );
 };
@@ -180,6 +192,11 @@ const SubmitBtn = styled.button<{ mode: string }>`
   }
 `;
 
-const TestBoard = styled.div`
-  background-color: red;
+const Loading = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: ${({ theme }) => theme.lightGray};
+  text-align: center;
 `;
