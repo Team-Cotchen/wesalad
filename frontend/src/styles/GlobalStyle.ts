@@ -8,7 +8,9 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body{
- 
+  box-sizing: border-box; 
+  outline: none;
+  font-family: 'Jua', sans-serif;
 }
 
 img{
