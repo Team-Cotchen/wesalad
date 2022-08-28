@@ -253,7 +253,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   colon={false}
                 >
                   <StyledSelect
-                    placeholder="      사용할 기술 스택을 골라주세요."
+                    placeholder="사용할 기술 스택을 골라주세요."
                     bordered={false}
                     mode="multiple"
                     optionLabelProp="label"
@@ -475,11 +475,12 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                 initialValue={defaultPost?.description}
                 apiKey={TINYMCE_API_KEY}
                 init={{
+                  content_style: 'body{height :500px}',
                   referrer_policy: 'origin',
                   export_cors_hosts: [`${BASE_URL}`],
+                  height: 700,
                   placeholder:
                     '프로젝트에 대해 소개해주세요. (이미지를 올리고 싶다면 드래그를 해주세요!)',
-                  height: 700,
                   paste_data_images: true,
                   menubar: false,
                   toolbar:
@@ -515,6 +516,7 @@ export default PostForm;
 const Wrapper = styled.div`
   ${({ theme }) => theme.wrapper()}
   padding : 0 35px;
+  overflow-x: hidden;
 
   @media screen and ${devices.laptop} {
     width: 800px;
@@ -533,7 +535,7 @@ const Wrapper = styled.div`
 
 //BasicInfo
 const BasicInfo = styled.div`
-  margin: 120px 0 160px 0;
+  margin: 120px 0 160px -100;
 
   @media screen and ${devices.laptop} {
     margin: 110px 20px 160px 20px;
@@ -645,7 +647,7 @@ const StyledSelect = styled(Select)`
   border-radius: 3px;
   background-color: #f4f5f7;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
 
   @media screen and ${devices.tablet} {
     margin-left: 20px;
@@ -667,15 +669,10 @@ const ContactInput = styled.input`
   border: 1px transparent solid;
   border-radius: 3px;
   background-color: #f4f5f7;
-  font-size: 14px;
+  font-size: 15px;
 
   @media screen and ${devices.tablet} {
-    font-size: 17px;
     margin-left: 20px;
-  }
-
-  @media screen and ${devices.mobile} {
-    font-size: 15px;
   }
 `;
 
@@ -748,13 +745,12 @@ const StyledDatePicker = styled(DatePicker)`
   border-radius: 3px;
   background-color: #f4f5f7;
 
-  @media screen and ${devices.tablet} {
-    font-size: 17px;
-    margin-left: 20px;
+  #start_date {
+    font-size: 15px;
   }
 
-  @media screen and ${devices.mobile} {
-    font-size: 15px;
+  @media screen and ${devices.tablet} {
+    margin-left: 20px;
   }
 `;
 
@@ -905,6 +901,7 @@ const EditorBox = styled.div`
   font-size: ${theme.fontSemiMedium};
   border-radius: 3px;
   resize: none;
+  }
 `;
 
 const ButtonBox = styled.div`
