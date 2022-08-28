@@ -901,8 +901,6 @@ const EditorBox = styled.div`
   font-size: ${theme.fontSemiMedium};
   border-radius: 3px;
   resize: none;
-
-
   }
 `;
 
