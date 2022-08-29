@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearStep } from 'redux/reducers/loginSlice';
 import { IFetchResultData } from 'components/LoginStep/loginStep.types';
 import API from 'config';
+import customHttp from 'utils/Axios';
 import axios from 'axios';
 import Modal from 'components/Modal/Modal';
 import DeleteBtn from 'components/SettingContainer/DeleteBtn';
@@ -16,7 +17,6 @@ import StackModiSection from 'components/SettingContainer/setStackModiSection';
 import AnswerModiSection from 'components/SettingContainer/setAnswerModiSection';
 import 'antd/dist/antd.less';
 import { QuestionData } from 'assets/data/QuestionData';
-import { AuthVerify } from 'utils/Axios';
 
 export interface IUserAnswerModi {
   id: number;
@@ -48,13 +48,6 @@ const Setting = () => {
   useEffect(() => {
     if (token.access === null) {
       message.warning('로그인이 필요합니다.');
-      return navigate('/');
-    }
-
-    if (AuthVerify() === 'Refresh Token Expired') {
-      message.warning('로그인이 만료되었습니다. 다시 로그인 해주세요.');
-      dispatch(clearStep());
-      localStorage.clear();
       return navigate('/');
     }
   }, [navigate, token.access]);
@@ -97,7 +90,7 @@ const Setting = () => {
 
   useEffect(() => {
     const userInfo = async () => {
-      const { data } = await axios.get(`${API.userModiorDell}`, {
+      const { data } = await customHttp.get(`${API.userModiorDell}`, {
         headers: {
           access: `${token.access}`,
           refresh: `${token.refresh}`,
