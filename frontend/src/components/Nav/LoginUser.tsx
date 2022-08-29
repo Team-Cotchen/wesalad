@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import API from 'config';
 import DropdownItem from 'components/Nav/Dropdown';
+import customHttp from 'utils/Axios';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { IFetchResultData } from 'components/LoginStep/loginStep.types';
 
@@ -18,7 +18,7 @@ const LoginUser = () => {
 
   useEffect(() => {
     const getUserImageUrl = async () => {
-      const { data } = await axios.get(`${API.userModiorDell}`, {
+      const { data } = await customHttp.get(`${API.userModiorDell}`, {
         headers: {
           access: `${token.access}`,
           refresh: `${token.refresh}`,
