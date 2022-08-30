@@ -1,8 +1,6 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { IUserAnswerModi } from 'pages/Setting/Setting';
-import { message } from 'antd';
-import { devices } from 'styles/devices';
 
 interface ISetAnswerModiProps {
   userAnswerModi: IUserAnswerModi[] | undefined;

@@ -8,7 +8,7 @@ import { ITitle, IInfoSection } from 'components/LoginStep/loginStep.types';
 import { OptionModel } from 'components/PostForm/PostForm.model';
 import 'antd/dist/antd.less';
 const { Option } = Select;
-import BackButton from 'components/BackButton';
+import ModalBackButton from 'components/ModalBackButton';
 import { OPTIONS } from 'assets/data/Options.constant';
 import { devices } from 'styles/devices';
 
@@ -25,7 +25,7 @@ const setStacksSection = ({
   return (
     <>
       <StacksSection>
-        <BackButton />
+        <ModalBackButton />
         <Header>
           <Title fontSize="2rem" marginBottom="8px">
             {name}님, 궁금한게 있어요.

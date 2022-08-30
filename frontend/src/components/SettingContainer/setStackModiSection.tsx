@@ -14,18 +14,13 @@ interface ISetStackModi {
 const setStackModi = ({ userStackModi, setUserStackModi }: ISetStackModi) => {
   const { STACKS }: IStacks = OPTIONS;
 
-  // TODO
-  // const filterStacks = STACKS.filter(
-  //   (stack) => !userStackModi.includes(stack.title),
-  // );
-
   return (
     <>
       <StyledSelect
-        mode="multiple"
         placeholder="사용할 기술 스택을 골라주세요."
-        value={userStackModi}
         bordered={false}
+        value={userStackModi}
+        mode="multiple"
         maxTagCount="responsive"
         showArrow
         onChange={(value) => setUserStackModi(value as any)}
