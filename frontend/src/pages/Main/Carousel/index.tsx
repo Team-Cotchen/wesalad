@@ -44,9 +44,9 @@ const Container = styled.div`
 `;
 
 const ScrollWrapper = styled.div`
-  margin: 0 90px 0 50px;
+  margin: 0 90px 0 70px;
   padding-top: 20px;
-  width: 90%;
+  width: 85%;
   overflow: hidden;
 `;
 
@@ -65,7 +65,7 @@ const LeftBtn = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 30px;
+  left: 40px;
   border: transparent;
 `;
 
@@ -78,5 +78,5 @@ const RightBtn = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 30px;
+  right: 40px;
 `;
