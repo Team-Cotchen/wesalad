@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { AiOutlineCheck } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import Tag from 'antd/lib/tag';
-import { devices } from 'styles/devices';
 
 export interface CardsProps {
   id: number;
@@ -125,9 +124,9 @@ interface IMainCard {
 }
 
 const MainCard = styled.div<IMainCard>`
-  min-width: 350px;
-  max-width: 420px;
-  height: 500px;
+  flex-shrink: 0;
+  width: 350px;
+  height: 480px;
   margin: 20px;
   padding: 20px 25px;
   border: 1px solid
@@ -136,6 +135,9 @@ const MainCard = styled.div<IMainCard>`
   border-radius: 5px;
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   :hover {
     transform: scale(1);
@@ -147,12 +149,12 @@ const MainCard = styled.div<IMainCard>`
 
 const StackLogos = styled.div`
   display: flex;
-  padding-bottom: 25px;
+  flex-wrap: wrap;
 `;
 
 const StackLogo = styled.div`
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   margin-right: 8px;
 `;
 
@@ -162,18 +164,19 @@ const Img = styled.img`
 `;
 
 const CardTitle = styled.div`
-  margin-top: 20px;
+  margin-top: 35px;
   font-size: ${({ theme }) => theme.fontMedium};
   font-weight: ${({ theme }) => theme.weightSemiBold};
   line-height: 1.3em;
+  white-space: normal;
 `;
 
 const CardDescriptions = styled.div`
-  margin: 15px 10px;
+  margin: 5px 5px;
 `;
 
 const CardDescription = styled.div`
-  margin-bottom: 7px;
+  margin-bottom: 3px;
 `;
 
 const DescriptionIcon = styled.span`
@@ -182,31 +185,23 @@ const DescriptionIcon = styled.span`
 
 const DescriptionText = styled.span`
   font-size: ${({ theme }) => theme.fontRegular};
-  color: #8e8e8e;
-`;
-
-const Description = styled.p`
-  font-size: ${({ theme }) => theme.fontSmall};
-  padding-top: 5px;
-  padding-left: 3px;
-  letter-spacing: 3px;
 `;
 
 const CharacterCardAndStakLogos = styled.div`
-  height: 300px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10px;
 `;
 
 const ChacracterCardsWrapper = styled.div`
-  margin-top: 10px;
+  margin-top: 3px;
 `;
 
 const ChacracterCardWrapper = styled.div`
   ${({ theme }) => theme.flexMixIn('center', 'center')};
-  margin: 10px;
-  padding: 7px;
+  margin: 7px;
+  padding: 5px;
   border-radius: 5px;
   border: 1px solid ${(props) => props.color};
 `;
