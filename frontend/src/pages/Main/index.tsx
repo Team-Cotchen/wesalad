@@ -9,13 +9,14 @@ import Nav from 'components/Nav/Nav';
 import MainTypo from 'pages/Main/MainTypo';
 import Filter from 'pages/Main/Filter';
 import Card from 'pages/Main/Card';
-import CardsSlider from './CardsSlider';
+
 import Modal from 'components/Modal/Modal';
 import LoginModal from 'components/LoginStep/LoginModal';
 
 import API, { getToken } from 'config';
 import { devices } from 'styles/devices';
 import { DetailModel } from 'types/detailmodel';
+import CardCarousel from './Carousel';
 
 const LIMIT = 20;
 
@@ -125,11 +126,11 @@ const Main: FunctionComponent = () => {
           <Description>위샐러드 추천하는 나에게 맞는 프로젝트</Description>
           <HighlightLabel>이런 프로젝트가 잘 맞으실 것 같아요!</HighlightLabel>
         </Head>
-        {id ? (
+        {!id ? (
           <>
             <Notify>PC로 확인 부탁드려요🫶🏻</Notify>
             <RecommendCardWrapper>
-              <CardsSlider data={recommendCards} />
+              <CardCarousel recommendCards={recommendCards} />
             </RecommendCardWrapper>
           </>
         ) : (
