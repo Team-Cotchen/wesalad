@@ -126,7 +126,7 @@ const Main: FunctionComponent = () => {
           <Description>위샐러드 추천하는 나에게 맞는 프로젝트</Description>
           <HighlightLabel>이런 프로젝트가 잘 맞으실 것 같아요!</HighlightLabel>
         </Head>
-        {!id ? (
+        {id ? (
           <>
             <Notify>PC로 확인 부탁드려요🫶🏻</Notify>
             <RecommendCardWrapper>
