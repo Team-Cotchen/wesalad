@@ -200,6 +200,7 @@ const Setting = () => {
     if (deleteUserId) {
       dispatch(clearStep());
       localStorage.clear();
+      document.body.style.overflow = 'auto';
       message.success('회원탈퇴가 완료되었어요!🤧');
       navigate('/');
     } else {

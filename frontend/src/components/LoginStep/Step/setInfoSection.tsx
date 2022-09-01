@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import BackButton from 'components/BackButton';
+import ModalBackButton from 'components/ModalBackButton';
 import { ITitle } from 'components/LoginStep/loginStep.types';
 import { IInfoSection } from 'components/LoginStep/loginStep.types';
 import { devices } from 'styles/devices';
@@ -12,7 +12,7 @@ const setInfoSection = ({ handleBasicInfo, handleLoginStep }: IInfoSection) => {
   return (
     <>
       <InfoSection>
-        <BackButton />
+        <ModalBackButton />
         <Title fontSize="28px" marginBottom="10px">
           WeSalad에 처음오셨군요!
         </Title>

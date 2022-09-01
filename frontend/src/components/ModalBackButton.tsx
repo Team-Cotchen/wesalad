@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useRootState } from 'redux/hooks/useRootState';
 import { previousStep } from 'redux/reducers/loginSlice';
 
-const BackBtn = () => {
+const ModalBackButton = () => {
   const loginStep = useRootState((state) => state.login.currentStep);
   const dispatch = useDispatch();
 
@@ -32,4 +32,4 @@ const IconSection = styled.div`
   }
 `;
 
-export default BackBtn;
+export default ModalBackButton;

@@ -43,11 +43,9 @@ const LoginModal = ({ handleClose }: ModalProps) => {
   const handleBtnNum = (num: number, name: string) => {
     setBasicInfo({ ...basicInfo, [name]: [...basicInfo.answers, num] });
 
-    if (QuestionData.length !== questionNum + 1) {
+    if (QuestionData.length !== questionNum + 1)
       setQuestionNum(questionNum + 1);
-    } else {
-      dispatch(nextStep(loginStep));
-    }
+    else dispatch(nextStep(loginStep));
   };
 
   const handleLoginStep = () => {
@@ -74,19 +72,28 @@ const LoginModal = ({ handleClose }: ModalProps) => {
       case SET_JOININFO:
         return (
           <InfoSection
-            {...{
-              handleBasicInfo,
-              handleLoginStep,
-            }}
-          ></InfoSection>
+            handleBasicInfo={handleBasicInfo}
+            handleLoginStep={handleLoginStep}
+          />
         );
       case SET_INTEREST:
-        return <StacksSection name={basicInfo.name} {...{ handleBasicInfo }} />;
+        return (
+          <StacksSection
+            handleBasicInfo={handleBasicInfo}
+            name={basicInfo.name}
+          />
+        );
       case SET_QUESTION:
-        return <QuestionSection {...{ questionNum, handleBtnNum }} />;
+        return (
+          <QuestionSection
+            questionNum={questionNum}
+            handleBtnNum={handleBtnNum}
+          />
+        );
       case SET_RESULT:
-        return <ResultSection {...{ handleClose, basicInfo }} />;
-
+        return (
+          <ResultSection handleClose={handleClose} basicInfo={basicInfo} />
+        );
       default:
         return <div>Loding</div>;
     }
