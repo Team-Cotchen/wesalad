@@ -515,15 +515,19 @@ export default PostForm;
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.wrapper()}
-  padding : 0 35px;
+  margin-top : 150px;
+  padding: 0 35px;
   overflow-x: hidden;
 
   @media screen and ${devices.laptop} {
+    margin-top: 10px;
+
     width: 800px;
     padding: 0px;
   }
 
   @media screen and ${devices.tablet} {
+    margin-top: 0px;
     width: 650px;
   }
 
