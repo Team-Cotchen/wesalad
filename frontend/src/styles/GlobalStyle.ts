@@ -4,13 +4,12 @@ const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box; 
   outline: none;
-  font-family: 'Jua', sans-serif;
 }
 
 body{
   box-sizing: border-box; 
   outline: none;
-  font-family: 'Jua', sans-serif;
+ font-family: 'Jua', sans-serif;
 }
 
 img{
