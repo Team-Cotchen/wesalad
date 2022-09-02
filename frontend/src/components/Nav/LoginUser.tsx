@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import API from 'config';
 import DropdownItem from 'components/Nav/Dropdown';
@@ -16,18 +16,18 @@ const LoginUser = () => {
     refresh: localStorage.getItem('refreshToken'),
   };
 
-  useEffect(() => {
-    const getUserImageUrl = async () => {
-      const { data } = await customHttp.get(`${API.userModiorDell}`, {
-        headers: {
-          access: `${token.access}`,
-          refresh: `${token.refresh}`,
-        },
-      });
-      setUser(data);
-      if (user === undefined) return;
-    };
+  const getUserImageUrl = useCallback(async () => {
+    const { data } = await customHttp.get(`${API.userDellModify}`, {
+      headers: {
+        access: `${token.access}`,
+        refresh: `${token.refresh}`,
+      },
+    });
+    setUser(data);
+    if (user === undefined) return;
+  }, [token.access]);
 
+  useEffect(() => {
     getUserImageUrl();
   }, []);
 
