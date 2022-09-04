@@ -6,12 +6,15 @@ from apps.characteristics.models import Answer
 class PostListFilterBackend(filters.BaseFilterBackend):
     
     def filter_queryset(self, request, queryset, view):
-        stack_id  = request.query_params.getlist('stack')
-        flavor_id = request.query_params.get('flavor')
-        user_id   = request.query_params.get('user')
-        status    = request.query_params.get('status')
+        category_id = request.query_params.get('category')
+        flavor_id   = request.query_params.get('flavor')
+        stack_id    = request.query_params.getlist('stack')
+        user_id     = request.query_params.get('user')
+        status      = request.query_params.get('status')
         
         try:
+            if category_id:
+                queryset = queryset.filter(category = category_id)
             if stack_id:
                 queryset = queryset.filter(poststacks__stack_id__in = stack_id)
             if flavor_id:
