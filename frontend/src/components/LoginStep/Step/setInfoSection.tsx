@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ModalBackButton from 'components/ModalBackButton';
-import { ITitle } from 'components/LoginStep/loginStep.types';
-import { IInfoSection } from 'components/LoginStep/loginStep.types';
+import { ITitle, IInfoSection } from 'components/LoginStep/loginStep.types';
 import { devices } from 'styles/devices';
 import { useRootState } from 'redux/hooks/useRootState';
 

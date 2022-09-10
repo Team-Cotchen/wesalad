@@ -90,7 +90,7 @@ const Setting = () => {
 
   useEffect(() => {
     const userInfo = async () => {
-      const { data } = await customHttp.get(`${API.userModiorDell}`, {
+      const { data } = await customHttp.get(`${API.userDellModify}`, {
         headers: {
           access: `${token.access}`,
           refresh: `${token.refresh}`,
@@ -136,7 +136,7 @@ const Setting = () => {
     try {
       const res = await axios({
         method: 'patch',
-        url: `${API.userModiorDell}`,
+        url: `${API.userDellModify}`,
 
         headers: {
           'Content-Type': 'application/json',
@@ -147,11 +147,10 @@ const Setting = () => {
       });
 
       if (res.status === 201) {
-        window.location.replace('/');
-
-        setTimeout(() => {
-          message.success('수정이 완료되었습니다. 🌈');
-        }, 2000);
+        // window.location.replace('/');
+        /**@todo 확인 후 수정 필요 */
+        navigate('/');
+        message.success('수정이 완료되었습니다. 🌈');
       }
     } catch (error) {
       console.log(error);
@@ -190,7 +189,7 @@ const Setting = () => {
   }
 
   const onDeleteClick = async () => {
-    const deleteUserId = await axios.delete(`${API.userModiorDell}`, {
+    const deleteUserId = await axios.delete(`${API.userDellModify}`, {
       headers: {
         access: `${token.access}`,
         refresh: `${token.refresh}`,

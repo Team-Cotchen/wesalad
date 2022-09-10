@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { QuestionData } from 'assets/data/QuestionData';
-import { IQuestionSection } from 'components/LoginStep/loginStep.types';
-import { ITitle } from 'components/LoginStep/loginStep.types';
-import { IProgressBar } from 'components/LoginStep/loginStep.types';
+import {
+  IQuestionSection,
+  ITitle,
+  IProgressBar,
+} from 'components/LoginStep/loginStep.types';
 import { devices } from 'styles/devices';
 
 const setQuestionSection = ({

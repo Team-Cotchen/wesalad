@@ -20,7 +20,7 @@ const SET_INTEREST = 3;
 const SET_QUESTION = 4;
 const SET_RESULT = 5;
 
-enum BasicInfoKeys {
+const enum BasicInfoKeys {
   name = 'name',
   ordinal_number = 'ordinal_number',
 }
