@@ -857,7 +857,7 @@ const Chili = styled.img`
 
 // DetailInfo
 const DetailInfo = styled.div`
-  margin: 80px 0;
+  margin: 150px 0 90px 0;
 
   @media screen and ${devices.laptop} {
     margin: 210px 20px 100px 20px;
