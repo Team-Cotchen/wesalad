@@ -20,11 +20,6 @@ const SET_INTEREST = 3;
 const SET_QUESTION = 4;
 const SET_RESULT = 5;
 
-const enum BasicInfoKeys {
-  name = 'name',
-  ordinal_number = 'ordinal_number',
-}
-
 const LoginModal = ({ handleClose }: ModalProps) => {
   const dispatch = useDispatch();
   const loginStep = useRootState((state) => state.login.currentStep);
@@ -49,15 +44,15 @@ const LoginModal = ({ handleClose }: ModalProps) => {
   };
 
   const handleLoginStep = () => {
-    if (basicInfo[BasicInfoKeys.name] === '') {
+    if (basicInfo.name === '') {
       message.warning('이름을 적어주세요.');
       return;
-    } else if (basicInfo[BasicInfoKeys.name].length > 10) {
+    } else if (basicInfo.name.length > 10) {
       message.warning('이름의 최대길이는 10글자 입니다.');
       return;
     }
 
-    if (basicInfo[BasicInfoKeys.ordinal_number] <= 0) {
+    if (basicInfo.ordinal_number <= 0) {
       message.warning('기수를 숫자로 입력해주세요.');
       return;
     }

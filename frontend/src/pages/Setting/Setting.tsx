@@ -147,8 +147,6 @@ const Setting = () => {
       });
 
       if (res.status === 201) {
-        // window.location.replace('/');
-        /**@todo 확인 후 수정 필요 */
         navigate('/');
         message.success('수정이 완료되었습니다. 🌈');
       }
