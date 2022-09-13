@@ -1,16 +1,12 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import API from 'config';
 import DropdownItem from 'components/Nav/Dropdown';
 import customHttp from 'utils/Axios';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { IFetchResultData } from 'components/LoginStep/loginStep.types';
+
+import { MemoizedImgUrl } from 'components/Nav/ProfileImg';
 
 const LoginUser = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -33,10 +29,7 @@ const LoginUser = () => {
     if (user === undefined) return;
   }, [token.access]);
 
-  /**
-   * @todo Test 깜빡임
-   */
-  useLayoutEffect(() => {
+  useEffect(() => {
     getUserImageUrl();
   }, []);
 
@@ -56,7 +49,7 @@ const LoginUser = () => {
         ref={menuRef}
         onClick={() => setMenuVisible(!menuVisible)}
       >
-        <img src={user?.google_account?.image_url} />
+        <MemoizedImgUrl url={user?.google_account?.image_url} />
         <ArrowIcon size={20} />
       </ProfileSection>
       {menuVisible && <DropdownItem />}
