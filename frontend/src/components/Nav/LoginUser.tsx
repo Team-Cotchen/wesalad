@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
 import styled from 'styled-components';
 import API from 'config';
 import DropdownItem from 'components/Nav/Dropdown';
@@ -27,7 +33,10 @@ const LoginUser = () => {
     if (user === undefined) return;
   }, [token.access]);
 
-  useEffect(() => {
+  /**
+   * @todo Test 깜빡임
+   */
+  useLayoutEffect(() => {
     getUserImageUrl();
   }, []);
 
