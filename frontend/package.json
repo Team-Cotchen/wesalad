@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "craco start",
-    "build": "craco --max_old_space_size=4096 build",
+    "start": "GENERATE_SOURCEMAP=false craco start",
+    "build": "GENERATE_SOURCEMAP=false craco --max_old_space_size=4096 build",
     "test": "craco test"
   },
   "babel": {

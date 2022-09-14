@@ -29,7 +29,7 @@ const LoginUser = () => {
 
   useEffect(() => {
     getUserImageUrl();
-  }, [getUserImageUrl]);
+  }, []);
 
   useEffect(() => {
     const handleCloseMenu = (event: MouseEvent) => {
