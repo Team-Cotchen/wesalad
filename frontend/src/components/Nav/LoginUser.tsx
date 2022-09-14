@@ -6,8 +6,6 @@ import customHttp from 'utils/Axios';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { IFetchResultData } from 'components/LoginStep/loginStep.types';
 
-import { MemoizedImgUrl } from 'components/Nav/ProfileImg';
-
 const LoginUser = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -31,7 +29,7 @@ const LoginUser = () => {
 
   useEffect(() => {
     getUserImageUrl();
-  }, []);
+  }, [getUserImageUrl]);
 
   useEffect(() => {
     const handleCloseMenu = (event: MouseEvent) => {
@@ -49,7 +47,7 @@ const LoginUser = () => {
         ref={menuRef}
         onClick={() => setMenuVisible(!menuVisible)}
       >
-        <MemoizedImgUrl url={user?.google_account?.image_url} />
+        <img alt="userImg" src={user?.google_account?.image_url} />
         <ArrowIcon size={20} />
       </ProfileSection>
       {menuVisible && <DropdownItem />}
