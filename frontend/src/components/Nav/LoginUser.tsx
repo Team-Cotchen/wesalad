@@ -11,35 +11,42 @@ const LoginUser = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState<IFetchResultData>();
 
-  const token = {
-    access: localStorage.getItem('accessToken'),
-    refresh: localStorage.getItem('refreshToken'),
-  };
+  /**
+   * @todo 불필요한 요소 삭제 & 타입단언 수정
+   */
 
-  const getUserImageUrl = useCallback(async () => {
-    const { data } = await customHttp.get(`${API.userDellModify}`, {
-      headers: {
-        access: `${token.access}`,
-        refresh: `${token.refresh}`,
-      },
-    });
-    setUser(data);
-    if (user === undefined) return;
-  }, [token.access]);
+  // const token = {
+  //   access: localStorage.getItem('accessToken'),
+  //   refresh: localStorage.getItem('refreshToken'),
+  // };
 
-  useEffect(() => {
-    getUserImageUrl();
-  }, []);
+  // const getUserImageUrl = useCallback(async () => {
+  //   const { data } = await customHttp.get(`${API.userDellModify}`, {
+  //     headers: {
+  //       access: `${token.access}`,
+  //       refresh: `${token.refresh}`,
+  //     },
+  //   });
+  //   setUser(data);
+  //   if (user === undefined) return;
+  // }, [token.access]);
 
-  useEffect(() => {
-    const handleCloseMenu = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node))
-        setMenuVisible(false);
-    };
+  // useEffect(() => {
+  //   getUserImageUrl();
+  // }, []);
 
-    document.addEventListener('click', handleCloseMenu);
-    return () => document.removeEventListener('click', handleCloseMenu);
-  }, [menuRef]);
+  const imageUrl = window.localStorage.getItem('imageUrl') as string;
+
+  if (!imageUrl)
+    useEffect(() => {
+      const handleCloseMenu = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node))
+          setMenuVisible(false);
+      };
+
+      document.addEventListener('click', handleCloseMenu);
+      return () => document.removeEventListener('click', handleCloseMenu);
+    }, [menuRef]);
 
   return (
     <>
@@ -47,7 +54,7 @@ const LoginUser = () => {
         ref={menuRef}
         onClick={() => setMenuVisible(!menuVisible)}
       >
-        <img alt="userImg" src={user?.google_account?.image_url} />
+        <img alt="userImg" src={imageUrl} />
         <ArrowIcon size={20} />
       </ProfileSection>
       {menuVisible && <DropdownItem />}
