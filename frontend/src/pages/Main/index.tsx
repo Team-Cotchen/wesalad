@@ -1,90 +1,19 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { FunctionComponent, useState } from 'react';
+
 import styled from 'styled-components';
 
-import axios from 'axios';
-import { Switch } from 'antd';
-
 import Nav from 'components/Nav/Nav';
-import MainTypo from 'pages/Main/MainTypo';
-import Filter from 'pages/Main/Filter';
-import Card from 'pages/Main/Card';
+import MainTypo from 'pages/Main/components/MainTypo';
 
+import RecommendedCards from './components/RecommendCards';
+import AllCards from './components/AllCards';
 import Modal from 'components/Modal/Modal';
 import LoginModal from 'components/LoginStep/LoginModal';
 
-import API, { getToken } from 'config';
 import { devices } from 'styles/devices';
-import { DetailModel } from 'types/detailmodel';
-import CardCarousel from './Carousel';
-
-const LIMIT = 20;
 
 const Main: FunctionComponent = () => {
-  const [filteredCards, setFilteredCards] = useState<DetailModel[]>([]);
-  const [recommendCards, setRecommendCards] = useState<DetailModel[]>([]);
-  const [paginationBtnNumber, setPaginationBtnNumber] = useState(0);
-  const [paginationString, setPaginationString] = useState('');
-  const [queryStringList, setQueryStringList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { id } = getToken();
-
-  const { search } = useLocation();
-  const navigate = useNavigate();
-
-  const getRecommendationData = async () => {
-    try {
-      const query = id ? `?user=${id}` : '';
-      const { data } = await axios.get(`${API.getPosts}${query}`);
-      setRecommendCards(data.results);
-    } catch (error) {
-      console.error();
-    }
-  };
-
-  const changeQueryStringList = (queryKey: string, queryValue: number) => {
-    const queryString = `${queryKey}=${queryValue}`;
-    if (queryKey === 'all') {
-      setQueryStringList([]);
-      return;
-    } else if (queryKey === 'flavor') {
-      const stringWithoutFlavor = queryStringList.filter(
-        (item) => !item.includes('flavor'),
-      );
-      const newFlavorString = [...stringWithoutFlavor, queryString];
-      setQueryStringList(newFlavorString);
-    } else if (queryStringList?.includes(queryString)) {
-      setQueryStringList(
-        queryStringList?.filter((item) => item !== queryString),
-      );
-    } else setQueryStringList([...queryStringList, queryString]);
-  };
-
-  const changeLocation = () => {
-    if (!paginationString) {
-      navigate(`?${queryStringList.join('&')}`);
-    } else if (!queryStringList) {
-      navigate(`?${paginationString}`);
-    } else {
-      navigate(`?${[paginationString, ...queryStringList].join('&')}`);
-    }
-  };
-
-  const getFilteredCards = async () => {
-    try {
-      const { data } = await axios.get(`${API.getPosts}${search || `?page=1`}`);
-      setFilteredCards(data.results);
-      setPaginationBtnNumber(Math.ceil(data.count / LIMIT));
-    } catch (error) {
-      console.error();
-    }
-  };
-
-  const makePagination = (btnNum: number) => {
-    const paginationString = `page=${btnNum}`;
-
-    setPaginationString(paginationString);
-  };
 
   const openModal = () => {
     document.body.style.overflow = 'hidden';
@@ -96,88 +25,14 @@ const Main: FunctionComponent = () => {
     setIsModalOpen(false);
   };
 
-  const handleNotUserBtn = () => {
-    openModal();
-  };
-
-  const handleStatusBtnChange = () => {
-    changeQueryStringList('status', 1);
-  };
-
-  useEffect(() => {
-    getRecommendationData();
-  }, []);
-
-  useEffect(() => {
-    getFilteredCards();
-  }, [search]);
-
-  useEffect(() => {
-    changeLocation();
-  }, [paginationString, queryStringList]);
-
   return (
     <>
       <Nav />
       <MainTypo />
       <DivisionLine />
-      <CardSectionWrap>
-        <Head>
-          <Description>위샐러드 추천하는 나에게 맞는 프로젝트</Description>
-          <HighlightLabel>이런 프로젝트가 잘 맞으실 것 같아요!</HighlightLabel>
-        </Head>
-        {id ? (
-          <>
-            <Notify>PC로 확인 부탁드려요🫶🏻</Notify>
-            <RecommendCardWrapper>
-              <CardCarousel recommendCards={recommendCards} />
-            </RecommendCardWrapper>
-          </>
-        ) : (
-          <NotUserWrap>
-            <NotUserText>아직 등록된 성향이 없네요!</NotUserText>
-            <NotUserButton onClick={handleNotUserBtn}>
-              먼저 내 성향을 알아볼까요?
-            </NotUserButton>
-          </NotUserWrap>
-        )}
-      </CardSectionWrap>
+      <RecommendedCards openModal={openModal} />
       <DivisionLineTwo />
-      <CardSectionWrap>
-        <Head>
-          <Description>나에게 꼭 맞는 샐러드 찾아볼까요?</Description>
-          <HighlightLabel>내 취향에 맞는 샐러드 고르기</HighlightLabel>
-        </Head>
-        <Filter changeQueryStringList={changeQueryStringList} />
-        <SwitchWrap>
-          <span>모집 중만 보기</span>
-          <Switch
-            style={{
-              backgroundColor: '#693bfb',
-              position: 'relative',
-              bottom: 2,
-            }}
-            onChange={handleStatusBtnChange}
-          ></Switch>
-        </SwitchWrap>
-        <Cards>
-          <CardWrapper>
-            {filteredCards.map((item) => (
-              <Card key={item.id} cardtype="regular" {...item} id={item.id} />
-            ))}
-          </CardWrapper>
-        </Cards>
-        <PaginationBtnWrap>
-          {[...Array(paginationBtnNumber).keys()].map((item, index) => (
-            <PaginationBtn
-              onClick={() => makePagination(index + 1)}
-              key={index}
-            >
-              {index + 1}
-            </PaginationBtn>
-          ))}
-        </PaginationBtnWrap>
-      </CardSectionWrap>
+      <AllCards />
       <Modal onClose={closeModal} visible={isModalOpen}>
         <LoginModal handleClose={closeModal} />
       </Modal>
@@ -254,9 +109,7 @@ const RecommendCardWrapper = styled.div`
 `;
 
 const CardWrapper = styled(RecommendCardWrapper)`
-  @media (max-width: 1380px) {
-    display: block;
-  }
+  width: 1200px;
 `;
 
 const Description = styled.p`
@@ -325,27 +178,9 @@ const NotUserButton = styled.button`
   }
 `;
 
-const SwitchWrap = styled.div`
-  display: flex;
-  align-items: center;
-  position: absolute;
-  right: 150px;
-  font-size: 20px;
-
-  span {
-    margin-right: 10px;
-  }
-
-  @media ${devices.laptop} {
-    left: 50%;
-    width: 50%;
-    margin-top: 20px;
-  }
-`;
-
 const Cards = styled.div`
   display: flex;
-  margin-top: 70px;
+  margin-top: 30px;
 `;
 
 const Notify = styled.div`
@@ -359,5 +194,32 @@ const Notify = styled.div`
 
   @media (min-width: 1380px) {
     display: none;
+  }
+`;
+
+const Options = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 530px;
+  font-size: 24px;
+  margin-top: 30px;
+`;
+
+const CategoryWrap = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
+const CategoryOption = styled.div`
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+  border-radius: 100px;
+  padding: 8px 20px;
+
+  &:hover {
+    background-color: #693bfb;
+    color: white;
   }
 `;
