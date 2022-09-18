@@ -211,7 +211,7 @@ const PostForm: FunctionComponent<Props> = ({ mode, defaultPost }: Props) => {
                   label={
                     <StyledLabel>
                       <StyledCircle />
-                      &nbsp; 프로젝트 타입
+                      &nbsp; 모집 구분
                     </StyledLabel>
                   }
                   colon={false}

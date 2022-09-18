@@ -72,12 +72,6 @@ const MyPosts = () => {
 
   const columns = [
     {
-      title: <ColumnsTitle>번호</ColumnsTitle>,
-      dataIndex: 'id',
-      key: 'id',
-      render: (id: string) => <ColumnsContent>{id}</ColumnsContent>,
-    },
-    {
       title: <ColumnsTitle>제목</ColumnsTitle>,
       dataIndex: 'title',
       key: 'title',
@@ -138,7 +132,6 @@ const MyPosts = () => {
             dataSource={myposts}
             rowKey={({ id }) => id}
             style={{ fontSize: '3px' }}
-            scroll={{ x: 'max-content' }}
           />
         ) : (
           <div style={{ position: 'absolute', top: '45%', right: '45%' }}>
@@ -156,10 +149,10 @@ export default MyPosts;
 
 const Wrapper = styled.div`
   ${theme.wrapper()};
-  padding: 6rem;
+  padding: 6rem 3rem;
 
   @media screen and ${devices.laptop} {
-    width: 800px;
+    width: 900px;
     padding: 6rem 40px;
   }
 

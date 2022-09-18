@@ -85,7 +85,8 @@ const Detail: FunctionComponent = () => {
           <Line />
           <BasicInfo>
             <Title>
-              <Num>1</Num>프로젝트 레시피
+              <Num>1</Num>
+              {detailInfo?.category} 레시피
               <Spicy>
                 맵기 단계
                 <Flavor>
@@ -101,7 +102,7 @@ const Detail: FunctionComponent = () => {
             <InfoList>
               <ListSection>
                 <ListItem>
-                  <ItemTitle>프로젝트 타입</ItemTitle>
+                  <ItemTitle>모집 구분</ItemTitle>
                   <Content>{detailInfo?.category}</Content>
                 </ListItem>
                 <ListItem>
@@ -201,7 +202,7 @@ const Detail: FunctionComponent = () => {
           </PersonalityList>
           <Introduction>
             <Title>
-              <Num>2</Num>프로젝트 소개
+              <Num>2</Num> {detailInfo?.category} 소개
             </Title>
             <Line></Line>
             <MainContent>
