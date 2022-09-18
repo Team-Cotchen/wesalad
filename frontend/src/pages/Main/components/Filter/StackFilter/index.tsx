@@ -2,25 +2,39 @@ import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface IStackFilter {
-  handleStackClick: (id: number, value: string) => void;
-  chosenStackList: string[];
   isClicked: string;
+  category: string;
+  makeQueryString: (queryKey: string, queryValue: number) => void;
 }
 
 const StackFilter: FunctionComponent<IStackFilter> = ({
-  handleStackClick,
-  chosenStackList,
   isClicked,
+  category,
+  makeQueryString,
 }: IStackFilter) => {
   const [stackList, setStackList] = useState<
     { id: number; value: string }[] | null
   >(null);
+  const [chosenStackList, setChosenStackList] = useState<string[]>([]);
+
+  const handleFilterOptionClick = (value: string, id: number) => {
+    if (chosenStackList.includes(value)) {
+      setChosenStackList(chosenStackList.filter((el) => el !== value));
+      makeQueryString(category, id);
+      return;
+    }
+    setChosenStackList((prev) => [...prev, value]);
+    makeQueryString(category, id);
+  };
 
   useEffect(() => {
+    setChosenStackList([]);
     if (isClicked === '프론트엔드') {
       setStackList(FRONT_STACK_LIST);
     } else if (isClicked === '백엔드') {
       setStackList(BACK_STACK_LIST);
+    } else if (isClicked === '맵기') {
+      setStackList(FLAVOR_LIST);
     } else setStackList(COMMON_STACK_LIST);
   }, [isClicked]);
 
@@ -28,10 +42,10 @@ const StackFilter: FunctionComponent<IStackFilter> = ({
     <>
       <FilterOptions>
         {stackList &&
-          stackList.map(({ id, value }) => (
+          stackList.map(({ id, value }, index) => (
             <FilterOption
-              onClick={() => handleStackClick(id, value)}
-              key={id}
+              onClick={() => handleFilterOptionClick(value, id)}
+              key={`filteroptions-${id}-${value}${index}`}
               isChosen={chosenStackList.includes(value)}
             >
               {value}
@@ -49,19 +63,20 @@ interface IFilterOptionProps {
 }
 
 const FilterOptions = styled.div`
+  margin: 0 90px;
+  display: flex;
   font-family: ‘Black Han Sans’, sans-serif;
-  ${({ theme }) => theme.flexMixIn('center', 'center')}
   flex-wrap: wrap;
 `;
 
 const FilterOption = styled.div<IFilterOptionProps>`
   margin: 0 20px 40px 0;
-  border: 2px solid ${({ isChosen }) => (isChosen ? '#474747' : '#d0d0d0')};
+  border: 1px solid ${({ isChosen }) => (isChosen ? '#474747' : '#ffffff')};
   border-radius: 30px;
-  padding: 15px 20px;
+  padding: 8px 15px;
   font-size: ${({ theme }) => theme.fontRegular};
   opacity: ${({ isChosen }) => (isChosen ? 1 : 0.3)};
-  background-color: ${({ isChosen }) => (isChosen ? '#e8e8e8' : '#ffffff')};
+  background-color: ${({ isChosen }) => (isChosen ? '#e8e8e8' : '#dedede')};
   cursor: pointer;
 
   &:hover {
@@ -100,4 +115,22 @@ const COMMON_STACK_LIST = [
   { id: 21, value: 'Git' },
   { id: 22, value: 'Figma' },
   { id: 23, value: 'Zeplin' },
+];
+
+const FLAVOR_LIST = [
+  {
+    id: 1,
+    value: `순한맛 (주 2시간 이하)`,
+    queryKey: 'flavor',
+  },
+  {
+    id: 2,
+    value: '중간맛 (주 2~4 시간)',
+    queryKey: 'flavor',
+  },
+  {
+    id: 3,
+    value: '매운맛 (주 4시간 이상)',
+    queryKey: 'flavor',
+  },
 ];

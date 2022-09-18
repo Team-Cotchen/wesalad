@@ -132,7 +132,7 @@ const MainCard = styled.div<IMainCard>`
   border: 1px solid
     ${({ theme, cardtype }) =>
       cardtype === 'promo' ? theme.mainViolet : '#b9b9b9'};
-  border-radius: 5px;
+  border-radius: 15px;
   position: relative;
   cursor: pointer;
   display: flex;

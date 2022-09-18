@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import Card from 'pages/Main/Card';
+import Card from 'pages/Main/components/Card';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 const CardCarousel = ({ recommendCards }: any) => {
