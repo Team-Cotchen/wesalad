@@ -202,7 +202,8 @@ const Detail: FunctionComponent = () => {
           </PersonalityList>
           <Introduction>
             <Title>
-              <Num>2</Num> {detailInfo?.category} 소개
+              <Num>2</Num>
+              {detailInfo?.category} 소개
             </Title>
             <Line></Line>
             <MainContent>
