@@ -29,9 +29,6 @@ const googleLogin = () => {
     const googleAccountId = data?.google_account_id;
     const imageUrl = data?.image_url;
 
-    /**
-     * @todo 확인 후 삭제
-     */
     localStorage.setItem('imageUrl', imageUrl);
     dispatch(
       setSignUpInfo({
