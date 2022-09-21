@@ -1,39 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import API from 'config';
 import DropdownItem from 'components/Nav/Dropdown';
-import customHttp from 'utils/Axios';
 import { IoMdArrowDropdown } from 'react-icons/io';
-import { IFetchResultData } from 'components/LoginStep/loginStep.types';
 
 const LoginUser = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [user, setUser] = useState<IFetchResultData>();
-
-  /**
-   * @todo 불필요한 요소 삭제 & 타입단언 수정
-   */
-
-  // const token = {
-  //   access: localStorage.getItem('accessToken'),
-  //   refresh: localStorage.getItem('refreshToken'),
-  // };
-
-  // const getUserImageUrl = useCallback(async () => {
-  //   const { data } = await customHttp.get(`${API.userDellModify}`, {
-  //     headers: {
-  //       access: `${token.access}`,
-  //       refresh: `${token.refresh}`,
-  //     },
-  //   });
-  //   setUser(data);
-  //   if (user === undefined) return;
-  // }, [token.access]);
-
-  // useEffect(() => {
-  //   getUserImageUrl();
-  // }, []);
 
   const imageUrl = window.localStorage.getItem('imageUrl') as string;
 
