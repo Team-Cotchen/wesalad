@@ -69,13 +69,13 @@ const CardWrapper = styled.div<{
   background: white;
   cursor: pointer;
 
-  @media screen and ${devices.tablet} {
+  @media ${devices.tablet} {
     font-size: ${theme.fontSmall};
     padding: 6px;
     width: 155px;
   }
 
-  @media screen and ${devices.mobile} {
+  @media ${devices.mobile} {
     width: 146px;
     padding: 5px;
   }
