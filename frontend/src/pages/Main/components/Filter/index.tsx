@@ -69,6 +69,10 @@ interface IFilterBtn {
 const Container = styled.div`
   margin-left: 100px;
 
+  @media ${devices.laptop} {
+    margin: 0 auto;
+  }
+
   @media ${devices.tablet} {
     display: none;
   }

@@ -216,10 +216,6 @@ const CardWrapper = styled.div`
   margin: 0 auto;
   align-items: center;
   justify-content: center;
-
-  @media (max-width: 1380px) {
-    display: none;
-  }
 `;
 
 const Description = styled.p`
@@ -238,9 +234,7 @@ const SwitchWrap = styled.div`
   }
 
   @media ${devices.laptop} {
-    left: 50%;
-    width: 50%;
-    margin-top: 20px;
+    text-align: center;
   }
 `;
 
@@ -256,6 +250,15 @@ const Options = styled.div`
   gap: 530px;
   font-size: 24px;
   margin-top: 30px;
+
+  @media ${devices.laptop} {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  @media ${devices.mobile} {
+    font-size: 16px;
+  }
 `;
 
 const CategoryWrap = styled.div`
