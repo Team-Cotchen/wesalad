@@ -90,7 +90,7 @@ const LoginModal = ({ handleClose }: ModalProps) => {
           <ResultSection handleClose={handleClose} basicInfo={basicInfo} />
         );
       default:
-        return <div>Loding</div>;
+        return <div>Loading</div>;
     }
   };
 
