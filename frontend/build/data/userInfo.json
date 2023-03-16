@@ -1,0 +1,77 @@
+{
+  "name": "이원빈",
+  "ordinal_number": 31,
+  "google_account": {
+    "sub": "108820782940481003407",
+    "email": "lob3767@gmail.com",
+    "image_url": "https://lh3.googleusercontent.com/a-/AFdZucqZUnn4hStyfGtDFW1FUIoPT6u7igSTPcWWyeO19g=s96-c"
+  },
+  "user_answers": [
+    {
+      "answer": {
+        "content": "적극적으로 의견을 어필하는 편이다.",
+        "description": "적극적인 토마토",
+        "image_url": "https://i.ibb.co/BnmkQsk/07-tomato.png"
+      }
+    },
+    {
+      "answer": {
+        "content": "적극적으로 의견을 어필하는 편이다.",
+        "description": "적극적인 발싸믹",
+        "image_url": "https://i.ibb.co/hyHqvp0/08-lettuce.png"
+      }
+    },
+    {
+      "answer": {
+        "content": "적극적으로 의견을 어필하는 편이다.",
+        "description": "적극적인 연어친구",
+        "image_url": "https://i.ibb.co/LpDN5YK/09-paprika.png"
+      }
+    },
+    {
+      "answer": {
+        "content": "적극적으로 의견을 어필하는 편이다.",
+        "description": "적극적인 잠온다",
+        "image_url": "https://i.ibb.co/BnmkQsk/07-tomato.png"
+      }
+    },
+    {
+      "answer": {
+        "content": "적극적으로 의견을 어필하는 편이다.",
+        "description": "적극적인 으악",
+        "image_url": "https://i.ibb.co/BnmkQsk/07-tomato.png"
+      }
+    }
+  ],
+
+  "user_stacks": [
+    {
+      "stack": {
+        "title": "Typescript",
+        "description": "front-end",
+        "image_url": "https://i.ibb.co/6gxfp3m/02-typescript.png"
+      }
+    },
+    {
+      "stack": {
+        "title": "Next.js",
+        "description": "front-end",
+        "image_url": "https://i.ibb.co/LvR61Cs/06-nextjs.png"
+      }
+    },
+    {
+      "stack": {
+        "title": "Java",
+        "description": "back-end",
+        "image_url": "https://i.ibb.co/S6rn6kw/08-java.png"
+      }
+    },
+    {
+      "stack": {
+        "title": "Spring",
+        "description": "back-end",
+        "image_url": "https://i.ibb.co/Wx4P4gm/14-spring.png"
+      }
+    }
+  ]
+}
