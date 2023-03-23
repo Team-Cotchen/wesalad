@@ -747,3 +747,6 @@ my_settings.py
 *.csv
 db_uploader.py
 front_end
+
+# SSH
+wesalad.pem
