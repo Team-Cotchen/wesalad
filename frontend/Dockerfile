@@ -2,9 +2,14 @@ FROM node:16.14.2-alpine3.15 as builder
 
 WORKDIR /frontend
 
-COPY . /frontend
+COPY package.json /frontend
+COPY package-lock.json /frontend
 
 RUN npm install
+
+COPY . /frontend
+
+RUN npm run build
 
 FROM nginx:latest as final
 
