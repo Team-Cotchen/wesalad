@@ -54,8 +54,10 @@ jobs:
       #       docker-compose up -d --force-recreate
 
       - name: TEST
-        run: |
-          echo "${{ secrets.EC2_PEM_KEY_2 }}" >> $HOME/wesalad.pem
-          chmod 400 $HOME/wesalad.pem
-          ssh -i $HOME/wesalad.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST}
-          touch test2.txt
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_PEM_KEY_2 }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME}}
+          script: |
+            touch "test101.txt"
