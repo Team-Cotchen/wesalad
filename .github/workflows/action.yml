@@ -37,18 +37,25 @@ jobs:
             docker.io/${{ secrets.DOCKER_USERNAME}}/frontend:latest
             
         
-      - name: Into Wesalad EC2 # ssh로 wesald EC2 접속.
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          password: ${{ secrets.EC2_PASSWORD }}
-          key: ${{ secrets.EC2_PRIBATE_KEY }}
-          port: ${{ secrets.EC2_SSH_PORT }}
+      # - name: Into Wesalad EC2 # ssh로 wesald EC2 접속.
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USERNAME }}
+      #     password: ${{ secrets.EC2_PASSWORD }}
+      #     key: ${{ secrets.EC2_PRIBATE_KEY }}
+      #     port: ${{ secrets.EC2_SSH_PORT }}
           
-          # 최신 docker image 가져오기
+      #     # 최신 docker image 가져오기
+      #     run: |
+      #       docker pull docker.io/${{ secrets.DOCKER_USERNAME }}/backend:latest
+      #       docker pull docker.io/${{ secrets.DOCKER_USERNAME }}/frontend:latest
+      #       docker-compose down
+      #       docker-compose up -d --force-recreate
+
+      - name: TEST
           run: |
-            docker pull docker.io/${{ secrets.DOCKER_USERNAME }}/backend:latest
-            docker pull docker.io/${{ secrets.DOCKER_USERNAME }}/frontend:latest
-            docker-compose down
-            docker-compose up -d --force-recreate
+            echo "$SSH_PEM_KEY" >> $HOME/wesalad.pem
+            chmod 400 $HOME/wesalad.pem
+            ssh -i $HOME/wesalad.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST}
+            touch test.txt
