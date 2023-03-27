@@ -53,19 +53,20 @@ jobs:
       #       docker-compose down
       #       docker-compose up -d --force-recreate
 
-      - name: TEST
-        run: |
-          echo ${{ secrets.DOCKER_USERNAME }}
-          echo ${{ secrets.PEM_KEY }}
-          touch test.txt
+      # - name: TEST
+      #   run: |
+      #     echo ${{ secrets.DOCKER_USERNAME }}
+      #     echo ${{ secrets.PEM_KEY }}
+      #     touch test.txt
 
-        #   - name: SSH Commands
-        # uses: appleboy/ssh-action@v0.1.6
-        # with:
-        #   host: ${{ secrets.AWS_SSH_HOST }}
-        #   username: ${{ secrets.AWS_SSH_USERNAME }}
-        #   key: ${{ secrets.AWS_SSH_KEY }}
-
+      - name: SSH Commands
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.PEM_KEY }}
+          script: |
+            touch "test.txt"
         # chmod 400 $HOME/wesalad.pem
         #   ssh -i $HOME/wesalad.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}
           
