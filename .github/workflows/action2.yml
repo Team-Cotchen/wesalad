@@ -55,7 +55,7 @@ jobs:
 
       - name: TEST
         run: |
-          cat ${{ secrets.PEM_KEY }}
+          echo ${{ secrets.DOCKER_USERNAME }}
           echo ${{ secrets.PEM_KEY }}
           touch test.txt
 
