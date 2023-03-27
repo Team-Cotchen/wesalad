@@ -55,7 +55,7 @@ jobs:
 
       - name: TEST
         run: |
-          echo "$PEM_KEY" >> $HOME/wesalad.pem
+          echo "${{ secrets.EC2_PEM_KEY_2 }}" >> $HOME/wesalad.pem
           chmod 400 $HOME/wesalad.pem
           ssh -i $HOME/wesalad.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST}
           touch test.txt
