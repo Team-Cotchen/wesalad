@@ -58,4 +58,4 @@ jobs:
           echo "${{ secrets.EC2_PEM_KEY_2 }}" >> $HOME/wesalad.pem
           chmod 400 $HOME/wesalad.pem
           ssh -i $HOME/wesalad.pem -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_HOST}
-          touch test.txt
+          touch test2.txt
