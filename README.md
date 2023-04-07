@@ -77,6 +77,15 @@ Wesalad에서는, 부담없이 원하는 성향의 팀원들을 만나 특별하
         /><br /><sub><b>이원빈</b></sub></a
       ><br />
     </td>
+    <td align="center">
+      <a href="https://github.com/suhun96"
+        ><img
+          src="https://avatars.githubusercontent.com/suhun96"
+          width="100px;"
+          alt=""
+        /><br /><sub><b>김수훈</b></sub></a
+      ><br />
+    </td>
 
   </tr>
 </table>
