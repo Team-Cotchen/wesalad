@@ -1,6 +1,7 @@
 name: Docker Build & Deploy
 run-name: Github Action is running
 
+# main branch에 push 또는 pull request 시에만 작동
 on:
   push:
     branches: [ "main" ]
