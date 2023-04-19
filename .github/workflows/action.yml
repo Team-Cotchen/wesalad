@@ -23,8 +23,9 @@ jobs:
         run: |
           echo $(ls)
           echo $(pwd)
-          echo $(cd backend)
-
+          echo $(cd .. & cd backend)
+          echo $(pwd)
+          
       - name: Create my_settings.py
         run: |
           echo $(pwd)
@@ -39,6 +40,7 @@ jobs:
           
           echo "GOOGLE_MAIL_ADDRESS='&{{ secrets.GOOGLE_MAIL_ADDRESS }}'" >> my_settings.py
           echo "GOOGLE_MAIL_APP_PWD='&{{ secrets.GOOGLE_MAIL_APP_PWD }}'" >> my_settings.py
+      
       - name: Run Django Test
         run: |
           if python backend/manage.py test backend/apps; then
