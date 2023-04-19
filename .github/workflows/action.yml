@@ -20,12 +20,13 @@ jobs:
         run: pip install -r backend/requirements.txt
 
       - name: Move to Backend directory
-        run: cd wesalad/backend
-
-      - name: Create my_settings.py
         run: |
           echo $(ls)
           echo $(pwd)
+          cd backend
+
+      - name: Create my_settings.py
+        run: |
           echo "SECRET_KEY='${{ secrets.MY_SECRET_KEY }}'" >> my_settings.py
           echo "DATABASES='&{{ secrets.DATABASES }}'" >> my_settings.py
           echo "SECRET_KEY='&{{ secrets.SECRET_KEY }}'" >> my_settings.py
@@ -37,8 +38,6 @@ jobs:
           
           echo "GOOGLE_MAIL_ADDRESS='&{{ secrets.GOOGLE_MAIL_ADDRESS }}'" >> my_settings.py
           echo "GOOGLE_MAIL_APP_PWD='&{{ secrets.GOOGLE_MAIL_APP_PWD }}'" >> my_settings.py
-          echo $(pwd)
-          echo $(ls)
 
       - name: Run Django Test
         run: |
