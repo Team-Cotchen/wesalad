@@ -19,15 +19,9 @@ jobs:
       - name: Install Requirements
         run: pip install -r backend/requirements.txt
 
-      - name: Move to Backend directory
-        run: |
-          echo $(ls)
-          echo $(pwd)
-          echo $(cd .. & cd backend)
-          echo $(pwd)
-          
       - name: Create my_settings.py
         run: |
+          echo $(cd backend)
           echo $(pwd)
           echo "SECRET_KEY='${{ secrets.MY_SECRET_KEY }}'" >> my_settings.py
           echo "DATABASES='&{{ secrets.DATABASES }}'" >> my_settings.py
