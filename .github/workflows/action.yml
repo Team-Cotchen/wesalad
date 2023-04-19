@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 name: Docker Build & Depoly
 
+=======
+name: Docker Build & Deploy
+run-name: Github Action is running
+
+# main branch에 push 또는 pull request 시에만 작동
+>>>>>>> main
 on:
   push:
     branches: [ "main" ]
@@ -19,8 +26,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME}}
           password: ${{ secrets.DOCKER_PASSWORD}}
+<<<<<<< HEAD
         
       - name: Build Backend Docker images # backend docker file 작성
+=======
+      
+      # backend docker file 작성
+      - name: Build Backend Docker images
+>>>>>>> main
         uses: docker/build-push-action@v2
         with:
           context: ./backend
@@ -28,14 +41,23 @@ jobs:
           tags: |
             docker.io/${{ secrets.DOCKER_USERNAME}}/backend:latest
           
+<<<<<<< HEAD
       - name: Build Frontend Docker images # frontend docker file 작성
         uses: docker/build-push-action@v2
         with:
           context:  ./frontend
+=======
+      # frontend docker file 작성
+      - name: Build Frontend Docker images
+        uses: docker/build-push-action@v2
+        with:
+          context: ./frontend
+>>>>>>> main
           push: true
           tags: |
             docker.io/${{ secrets.DOCKER_USERNAME}}/frontend:latest
             
+<<<<<<< HEAD
         
       - name: Into Wesalad EC2 # ssh로 wesald EC2 접속.
         uses: appleboy/ssh-action@master
@@ -52,3 +74,26 @@ jobs:
             docker pull docker.io/${{ secrets.DOCKER_USERNAME }}/frontend:latest
             docker-compose down
             docker-compose up -d --force-recreate
+=======
+      # ssh로 wesald EC2 접속.
+      - name: Into Wesalad EC2
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.PEM_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME}}
+      
+      - name: Login DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME}}
+          password: ${{ secrets.DOCKER_PASSWORD}}
+      
+      # 최신 docker image 가져오기
+      - name: Pull Docker Image
+        run: |
+          docker pull docker.io/${{ secrets.DOCKER_USERNAME }}/backend:latest
+          docker pull docker.io/${{ secrets.DOCKER_USERNAME }}/frontend:latest
+          docker-compose down
+          docker-compose up -d --force-recreate
+>>>>>>> main
