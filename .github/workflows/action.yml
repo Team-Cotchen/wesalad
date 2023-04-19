@@ -29,7 +29,9 @@ jobs:
           
           echo "GOOGLE_OAUTH2_REDIRECT_URI='&{{ secrets.GOOGLE_OAUTH2_REDIRECT_URI }}'" >> backend/my_settings.py
           echo "GOOGLE_OAUTH2_CLIENT_ID='&{{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}'" >> backend/my_settings.py
+          echo "GOOGLE_OAUTH2_CLIENT_SECRET='&{{ secrets.GOOGLE_OAUTH2_CLIENT_SECRET }}'" >> backend/my_settings.py
           
+
           echo "GOOGLE_MAIL_ADDRESS='&{{ secrets.GOOGLE_MAIL_ADDRESS }}'" >> backend/my_settings.py
           echo "GOOGLE_MAIL_APP_PWD='&{{ secrets.GOOGLE_MAIL_APP_PWD }}'" >> backend/my_settings.py
 
