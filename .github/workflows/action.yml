@@ -21,17 +21,17 @@ jobs:
 
       - name: Create my_settings.py
         run: |
-          echo pwd
-          echo "SECRET_KEY='${{ secrets.MY_SECRET_KEY }}'" > backend/my_settings.py
-          echo "DATABASES='&{{ secrets.DATABASES }}'" > backend/my_settings.py
-          echo "SECRET_KEY='&{{ secrets.SECRET_KEY }}'" > backend/my_settings.py
-          echo "ALGORITHM='&{{ secrets.ALGORITHM }}'" > backend/my_settings.py
+          echo $(pwd)
+          echo "SECRET_KEY='${{ secrets.MY_SECRET_KEY }}'" >> backend/my_settings.py
+          echo "DATABASES='&{{ secrets.DATABASES }}'" >> backend/my_settings.py
+          echo "SECRET_KEY='&{{ secrets.SECRET_KEY }}'" >> backend/my_settings.py
+          echo "ALGORITHM='&{{ secrets.ALGORITHM }}'" >> backend/my_settings.py
           
-          echo "GOOGLE_OAUTH2_REDIRECT_URI='&{{ secrets.GOOGLE_OAUTH2_REDIRECT_URI }}'" > backend/my_settings.py
-          echo "GOOGLE_OAUTH2_CLIENT_ID='&{{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}'" > backend/my_settings.py
+          echo "GOOGLE_OAUTH2_REDIRECT_URI='&{{ secrets.GOOGLE_OAUTH2_REDIRECT_URI }}'" >> backend/my_settings.py
+          echo "GOOGLE_OAUTH2_CLIENT_ID='&{{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}'" >> backend/my_settings.py
           
-          echo "GOOGLE_MAIL_ADDRESS='&{{ secrets.GOOGLE_MAIL_ADDRESS }}'" > backend/my_settings.py
-          echo "GOOGLE_MAIL_APP_PWD='&{{ secrets.GOOGLE_MAIL_APP_PWD }}'" > backend/my_settings.py
+          echo "GOOGLE_MAIL_ADDRESS='&{{ secrets.GOOGLE_MAIL_ADDRESS }}'" >> backend/my_settings.py
+          echo "GOOGLE_MAIL_APP_PWD='&{{ secrets.GOOGLE_MAIL_APP_PWD }}'" >> backend/my_settings.py
 
       - name: Run Django Test
         run: |
