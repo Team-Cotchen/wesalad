@@ -16,6 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install Requirements
+        run: pip install -r backend/requirements.txt
+
       - name: Run Django Test
         run: |
           if python backend/manage.py test backend/apps; then
