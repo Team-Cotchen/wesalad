@@ -35,7 +35,7 @@ jobs:
                         'HOST': 'wesalad-db.cnaw0fqhzw63.ap-northeast-2.rds.amazonaws.com',
                         'PORT': '3306',
                         'OPTIONS': {'charset': 'utf8mb4'}
-                    }" >> my_settings.py
+                    }}" >> my_settings.py
           echo "ALGORITHM = 'HS256'" >> my_settings.py
           echo "GOOGLE_OAUTH2_REDIRECT_URI = 'https://wesalad.net/google/callback'" >> my_settings.py
           echo "GOOGLE_OAUTH2_CLIENT_ID = '968338780018-8jnmsu6a5hbbbn1arr3l8e04b5qu35o6.apps.googleusercontent.com'" >> my_settings.py
