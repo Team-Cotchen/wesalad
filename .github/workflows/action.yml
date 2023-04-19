@@ -18,8 +18,7 @@ jobs:
 
       - name: Run Django Test
         run: |
-          cd backend
-          if python manage.py test apps; then
+          if python backend/manage.py test backend/apps; then
             echo "::set-output name=test_result::OK"
           else
             echo "::set-output name=test_result::FAILED"
