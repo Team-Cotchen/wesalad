@@ -20,21 +20,24 @@ jobs:
         run: pip install -r backend/requirements.txt
 
       - name: Create my_settings.py
+        env:
+          MY_SETTINGS_SECRET: ${{ secrets.MY_SETTINGS_SECRET }}
         run: |
           cd backend
-          echo $(pwd)
-          echo "SECRET_KEY='${{ secrets.MY_SECRET_KEY }}'" >> my_settings.py
-          echo "DATABASES='${{ secrets.DATABASES }}'" >> my_settings.py
-          echo "SECRET_KEY='${{ secrets.SECRET_KEY }}'" >> my_settings.py
-          echo "ALGORITHM='${{ secrets.ALGORITHM }}'" >> my_settings.py
-          
-          echo "GOOGLE_OAUTH2_REDIRECT_URI='${{ secrets.GOOGLE_OAUTH2_REDIRECT_URI }}'" >> my_settings.py
-          echo "GOOGLE_OAUTH2_CLIENT_ID='${{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}'" >> my_settings.py
-          echo "GOOGLE_OAUTH2_CLIENT_SECRET='${{ secrets.GOOGLE_OAUTH2_CLIENT_SECRET }}'" >> my_settings.py
-          
-          echo "GOOGLE_MAIL_ADDRESS='${{ secrets.GOOGLE_MAIL_ADDRESS }}'" >> my_settings.py
-          echo "GOOGLE_MAIL_APP_PWD='${{ secrets.GOOGLE_MAIL_APP_PWD }}'" >> my_settings.py
+          echo "import os" > my_settings.py
+          echo "from dotenv import load_dotenv" >> my_settings.py
+          echo "load_dotenv()" >> my_settings.py
+          echo "SECRET_KEY = os.environ.get('SECRET_KEY')" >> my_settings.py
+          echo "DATABASES = eval(os.environ.get('DATABASES'))" >> my_settings.py
+          echo "ALGORITHM = os.environ.get('ALGORITHM')" >> my_settings.py
+          echo "GOOGLE_OAUTH2_REDIRECT_URI = os.environ.get('GOOGLE_OAUTH2_REDIRECT_URI')" >> my_settings.py
+          echo "GOOGLE_OAUTH2_CLIENT_ID = os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')" >> my_settings.py
+          echo "GOOGLE_OAUTH2_CLIENT_SECRET = os.environ.get('GOOGLE_OAUTH2_CLIENT_SECRET')" >> my_settings.py
+          echo "GOOGLE_MAIL_ADDRESS = os.environ.get('GOOGLE_MAIL_ADDRESS')" >> my_settings.py
+          echo "GOOGLE_MAIL_APP_PWD = os.environ.get('GOOGLE_MAIL_APP_PWD')" >> my_settings.py
+          echo $MY_SETTINGS_SECRET | base64 --decode >> my_settings.py
           cat my_settings.py
+
       
       - name: Run Django Test
         run: |
