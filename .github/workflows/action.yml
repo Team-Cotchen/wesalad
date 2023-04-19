@@ -46,6 +46,7 @@ jobs:
       
       - name: Run Django Test
         run: |
+          python backend/manage.py migrate
           if python backend/manage.py test backend/apps; then
             echo "::set-output name=test_result::OK"
           else
