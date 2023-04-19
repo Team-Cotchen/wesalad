@@ -18,7 +18,7 @@ jobs:
 
       - name: Run Django Test
         run: |
-          python mange.py test apps
+          python manage.py test apps
           echo "::set-output name=test_result::$"
         id: test
 
