@@ -18,9 +18,10 @@ jobs:
 
       - name: Install Requirements
         run: |
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt 
           pip install python-dotenv
-
+          
       - name: Create my_settings.py
         env:
           MY_SETTINGS_SECRET: ${{ secrets.MY_SETTINGS_SECRET }}
