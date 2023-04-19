@@ -39,7 +39,8 @@ jobs:
           echo "GOOGLE_MAIL_ADDRESS = os.environ.get('GOOGLE_MAIL_ADDRESS')" >> my_settings.py
           echo "GOOGLE_MAIL_APP_PWD = os.environ.get('GOOGLE_MAIL_APP_PWD')" >> my_settings.py
           echo $MY_SETTINGS_SECRET | base64 --decode >> my_settings.py
-          cat my_settings.py
+          
+          printf $SECRET_KEY
 
       
       - name: Run Django Test
