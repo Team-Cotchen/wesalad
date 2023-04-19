@@ -25,7 +25,7 @@ jobs:
       - name: Set Environment Variables
         run: |
           cd backend
-          echo "SECRET_KEY = 'django-insecure-5m*0&ap_#^fdp+3@%-t1&-9c!hmv=$kwnw+y0jd0xn!z4fu*y='" >> my_settings.py
+          echo "SECRET_KEY = ${{ secrets.SECRET_KEY}}" >> my_settings.py
           echo "DATABASES = {
                     'default': {
                         'ENGINE': 'django.db.backends.mysql',
@@ -36,12 +36,12 @@ jobs:
                         'PORT': '3306',
                         'OPTIONS': {'charset': 'utf8mb4'}
                     }}" >> my_settings.py
-          echo "ALGORITHM = 'HS256'" >> my_settings.py
+          echo "ALGORITHM = ${{ secrets.ALGORITHM}}" >> my_settings.py
           echo "GOOGLE_OAUTH2_REDIRECT_URI = 'https://wesalad.net/google/callback'" >> my_settings.py
           echo "GOOGLE_OAUTH2_CLIENT_ID = '968338780018-8jnmsu6a5hbbbn1arr3l8e04b5qu35o6.apps.googleusercontent.com'" >> my_settings.py
           echo "GOOGLE_OAUTH2_CLIENT_SECRET = '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'" >> my_settings.py
           echo "GOOGLE_MAIL_ADDRESS = 'Wesalad.cotchen@gmail.com'" >> my_settings.py
-          echo "GOOGLE_MAIL_APP_PWD = 'qljmohdebizfivhq'" >> my_settings.py
+          echo "GOOGLE_MAIL_APP_PWD = ${{ secrets.GOOGLE_MAIL_APP_PWD}}" >> my_settings.py
           cat my_settings.py
 
       - name: Run Django Test
