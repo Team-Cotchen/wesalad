@@ -38,7 +38,7 @@ jobs:
           
           echo "GOOGLE_MAIL_ADDRESS='&{{ secrets.GOOGLE_MAIL_ADDRESS }}'" >> my_settings.py
           echo "GOOGLE_MAIL_APP_PWD='&{{ secrets.GOOGLE_MAIL_APP_PWD }}'" >> my_settings.py
-
+          echo $(ls)
       - name: Run Django Test
         run: |
           if python backend/manage.py test backend/apps; then
