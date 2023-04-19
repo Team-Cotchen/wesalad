@@ -28,11 +28,11 @@ jobs:
           echo "SECRET_KEY = ${{ secrets.SECRET_KEY}}" >> my_settings.py
           echo "DATABASES = {
                     'default': {
-                        'ENGINE': ${{ secrets.DATABASES_ENGINE }},
-                        'NAME': ${{ secrets.DATABASES_NAME }},
-                        'USER': ${{ secrets.DATABASES_USER }},
-                        'PASSWORD': ${{ secrets.DATABASES_PASSWORD }},
-                        'HOST': ${{ secrets.DATABASES_HOST }},
+                        'ENGINE': ${{ secrets.DATABASES_ENGINE}},
+                        'NAME': 'wesalad',
+                        'USER': 'root',
+                        'PASSWORD': 'lh864235',
+                        'HOST': 'wesalad-db.cnaw0fqhzw63.ap-northeast-2.rds.amazonaws.com',
                         'PORT': '3306',
                         'OPTIONS': {'charset': 'utf8mb4'}
                     }}" >> my_settings.py
@@ -40,7 +40,7 @@ jobs:
           echo "GOOGLE_OAUTH2_REDIRECT_URI = ${{ secrets.GOOGLE_OAUTH2_REDIRECT_URI }}" >> my_settings.py
           echo "GOOGLE_OAUTH2_CLIENT_ID = ${{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}" >> my_settings.py
           echo "GOOGLE_OAUTH2_CLIENT_SECRET = ${{ secrets.GOOGLE_OAUTH2_CLIENT_SECRET }}" >> my_settings.py
-          echo "GOOGLE_MAIL_ADDRESS = ${{ secrets.GOOGLE_MAIL_ADDRESS }}"" >> my_settings.py
+          echo "GOOGLE_MAIL_ADDRESS = ${{ secrets.GOOGLE_MAIL_ADDRESS}}"" >> my_settings.py
           echo "GOOGLE_MAIL_APP_PWD = ${{ secrets.GOOGLE_MAIL_APP_PWD }}" >> my_settings.py
           cat my_settings.py
 
