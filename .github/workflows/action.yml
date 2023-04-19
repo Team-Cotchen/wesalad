@@ -42,7 +42,8 @@ jobs:
           echo "GOOGLE_OAUTH2_CLIENT_SECRET = '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'" >> my_settings.py
           echo "GOOGLE_MAIL_ADDRESS = 'Wesalad.cotchen@gmail.com'" >> my_settings.py
           echo "GOOGLE_MAIL_APP_PWD = 'qljmohdebizfivhq'" >> my_settings.py
-      
+          cat my_settings.py
+
       - name: Run Django Test
         run: |
           python backend/manage.py migrate
