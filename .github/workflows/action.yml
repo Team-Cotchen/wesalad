@@ -22,14 +22,19 @@ jobs:
           pip install -r backend/requirements.txt 
           pip install python-dotenv
 
-      - name: Create my_settings.py
+      - name: Set Environment Variables
         env:
-          MY_SETTINGS_SECRET: ${{ secrets.MY_SETTINGS_SECRET }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASES: ${{ secrets.DATABASES }}
+          ALGORITHM: ${{ secrets.ALGORITHM }}
+          GOOGLE_OAUTH2_REDIRECT_URI: ${{ secrets.GOOGLE_OAUTH2_REDIRECT_URI }}
+          GOOGLE_OAUTH2_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}
+          GOOGLE_OAUTH2_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH2_CLIENT_SECRET }}
+          GOOGLE_MAIL_ADDRESS: ${{ secrets.GOOGLE_MAIL_ADDRESS }}
+          GOOGLE_MAIL_APP_PWD: ${{ secrets.GOOGLE_MAIL_APP_PWD }}
         run: |
           cd backend
           echo "import os" > my_settings.py
-          echo "from dotenv import load_dotenv" >> my_settings.py
-          echo "load_dotenv()" >> my_settings.py
           echo "SECRET_KEY = os.environ.get('SECRET_KEY')" >> my_settings.py
           echo "DATABASES = eval(os.environ.get('DATABASES', '{}'))" >> my_settings.py
           echo "ALGORITHM = os.environ.get('ALGORITHM')" >> my_settings.py
@@ -38,10 +43,6 @@ jobs:
           echo "GOOGLE_OAUTH2_CLIENT_SECRET = os.environ.get('GOOGLE_OAUTH2_CLIENT_SECRET')" >> my_settings.py
           echo "GOOGLE_MAIL_ADDRESS = os.environ.get('GOOGLE_MAIL_ADDRESS')" >> my_settings.py
           echo "GOOGLE_MAIL_APP_PWD = os.environ.get('GOOGLE_MAIL_APP_PWD')" >> my_settings.py
-          echo $MY_SETTINGS_SECRET | base64 --decode >> my_settings.py
-          
-          printf $SECRET_KEY
-
       
       - name: Run Django Test
         run: |
