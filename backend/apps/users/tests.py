@@ -276,7 +276,7 @@ class ProfileTest(APITestCase):
     #     self.assertEqual(response.status_code, 400)    
     #     self.assertEqual(response.content, b'{"ERROR":"ANSWER_MATCHING_QUERY_DOES_NOT_EXIST."}')
     
-    # 테스트 주석처리 0419
+    # 테스트 주석처리 0419 -
     # def test_fail_wesalad_user_profile_update_with_wrong_stack_information(self):
     #     header   = {'HTTP_access' : self.access_token}
     #     response = self.client.patch(
