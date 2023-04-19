@@ -22,11 +22,8 @@ jobs:
             echo "::set-output name=test_result::OK"
           else
             echo "::set-output name=test_result::FAILED"
+            exit 1
           fi
-        id: test
-
-      - name: Check Test Result
-        if: steps.test.outputs.test_result == 'OK'
         
       - name: Login DockerHub
         uses: docker/login-action@v1
