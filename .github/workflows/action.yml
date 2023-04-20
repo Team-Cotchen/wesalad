@@ -15,6 +15,44 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Install Requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt 
+          pip install python-dotenv
+
+      - name: Create my_settings.py
+        run: |
+          cd backend
+          echo "SECRET_KEY = ${{ secrets.SECRET_KEY}}" >> my_settings.py
+          echo "DATABASES = {
+                    'default': {
+                        'ENGINE': ${{ secrets.DATABASES_ENGINE }},
+                        'NAME': ${{ secrets.DATABASES_NAME }},
+                        'USER': ${{ secrets.DATABASES_USER }},
+                        'PASSWORD': ${{ secrets.DATABASES_PASSWORD }},
+                        'HOST': ${{ secrets.DATABASES_HOST }},
+                        'PORT': '3306',
+                        'OPTIONS': {'charset': 'utf8mb4'}
+                    }}" >> my_settings.py
+          echo "ALGORITHM = ${{ secrets.ALGORITHM}}" >> my_settings.py
+          echo "GOOGLE_OAUTH2_REDIRECT_URI = ${{ secrets.GOOGLE_OAUTH2_REDIRECT_URI }}" >> my_settings.py
+          echo "GOOGLE_OAUTH2_CLIENT_ID = ${{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}" >> my_settings.py
+          echo "GOOGLE_OAUTH2_CLIENT_SECRET = ${{ secrets.GOOGLE_OAUTH2_CLIENT_SECRET }}" >> my_settings.py
+          echo "GOOGLE_MAIL_ADDRESS = ${{ secrets.GOOGLE_MAIL_ADDRESS}}" >> my_settings.py
+          echo "GOOGLE_MAIL_APP_PWD = ${{ secrets.GOOGLE_MAIL_APP_PWD }}" >> my_settings.py
+          cat my_settings.py
+
+      - name: Run Django Test
+        run: |
+          python backend/manage.py migrate
+          if python backend/manage.py test backend/apps; then
+            echo "::set-output name=test_result::OK"
+          else
+            echo "::set-output name=test_result::FAILED"
+            exit 1
+          fi
         
       - name: Login DockerHub
         uses: docker/login-action@v1
